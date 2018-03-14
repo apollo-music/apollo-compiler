@@ -4,15 +4,16 @@ O projeto será realizado em três etapas (*milestones*):
 ## Etapa 1
 Para entrega da primeira etapa faremos um compilador que converterá um código em uma música. A idéia é que ao final da entrega tenhamos uma linguagem que terá duas funções:
 
-    Os componentes basicos das nossas "partituras" serao:
-    - notas musicais:
-        - play (nota) (amp) (dur): essa funcao irá tocar uma nota (*nota*) em uma dada amplitude (*amp*) e por uma dada duracao (*dur*)
-            - (nota):definimos a nota a ser tocada e em qual oitava ela se encontrara. exemplo: c3 (do tocado na terceira oitava).
-            - (amp): definimos a amplitude da nota, definindo a dinamica da musica.
-            - (dur): definimos a duracao da nota dentro da musica em funcao da batida do metronomo.
-        - metronomo: definimos o valor de beats per minute (bpm), que sera o valor base da duracao das notas.
-        - sleep (dur): essa funcao irá indicar que o programa deve não tocar nenhum som por uma dada duracao (*dur*)
-        
+Os componentes basicos das nossas "partituras" serao:
+
+  - notas musicais:
+    - play (nota) (amp) (dur): essa funcao irá tocar uma nota (*nota*) em uma dada amplitude (*amp*) e por uma dada duracao (*dur*)
+      - (nota):definimos a nota a ser tocada e em qual oitava ela se encontrara. exemplo: c3 (do tocado na terceira oitava).
+      - (amp): definimos a amplitude da nota, definindo a dinamica da musica.
+      - (dur): definimos a duracao da nota dentro da musica em funcao da batida do metronomo.
+    - metronomo: definimos o valor de beats per minute (bpm), que sera o valor base da duracao das notas.
+    - sleep (dur): essa funcao irá indicar que o programa deve não tocar nenhum som por uma dada duracao (*dur*)
+
 Com esses componentes, será possível já tocar melodias simples que não tenham duas notas tocando ao mesmo tempo.
 
 ## Etapa 2
