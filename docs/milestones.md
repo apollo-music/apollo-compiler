@@ -32,36 +32,6 @@ uma música com uma guitarra ou com um berimbau.
 Essa etapa será a mais desafiadora: aqui objetivamos implementar threads para que vários sons de diversos instrumentos toquem simultaneamente. 
 
 # Distribuição do trabalho
-Nesta seção, detalhamos a distribuição do trabalho para cada um dos 6 membros da equipe.
+Nesta seção, detalhamos a distribuição do trabalho para cada um dos 6 membros da equipe. Os números em cada célula indicam em qual etapa aquele membro trabalhará naquela parte do projeto.
 
 ![Divisão de Trabalho](img/division.png)
-
-## Membro 1
- - **Nome:** Henrique Lacreta Alves
- - **RA:** 138507
- - **Responsável por:**
-
-## Membro 2
- - **Nome:** Henrique Noronha Facioli
- - **RA:** 157986
- - **Responsável por:**
-
-## Membro 3
- - **Nome:** Jose Renato Vicente
- - **RA:** 155984
- - **Responsável por:**
-
-## Membro 4
- - **Nome:** Matheus Jun Ota
- - **RA:** 138889
- - **Responsável por:**
-
-## Membro 5
- - **Nome:** Matheus Mortatti Diamantino
- - **RA:** 156740
- - **Responsável por:**
-
-## Membro 6
- - **Nome:** Thiago Silva de Farias
- - **RA:** 148077
- - **Responsável por:**
