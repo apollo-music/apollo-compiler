@@ -1,14 +1,13 @@
 # Etapas
-Nesta seção, abordamos o que deverá ser entregue em cada uma das 3 etapas do projeto.
+O projeto será realizado em três etapas (*milestones*):
 
 ## Etapa 1
-Para a primeira etapa do projeto estamos interessados em fazer um compilador simples, mas capaz de demonstrar o objetivo principal desse projeto: converter
-um código em uma música. A ideia é que implementemos 2 funções da nossa linguagem:
+Para entrega da primeira etapa faremos um compilador que converterá um código em uma música. A idéia é que ao final da entrega tenhamos uma linguagem que terá duas funções:
 
-- play (nota) (amp) (duracao): essa funcao irá indicar que o programa deve tocar uma nota em uma dada amplitude e por uma dada duracao
-- sleep (duracao): essa funcao irá indicar que o programa deve não tocar nenhum som por uma dada duracao
+- play (nota) (amp) (dur): essa funcao irá tocar uma nota (*nota*) em uma dada amplitude (*amp*) e por uma dada duracao (*dur*)
+- sleep (dur): essa funcao irá indicar que o programa deve não tocar nenhum som por uma dada duracao (*dur*)
 
-De posse de um compilador capaz de interpretar essas duas funcoes, já podemos produzir uma saída que é uma música.
+Com elas, será possível já tocar melodias simples que não tenham notas compostas.
 
 ## Etapa 2
 Na segunda etapa do projeto iremos implementar labels, loops e synthesizers.
