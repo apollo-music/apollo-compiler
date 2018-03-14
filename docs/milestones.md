@@ -34,6 +34,8 @@ Essa etapa será a mais desafiadora: aqui objetivamos implementar threads para q
 # Distribuição do trabalho
 Nesta seção, detalhamos a distribuição do trabalho para cada um dos 6 membros da equipe.
 
+![Divisão de Trabalho](img/division.png)
+
 ## Membro 1
  - **Nome:** Henrique Lacreta Alves
  - **RA:** 138507
