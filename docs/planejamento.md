@@ -6,5 +6,17 @@ Desenvolvimento de uma linguagem de programação que possa ser usada para a cri
 - Fazer com que a linguagem seja poderosa o suficiente para emitir sons de diferentes instrumentos, podendo personalizar várias características musicais de acordo com a preferência do programador.
 - Aprender sobre a construção de um compilador e colocar em prática conhecimentos obtidos em disciplinas prévias.
 
+# Features
+- Definição de BPM (compasso)
+- Acordes
+- Sintetizar Instrumentos
+- Funções
+- Variáveis
+- Paralelismo (notas/acordes juntos)
+- Duração da Nota
+- Loops
+- Condicionais
+- Tom base (clave)
+
 # Resultados Esperados
 A princípio esperamos que, ao fim do projeto, obtenhamos uma linguagem de programação simples, mas que permita o usuario de criar musica livremente.
