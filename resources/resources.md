@@ -12,8 +12,10 @@ No arquivo resources.md iremos adicionar a parte de estudos
 
 ## Analise Semantica
 
-[Compiler Design - Semantic Analysis](https://www.tutorialspoint.com/compiler_design/compiler_design_semantic_analysis.htm) - Visão geral de Semantic Analyser
-
 
 ## Geração de Musica
+[MIDI] (https://en.wikipedia.org/wiki/MIDI) - Entendendo o que e um arquivo MIDI e porque usa-lo em vez de criar o MP3 diretamente.
+[Python MIDI] (https://github.com/vishnubob/python-midi) - Biblioteca de python para criar arquivos midi. Muito simples de entender o funcionamento e utilizar. Possui as features que precisamos para desenvolver nossas musicas, como pitch, volume e duracao. Parece ser simples criar diversos sons ao mesmo tempo, tornando a producao musical simples.
+[MIDIUtil] (https://github.com/MarkCWirt/MIDIUtil) - Outra biblioteca interessante. Um pouco mais dificil de entender, mas mais poderosa, por possuir built in features, como um metronomo. Desta maneira, sua utilizacao deixa o codigo mais limpo.
+[Wave] (https://docs.python.org/3/library/wave.html) - Biblioteca de Python para criacao de MP3 diretamente. (Mais complicado e menos poderosa do que as bibiotecas de MIDI).
 
