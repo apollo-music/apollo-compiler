@@ -8,6 +8,9 @@ No arquivo resources.md iremos adicionar a parte de estudos
 
 [Slides das aulas 2s17] (http://oxent2.ic.unicamp.br/node/27)
 
+[Livros de compiladores] (https://drive.google.com/open?id=0B3wqib4CMy7VSEdaUnFPZVdLRzg)
+
+
 ## Lexer
 
 
