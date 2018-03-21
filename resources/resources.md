@@ -12,6 +12,8 @@ No arquivo resources.md iremos adicionar a parte de estudos
 
 ## Analise Semantica
 
+[Compiler Design - Semantic Analysis](https://www.tutorialspoint.com/compiler_design/compiler_design_semantic_analysis.htm) - Visão geral de Semantic Analyser
+
 
 ## Geração de Musica
 
