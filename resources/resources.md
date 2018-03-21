@@ -4,6 +4,10 @@ No arquivo resources.md iremos adicionar a parte de estudos
 ## Geral
 [Teaching Compilers with Python](TeachingCompilersWithPython_Paper.pdf) - Paper do professor do Ota que tem um rápido overview de como fazer um compilador completo usando python
 
+[Pagina de compiladores do guido] (http://oxent2.ic.unicamp.br/node/46)
+
+[Slides das aulas 2s17] (http://oxent2.ic.unicamp.br/node/27)
+
 ## Lexer
 
 
