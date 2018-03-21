@@ -19,6 +19,8 @@ No arquivo resources.md iremos adicionar a parte de estudos
 
 ## Analise Semantica
 
+[Compiler Design - Semantic Analysis](https://www.tutorialspoint.com/compiler_design/compiler_design_semantic_analysis.htm) - Visão geral de análise semântica
+
 
 ## Geração de Musica
 [MIDI] (https://en.wikipedia.org/wiki/MIDI) - Entendendo o que e um arquivo MIDI e porque usa-lo em vez de criar o MP3 diretamente.
