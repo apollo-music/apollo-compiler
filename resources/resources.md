@@ -22,3 +22,7 @@ No arquivo resources.md iremos adicionar a parte de estudos
 
 [Wave] (https://docs.python.org/3/library/wave.html) - Biblioteca de Python para criacao de MP3 diretamente. (Mais complicado e menos poderosa do que as bibiotecas de MIDI).
 
+[MIDI to MP3] (http://devonbryant.github.io/blog/2013/08/24/midi-to-audio-conversion-with-python/) - Como converter MIDI para MP3
+
+[TiMidity] (https://sourceforge.net/projects/timidity/) - Conversor muito utilizado para converter MIDI para MP3. Talvez o mais seguro de utilizar, por ser o mais conhecido e mais utilizado, logo mais facil de corrigir bugs e encontrar documentacao.
+
