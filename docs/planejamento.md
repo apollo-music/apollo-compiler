@@ -12,7 +12,7 @@ Queremos que, ao final do projeto, tenhamos uma linguagem que possua suporte a:
 - Acordes (i.e: Acorde de sol: G)
 - Sintetizar Instrumentos (i.e: Guitarra, Piano, etc)
 - Funções (i.e: Refrão em sol: (tocar um conjunto iguais))
-- Variáveis (i.e: ??? A definir)
+- Variáveis (i.e: somar/subtrair notas para ir para a próxima nota na escala)
 - Paralelismo (i.e: notas/acordes juntos)
 - Duração da Nota (i.e: Uma nota pode durar o batida inteira ou apenas uma porcentagem da batida)
 - Loops
