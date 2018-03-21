@@ -33,4 +33,10 @@ Como definido na (issue 17)[https://gitlab.ic.unicamp.br/mc911/2018-s1/group-9/i
 
 
 # Reuniões
+#### 14/03/2018
+Primeira definições do deadline. Definimos quais serão as features da nossa linguagem.
+
+
+#### 21/03/2018
+Redefinimos qual será a gramática de sintaxe básica da nossa linguagem.:
 
