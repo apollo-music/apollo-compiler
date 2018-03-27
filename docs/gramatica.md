@@ -43,7 +43,7 @@ Irá tocar a nota `70` em sequência 10 vezes.
 Variáveis podem ser criadas usando o termo `var`, seguido pelo nome da variável e o valor que ela irá receber:
 ```
 var nota: 70
-play: [var,var+1,var-1]
+play: [nota,nota+1,nota-1]
 ```
 Pode-se usar variáveis para armazenar uma sequência de notas também:
 ```
@@ -63,7 +63,7 @@ track bass:
 play: [(60, 62, 63), (60, 62, 63), (60, 62, 63)]
 end track
 ```
-Irá tocar as notas em ambos os `plays` ao mesmo tempo. Para todos os efeitos, `tracks` diferentes se comportam como programas em escopos diferentes,portanto apenas variáveis e configurações declaradas no escopo global (fora das tracks) podem ser referenciadas:
+Irá tocar as notas em ambos os `plays` ao mesmo tempo. Para todos os efeitos, `tracks` diferentes se comportam como programas em escopos diferentes, portanto apenas variáveis e configurações declaradas no escopo global (fora das tracks) podem ser referenciadas:
 ```
 var sequencia: [70, 71, 72]
 amp: 10
