@@ -15,4 +15,4 @@ As variáveis da linguagem *Apollo* são fracamente tipadas; isso significa que 
 - Duração de notas.
 
 ### Paralelismo
-Para facilitar o uso de notas paralelas em um mesmo áudio, criou-se o conceito de "tracks" no código; basicamente, duas partes do código irão rodas em paralelo como programas separados a partir do momento que uma "track" é declarada. Isso é similar ao conceito de "faixas musicais" em edição de áudio, e ao mesmo tempo possibilita explorar conceitos de sincronização de código através do uso das keywords estabelecidas na gramática `cue` e `sync`
+Para facilitar o uso de notas paralelas em um mesmo áudio, criou-se o conceito de "tracks" no código; basicamente, duas partes do código irão rodar em paralelo como programas separados a partir do momento que uma "track" é declarada. Isso é similar ao conceito de "faixas musicais" em edição de áudio, e ao mesmo tempo possibilita explorar conceitos de sincronização de código através do uso das keywords estabelecidas na gramática `cue` e `sync`
