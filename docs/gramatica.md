@@ -97,4 +97,4 @@ play: [sequencia]
 end track
 ```
 
-Como é possível observar, o argumento entre `()` de `cue` é o nome do sinal emitido, e o argumento entre `()` de `sync` é o nome do sinal que deve ser recebido para 
+Como é possível observar, o argumento entre `()` de `cue` é o nome do sinal emitido, e o argumento entre `()` de `sync` é o nome do sinal que deve ser recebido para a respectiva `track` continuar sendo tocada.
