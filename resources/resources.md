@@ -10,6 +10,8 @@ No arquivo resources.md iremos adicionar a parte de estudos
 
 [Livros de compiladores] (https://drive.google.com/open?id=0B3wqib4CMy7VSEdaUnFPZVdLRzg)
 
+[Tutorial do PLY] (http://www.dabeaz.com/ply/ply.html)
+
 
 ## Lexer
 
