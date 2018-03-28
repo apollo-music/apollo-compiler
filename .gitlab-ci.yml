@@ -14,5 +14,6 @@ before_script:
 build:
   stage: build
   script:
+    - echo $IMAGE_TAG
     - docker build -t $IMAGE_TAG ./src/
     - docker push $IMAGE_TAG
