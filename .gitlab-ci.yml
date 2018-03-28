@@ -1,0 +1,10 @@
+image: $CI_REGISTRY/mc911-2018-s1/group-9:docker
+
+build:
+  stage: build
+  
+  script: 
+    - src/test.py
+  artifacts:
+    paths:
+      - calc
