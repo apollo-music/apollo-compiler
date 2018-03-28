@@ -39,5 +39,5 @@ No arquivo resources.md iremos adicionar a parte de estudos
 
 
 ## Testes
-[Biblioteca unittest] (https://docs.python.org/2/library/unittest.html)
+[Biblioteca unittest] (https://docs.python.org/2/library/unittest.html) - Documentação da biblioteca unittest, utilizada na produção de testes para o compilador.
 
