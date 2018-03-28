@@ -37,3 +37,7 @@ No arquivo resources.md iremos adicionar a parte de estudos
 
 [TiMidity] (https://sourceforge.net/projects/timidity/) - Conversor muito utilizado para converter MIDI para MP3. Talvez o mais seguro de utilizar, por ser o mais conhecido e mais utilizado, logo mais facil de corrigir bugs e encontrar documentacao.
 
+
+## Testes
+[Biblioteca unittest] (https://docs.python.org/2/library/unittest.html)
+
