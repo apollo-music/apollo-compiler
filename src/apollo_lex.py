@@ -20,7 +20,12 @@ tokens = (
    'COMMA',
    'NEWLINE',
    'START',
-   'END'
+   'END',
+   'VAR',
+   'ID',
+   'SUM',
+   'MINUS',
+   'MULTIPLY'
 )
 
 # Regular expression rules for simple tokens
@@ -28,13 +33,14 @@ t_LPAREN  = r'\('
 t_RPAREN  = r'\)'
 t_LBRACKET  = r'\['
 t_RBRACKET  = r'\]'
-t_PLAY  = r'PLAY | play'
-t_AMP  = r'AMP | amp'
-t_DUR  = r'DUR | dur'
 t_COMMA  = r','
 t_TWOPOINTS = r':'
 t_START = r'\^'
 t_END = r'\$'
+
+t_SUM = r'\+'
+t_MINUS = r'\-'
+t_MULTIPLY = r'\*'
 
 # Define a rule so we can track line numbers
 def t_NEWLINE(t):
@@ -48,6 +54,26 @@ def t_INT(t):
     t.value = int(t.value)
     return t
 
+def t_AMP(t):
+	r'AMP | amp'
+	return t
+
+def t_DUR(t):
+	r'DUR | dur'
+	return t
+
+def t_VAR(t):
+	r'VAR | var'
+	return t
+
+def t_PLAY(t):
+	r'PLAY | play'
+	return t
+		
+def t_ID(t):
+	r'[a-zA-Z_][a-zA-Z0-9_]*'
+	return t
+	
 # A string containing ignored characters (spaces and tabs)
 t_ignore  = ' \t'
 
@@ -55,7 +81,7 @@ t_ignore  = ' \t'
 def t_error(t):
     print("Illegal character '%s'" % t.value[0])
     t.lexer.skip(1)
-
+    
 # Build the lexer
 lexer = lex.lex()
 
