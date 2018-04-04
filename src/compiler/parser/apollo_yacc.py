@@ -1,12 +1,12 @@
 # Yacc example
-import ply.yacc as yacc
+from ..ply import yacc
 
 # Get the token map from the lexer.  This is required.
-from apollo_lex import tokens
+from ..lexer.apollo_lex import tokens
 
 #graphic AST stuff
-import AST
-from AST import addToClass
+from ..AST import AST
+from ..AST.AST import addToClass
 import sys
 import pdb
 
@@ -22,16 +22,10 @@ def p_program_statement_program(p):
 	'program : statement NEWLINE program'
 	p[0] = AST.ProgramNode([p[1]] + [p[3]])
 
-def p_statement_command(p):
-	'statement : command'
-	p[0] = p[1]
-
-def p_statement_param(p):
-	'statement : param'
-	p[0] = p[1]
-
-def p_statement_assignation(p):
-	'statement : assignation'
+def p_statement(p):
+	'''statement : command
+		| param
+		| assignation'''
 	p[0] = p[1]
 		
 def p_param_AMP(p):
@@ -89,7 +83,7 @@ def p_nota_op(p):
 	
 	p[0] = AST.OpNode(p[2], [p[1], p[3]])
 	
-def p_nota_int(p):
+def p_nota(p):
     'nota : INT'
     p[0] = AST.TokenNode(p[1])
 
@@ -101,19 +95,18 @@ def p_nota_id(p):
 def p_error(p):
     print("Syntax error in input!")
 
-# Build the parser
-parser = yacc.yacc(debug=True)
+def run():
+	parser = yacc.yacc(debug=True)
 
-if __name__ == "__main__":
-    f = open(sys.argv[1], 'r')
-    prog = f.read()
-    f.close()
+	f = open(sys.argv[1], 'r')
+	prog = f.read()
+	f.close()
 
-    print("input:")
-    print(prog)
+	print("input:")
+	print(prog)
 
-    result = parser.parse(prog, debug = 1)
-    print(result)
+	result = parser.parse(prog, debug = 1)
+	print(result)
 
-    graph = result.makegraphicaltree()
-    graph.write_pdf('out.pdf')
+	graph = result.makegraphicaltree()
+	graph.write_pdf('out.pdf')
