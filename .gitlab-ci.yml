@@ -5,6 +5,3 @@ build:
   
   script: 
     - src/test.py
-  artifacts:
-    paths:
-      - calc
