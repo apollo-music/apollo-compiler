@@ -3,9 +3,10 @@ import unittest
 import sys
 
 # Tests performed:
-# - Test 1: regular program, should be OK
+# - Test 1: regular program. Should be OK.
+# - Test 2: like test 1, with empty spaces added. Should be OK.
 
-with open('test_files/test2_lex.apollo', 'r') as myfile:
+with open('test_files/test1_lex.apollo', 'r') as myfile:
     data = myfile.read()
 
 tokens1 = ['^', '\n', 'var', 'bixo', ':', '(', '1', ',', '3', '+', '4', ')', '\n',
