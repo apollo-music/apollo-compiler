@@ -9,18 +9,20 @@ import sys
 with open('test_files/test1_lex.apollo', 'r') as myfile:
     data = myfile.read()
 
-tokens1 = ['^', '\n', 'var', 'bixo', ':', '(', '1', ',', '3', '+', '4', ')', '\n',
-'amp', ':', '10', '\n', 'dur', ':', '2', '\n', 'play', ':', '[', '72', ',', 'bixo',
-']', ',', 'amp', ':', '10', ',', 'dur', ':', '3', '\n', '$']
+tokens = ['START', 'NEWLINE', 'VAR', 'ID', 'TWOPOINTS', 'LPAREN', 'INT', 'COMMA', 'INT',
+'SUM', 'INT', 'RPAREN', 'NEWLINE', 'AMP', 'TWOPOINTS', 'INT', 'NEWLINE', 'DUR',
+'TWOPOINTS', 'INT', 'NEWLINE', 'PLAY', 'TWOPOINTS', 'LBRACKET', 'INT', 'COMMA',
+'ID', 'RBRACKET', 'COMMA', 'AMP', 'TWOPOINTS', 'INT', 'COMMA', 'DUR', 'TWOPOINTS',
+'INT', 'NEWLINE', 'END']
 
 class LexTest(unittest.TestCase):
     def test_lex(self):
         # Give the lexer some input
         apollo_lex.lexer.input(data)
         # Tokenize
-        for t in tokens1:
+        for t in tokens:
             tok = apollo_lex.lexer.token()
-            self.assertEqual(t, str(tok.value))
+            self.assertEqual(t, str(tok.type))
 
 
 if __name__ == '__main__':
