@@ -98,8 +98,32 @@ class Node:
 class ProgramNode(Node):
     type = 'Program'
 
+class CommandNode(Node):
+    type = 'Command'
+    
+class VarNode(Node):
+    type = 'Var'
+
+class AccNode(Node):
+    type = 'Acc'
+
+class SeqNotasNode(Node):
+    type = 'SeqNotas'
+
+class AmpNode(Node):
+    type = 'Amp'
+
+class DurNode(Node):
+    type = 'Dur'
+    
+class ExpressionNode(Node):
+    type = 'Expression'
+
+class PlayNode(Node):
+    type = 'Play'
+    
 class TokenNode(Node):
-    type = 'token'
+    type = 'Token'
     def __init__(self, tok):
         Node.__init__(self)
         self.tok = tok
@@ -108,6 +132,7 @@ class TokenNode(Node):
         return repr(self.tok)
 
 class OpNode(Node):
+    type = 'Op'
     def __init__(self, op, children):
         Node.__init__(self,children)
         self.op = op
@@ -118,20 +143,6 @@ class OpNode(Node):
 
     def __repr__(self):
         return "%s (%s)" % (self.op, self.nbargs)
-
-class AssignNode(Node):
-    type = '='
-
-class PrintNode(Node):
-    type = 'print'
-
-class WhileNode(Node):
-    type = 'while'
-
-class EntryNode(Node):
-    type = 'ENTRY'
-    def __init__(self):
-        Node.__init__(self, None)
 
 def addToClass(cls):
     ''' D�corateur permettant d'ajouter la fonction d�cor�e en tant que m�thode
