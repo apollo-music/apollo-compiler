@@ -1,1 +1,1 @@
-python start.py test.apollo
+python3 start.py test.apollo

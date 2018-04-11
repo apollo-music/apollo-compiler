@@ -6,7 +6,9 @@
 # ------------------------------------------------------------
 from ..ply import lex
 import sys
-# List of token names.   This is always required
+from ..exceptions import exceptions as exc
+
+# List of token names. This is always required
 tokens = (
    'INT',
    'PLAY',
@@ -47,7 +49,7 @@ def t_NEWLINE(t):
     r'\n+'
     t.lexer.lineno += len(t.value)
     return t
-    
+
 # A regular expression rule with some action code
 def t_INT(t):
     r'\d+'
@@ -69,11 +71,11 @@ def t_VAR(t):
 def t_PLAY(t):
 	r'PLAY | play'
 	return t
-		
+
 def t_ID(t):
 	r'[a-zA-Z_][a-zA-Z0-9_]*'
 	return t
-	
+
 # A string containing ignored characters (spaces and tabs)
 t_ignore  = ' \t'
 
@@ -81,7 +83,8 @@ t_ignore  = ' \t'
 def t_error(t):
     print("Illegal character '%s'" % t.value[0])
     t.lexer.skip(1)
-    
+    raise exc.CharacterError("'%s' is not a valid Character for Apollo" % t.value[0])
+
 # Build the lexer
 lexer = lex.lex()
 
