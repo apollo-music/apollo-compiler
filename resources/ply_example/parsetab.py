@@ -6,9 +6,9 @@ _tabversion = '3.10'
 
 _lr_method = 'LALR'
 
-_lr_signature = 'DIVIDE LPAREN MINUS NUMBER PLUS RPAREN TIMESexpression : expression PLUS termexpression : expression MINUS termexpression : termterm : term TIMES factorterm : term DIVIDE factorterm : factorfactor : NUMBERfactor : LPAREN expression RPAREN'
+_lr_signature = 'AMP COMMA DUR END INT LBRACKET LPAREN NEWLINE PLAY RBRACKET RPAREN START TWOPOINTSp_play : PLAY TWOPOINTS LBRACKET seqacc RBRACKETseqacc : accseqacc : acc COMMA seqaccacc : LPAREN seqnotas RPARENacc : notaseqnotas : notaseqnotas : nota COMMA seqnotasnota : INT'
     
-_lr_action_items = {'NUMBER':([0,5,6,7,8,9,],[4,4,4,4,4,4,]),'LPAREN':([0,5,6,7,8,9,],[5,5,5,5,5,5,]),'$end':([1,2,3,4,11,12,13,14,15,],[0,-3,-6,-7,-1,-2,-4,-5,-8,]),'PLUS':([1,2,3,4,10,11,12,13,14,15,],[6,-3,-6,-7,6,-1,-2,-4,-5,-8,]),'MINUS':([1,2,3,4,10,11,12,13,14,15,],[7,-3,-6,-7,7,-1,-2,-4,-5,-8,]),'RPAREN':([2,3,4,10,11,12,13,14,15,],[-3,-6,-7,15,-1,-2,-4,-5,-8,]),'TIMES':([2,3,4,11,12,13,14,15,],[8,-6,-7,8,8,-4,-5,-8,]),'DIVIDE':([2,3,4,11,12,13,14,15,],[9,-6,-7,9,9,-4,-5,-8,]),}
+_lr_action_items = {'PLAY':([0,],[2,]),'$end':([1,10,],[0,-1,]),'TWOPOINTS':([2,],[3,]),'LBRACKET':([3,],[4,]),'LPAREN':([4,11,],[7,7,]),'INT':([4,7,11,16,],[9,9,9,9,]),'RBRACKET':([5,6,8,9,14,15,],[10,-2,-5,-8,-3,-4,]),'COMMA':([6,8,9,13,15,],[11,-5,-8,16,-4,]),'RPAREN':([9,12,13,17,],[-8,15,-6,-7,]),}
 
 _lr_action = {}
 for _k, _v in _lr_action_items.items():
@@ -17,7 +17,7 @@ for _k, _v in _lr_action_items.items():
       _lr_action[_x][_k] = _y
 del _lr_action_items
 
-_lr_goto_items = {'expression':([0,5,],[1,10,]),'term':([0,5,6,7,],[2,2,11,12,]),'factor':([0,5,6,7,8,9,],[3,3,3,3,13,14,]),}
+_lr_goto_items = {'p_play':([0,],[1,]),'seqacc':([4,11,],[5,14,]),'acc':([4,11,],[6,6,]),'nota':([4,7,11,16,],[8,13,8,13,]),'seqnotas':([7,16,],[12,17,]),}
 
 _lr_goto = {}
 for _k, _v in _lr_goto_items.items():
@@ -26,13 +26,13 @@ for _k, _v in _lr_goto_items.items():
        _lr_goto[_x][_k] = _y
 del _lr_goto_items
 _lr_productions = [
-  ("S' -> expression","S'",1,None,None,None),
-  ('expression -> expression PLUS term','expression',3,'p_expression_plus','calcyacc.py',9),
-  ('expression -> expression MINUS term','expression',3,'p_expression_minus','calcyacc.py',13),
-  ('expression -> term','expression',1,'p_expression_term','calcyacc.py',17),
-  ('term -> term TIMES factor','term',3,'p_term_times','calcyacc.py',21),
-  ('term -> term DIVIDE factor','term',3,'p_term_div','calcyacc.py',25),
-  ('term -> factor','term',1,'p_term_factor','calcyacc.py',29),
-  ('factor -> NUMBER','factor',1,'p_factor_num','calcyacc.py',33),
-  ('factor -> LPAREN expression RPAREN','factor',3,'p_factor_expr','calcyacc.py',37),
+  ("S' -> p_play","S'",1,None,None,None),
+  ('p_play -> PLAY TWOPOINTS LBRACKET seqacc RBRACKET','p_play',5,'p_play_seq','calcyacc.py',14),
+  ('seqacc -> acc','seqacc',1,'p_seqacc_acc','calcyacc.py',18),
+  ('seqacc -> acc COMMA seqacc','seqacc',3,'p_seqacc_accseqacc','calcyacc.py',22),
+  ('acc -> LPAREN seqnotas RPAREN','acc',3,'p_acc_seqnotas','calcyacc.py',26),
+  ('acc -> nota','acc',1,'p_acc_nota','calcyacc.py',30),
+  ('seqnotas -> nota','seqnotas',1,'p_seqnotas_nota','calcyacc.py',34),
+  ('seqnotas -> nota COMMA seqnotas','seqnotas',3,'p_seqnotas_notaseqnotas','calcyacc.py',38),
+  ('nota -> INT','nota',1,'p_nota_int','calcyacc.py',42),
 ]
