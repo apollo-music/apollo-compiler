@@ -98,8 +98,32 @@ class Node:
 class ProgramNode(Node):
     type = 'Program'
 
+class CommandNode(Node):
+    type = 'Command'
+    
+class VarNode(Node):
+    type = 'Var'
+
+class AccNode(Node):
+    type = 'Acc'
+
+class SeqNotasNode(Node):
+    type = 'SeqNotas'
+
+class AmpNode(Node):
+    type = 'Amp'
+
+class DurNode(Node):
+    type = 'Dur'
+    
+class ExpressionNode(Node):
+    type = 'Expression'
+
+class PlayNode(Node):
+    type = 'Play'
+    
 class TokenNode(Node):
-    type = 'token'
+    type = 'Token'
     def __init__(self, tok):
         Node.__init__(self)
         self.tok = tok
@@ -108,6 +132,7 @@ class TokenNode(Node):
         return repr(self.tok)
 
 class OpNode(Node):
+    type = 'Op'
     def __init__(self, op, children):
         Node.__init__(self,children)
         self.op = op
@@ -118,33 +143,22 @@ class OpNode(Node):
 
     def __repr__(self):
         return "%s (%s)" % (self.op, self.nbargs)
-
-class AssignNode(Node):
-    type = '='
-
-class PrintNode(Node):
-    type = 'print'
-
-class WhileNode(Node):
-    type = 'while'
-
+        
 class EntryNode(Node):
-    type = 'ENTRY'
-    def __init__(self):
-        Node.__init__(self, None)
+    type = 'Entry'
 
 def addToClass(cls):
     ''' D�corateur permettant d'ajouter la fonction d�cor�e en tant que m�thode
-    � une classe.
+� une classe.
 
-    Permet d'impl�menter une forme �l�mentaire de programmation orient�e
-    aspects en regroupant les m�thodes de diff�rentes classes impl�mentant
-    une m�me fonctionnalit� en un seul endroit.
+Permet d'impl�menter une forme �l�mentaire de programmation orient�e
+aspects en regroupant les m�thodes de diff�rentes classes impl�mentant
+une m�me fonctionnalit� en un seul endroit.
 
-    Attention, apr�s utilisation de ce d�corateur, la fonction d�cor�e reste dans
-    le namespace courant. Si cela d�range, on peut utiliser del pour la d�truire.
-    Je ne sais pas s'il existe un moyen d'�viter ce ph�nom�ne.
-    '''
+Attention, apr�s utilisation de ce d�corateur, la fonction d�cor�e reste dans
+le namespace courant. Si cela d�range, on peut utiliser del pour la d�truire.
+Je ne sais pas s'il existe un moyen d'�viter ce ph�nom�ne.
+'''
     def decorator(func):
         setattr(cls,func.__name__,func)
         return func
