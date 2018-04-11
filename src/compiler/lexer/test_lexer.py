@@ -1,18 +1,18 @@
-import apollo_lex
+from ..lexer import apollo_lex
 import unittest
 import sys
 import os
-import exceptions.exceptions as exc
+from ..exceptions import exceptions as exc
 
-# Tests performed:
-# - Test 1: regular program. Should be OK.
-# - Test 2: like test 1, with empty spaces added. Should be OK.
-# - Test 3: contains invalid character '#'. Should raise exception CharacterError.
 
 datas = []
 datas_e = []
+tokens_types = []
+tokens_values = []
+
 
 dir_path = os.path.dirname(os.path.realpath(__file__))
+print (dir_path)
 
 with open(dir_path + '/test_files/test1_lex.apollo', 'r') as myfile:
     datas.append(myfile.read())
@@ -33,8 +33,6 @@ tokens_t12 = ['START', 'NEWLINE', 'VAR', 'ID', 'TWOPOINTS', 'LPAREN', 'INT', 'CO
 'ID', 'RBRACKET', 'COMMA', 'AMP', 'TWOPOINTS', 'INT', 'COMMA', 'DUR', 'TWOPOINTS',
 'INT', 'NEWLINE', 'END']
 
-tokens_types = []
-tokens_values = []
 
 tokens_types.append(tokens_t12)
 tokens_types.append(tokens_t12)
@@ -65,8 +63,13 @@ class LexTest(unittest.TestCase):
         for i in range(len(datas_e)):
             # Give the lexer some input
             apollo_lex.lexer.input(datas_e[i])
-            #self.assertRaises(exc.CharacterError)
+            self.assertRaises(exc.CharacterError)
 
+# Tests performed:
+# - Test 1: regular program. Should be OK.
+# - Test 2: like test 1, with empty spaces added. Should be OK.
+# - Test 3: contains invalid character '#'. Should raise exception CharacterError.
 
-if __name__ == '__main__':
-    unittest.main()
+def run():
+    suite = unittest.TestLoader().loadTestsFromTestCase(LexTest)
+    unittest.TextTestRunner(verbosity=2).run(suite)

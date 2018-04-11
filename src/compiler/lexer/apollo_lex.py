@@ -5,11 +5,10 @@
 # numbers and +,-,*,/
 # ------------------------------------------------------------
 from ..ply import lex
-#import ply.lex as lex
 import sys
-#from ..lexer.exceptions import exceptions as exc
+from ..exceptions import exceptions as exc
 
-# List of token names.   This is always required
+# List of token names. This is always required
 tokens = (
    'INT',
    'PLAY',
