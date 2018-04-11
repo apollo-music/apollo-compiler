@@ -14,33 +14,43 @@ with open('test_files/test1_lex.apollo', 'r') as myfile:
 with open('test_files/test2_lex.apollo', 'r') as myfile:
     datas.append(myfile.read())
 
-tokens_values = ['^', '\n', 'var', 'bixo', ':', '(', '1', ',', '3', '+', '4', ')', '\n',
+tokens_v12 = ['^', '\n', 'var', 'bixo', ':', '(', '1', ',', '3', '+', '4', ')', '\n',
 'amp', ':', '10', '\n', 'dur', ':', '2', '\n', 'play', ':', '[', '72', ',', 'bixo',
 ']', ',', 'amp', ':', '10', ',', 'dur', ':', '3', '\n', '$']
 
-tokens_types = ['START', 'NEWLINE', 'VAR', 'ID', 'TWOPOINTS', 'LPAREN', 'INT', 'COMMA', 'INT',
+tokens_t12 = ['START', 'NEWLINE', 'VAR', 'ID', 'TWOPOINTS', 'LPAREN', 'INT', 'COMMA', 'INT',
 'SUM', 'INT', 'RPAREN', 'NEWLINE', 'AMP', 'TWOPOINTS', 'INT', 'NEWLINE', 'DUR',
 'TWOPOINTS', 'INT', 'NEWLINE', 'PLAY', 'TWOPOINTS', 'LBRACKET', 'INT', 'COMMA',
 'ID', 'RBRACKET', 'COMMA', 'AMP', 'TWOPOINTS', 'INT', 'COMMA', 'DUR', 'TWOPOINTS',
 'INT', 'NEWLINE', 'END']
 
+tokens_types = []
+tokens_values = []
+
+tokens_types.append(tokens_t12)
+tokens_types.append(tokens_t12)
+
+tokens_values.append(tokens_v12)
+tokens_values.append(tokens_v12)
+
 class LexTest(unittest.TestCase):
     def test_lex_values(self):
-        for data in datas:
+        for i in range(len(datas)):
             # Give the lexer some input
-            apollo_lex.lexer.input(data)
+            apollo_lex.lexer.input(datas[i])
             # Test using values
-            for t_val in tokens_values:
+            for t_val in tokens_values[i]:
                 tok = apollo_lex.lexer.token()
                 self.assertEqual(t_val, str(tok.value))
 
     def test_lex_types(self):
-        for data in datas:
-            apollo_lex.lexer.input(data)
-            # Test using token types
-            for t_type in tokens_types:
+        for i in range(len(datas)):
+            # Give the lexer some input
+            apollo_lex.lexer.input(datas[i])
+            # Test using values
+            for t_val in tokens_values[i]:
                 tok = apollo_lex.lexer.token()
-                self.assertEqual(t_type, str(tok.type))
+                self.assertEqual(t_val, str(tok.value))
 
 
 if __name__ == '__main__':
