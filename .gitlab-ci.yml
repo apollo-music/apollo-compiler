@@ -1,0 +1,11 @@
+image: $CI_REGISTRY_IMAGE:docker
+
+stages:
+  - build
+
+build:
+  tags:
+  - docker-kvm
+  stage: build
+  script:
+    - make
