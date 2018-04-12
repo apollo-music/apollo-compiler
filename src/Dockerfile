@@ -10,6 +10,7 @@ RUN apt-get update -qqy && \
                         pkg-config \
                         \
                         # To install python requirements
+                        python-pip \
                         python3-pip \
                         libssl-dev \
                         libffi-dev \
@@ -19,6 +20,10 @@ RUN apt-get update -qqy && \
                         \
                         # For generating mp3 files
                         fluidsynth \
+                        freepats \
+                        timidity \
+                        timidity-interfaces-extra \
+                        lame \
                        &&\
     \
     # Clean the cache to keep the image small
