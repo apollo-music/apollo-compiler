@@ -1,4 +1,4 @@
-image: $CI_REGISTRY_IMAGE/mc911/2018-s1/group-9:docker
+image: $CI_REGISTRY_IMAGE:docker
 
 stages:
   - build
