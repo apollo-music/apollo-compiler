@@ -14,6 +14,8 @@ RUN apt-get update -qqy && \
                         libssl-dev \
                         libffi-dev \
                         python-dev \
+                        python3-setuptools \
+                        python-setuptools \
                         \
                         # For generating mp3 files
                         fluidsynth \
