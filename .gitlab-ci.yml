@@ -1,7 +1,11 @@
-image: $CI_REGISTRY/mc911-2018-s1/group-9:docker
+image: $CI_REGISTRY_IMAGE/mc911/2018-s1/group-9:docker
+
+stages:
+  - build
 
 build:
+  tags:
+  - docker-kvm
   stage: build
-  
-  script: 
-    - src/test.py
+  script:
+    - make
