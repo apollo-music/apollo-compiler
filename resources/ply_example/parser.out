@@ -1,245 +1,211 @@
 Created by PLY version 3.11 (http://www.dabeaz.com/ply)
 
+Unused terminals:
+
+    AMP
+    DUR
+    END
+    NEWLINE
+    START
+
 Grammar
 
-Rule 0     S' -> expression
-Rule 1     expression -> expression PLUS term
-Rule 2     expression -> expression MINUS term
-Rule 3     expression -> term
-Rule 4     term -> term TIMES factor
-Rule 5     term -> term DIVIDE factor
-Rule 6     term -> factor
-Rule 7     factor -> NUMBER
-Rule 8     factor -> LPAREN expression RPAREN
+Rule 0     S' -> p_play
+Rule 1     p_play -> PLAY TWOPOINTS LBRACKET seqacc RBRACKET
+Rule 2     seqacc -> acc
+Rule 3     seqacc -> acc COMMA seqacc
+Rule 4     acc -> LPAREN seqnotas RPAREN
+Rule 5     acc -> nota
+Rule 6     seqnotas -> nota
+Rule 7     seqnotas -> nota COMMA seqnotas
+Rule 8     nota -> INT
 
 Terminals, with rules where they appear
 
-DIVIDE               : 5
-LPAREN               : 8
-MINUS                : 2
-NUMBER               : 7
-PLUS                 : 1
-RPAREN               : 8
-TIMES                : 4
+AMP                  : 
+COMMA                : 3 7
+DUR                  : 
+END                  : 
+INT                  : 8
+LBRACKET             : 1
+LPAREN               : 4
+NEWLINE              : 
+PLAY                 : 1
+RBRACKET             : 1
+RPAREN               : 4
+START                : 
+TWOPOINTS            : 1
 error                : 
 
 Nonterminals, with rules where they appear
 
-expression           : 1 2 8 0
-factor               : 4 5 6
-term                 : 1 2 3 4 5
+acc                  : 2 3
+nota                 : 5 6 7
+p_play               : 0
+seqacc               : 1 3
+seqnotas             : 4 7
 
 Parsing method: LALR
 
 state 0
 
-    (0) S' -> . expression
-    (1) expression -> . expression PLUS term
-    (2) expression -> . expression MINUS term
-    (3) expression -> . term
-    (4) term -> . term TIMES factor
-    (5) term -> . term DIVIDE factor
-    (6) term -> . factor
-    (7) factor -> . NUMBER
-    (8) factor -> . LPAREN expression RPAREN
+    (0) S' -> . p_play
+    (1) p_play -> . PLAY TWOPOINTS LBRACKET seqacc RBRACKET
 
-    NUMBER          shift and go to state 4
-    LPAREN          shift and go to state 5
+    PLAY            shift and go to state 2
 
-    expression                     shift and go to state 1
-    term                           shift and go to state 2
-    factor                         shift and go to state 3
+    p_play                         shift and go to state 1
 
 state 1
 
-    (0) S' -> expression .
-    (1) expression -> expression . PLUS term
-    (2) expression -> expression . MINUS term
+    (0) S' -> p_play .
 
-    PLUS            shift and go to state 6
-    MINUS           shift and go to state 7
 
 
 state 2
 
-    (3) expression -> term .
-    (4) term -> term . TIMES factor
-    (5) term -> term . DIVIDE factor
+    (1) p_play -> PLAY . TWOPOINTS LBRACKET seqacc RBRACKET
 
-    PLUS            reduce using rule 3 (expression -> term .)
-    MINUS           reduce using rule 3 (expression -> term .)
-    $end            reduce using rule 3 (expression -> term .)
-    RPAREN          reduce using rule 3 (expression -> term .)
-    TIMES           shift and go to state 8
-    DIVIDE          shift and go to state 9
+    TWOPOINTS       shift and go to state 3
 
 
 state 3
 
-    (6) term -> factor .
+    (1) p_play -> PLAY TWOPOINTS . LBRACKET seqacc RBRACKET
 
-    TIMES           reduce using rule 6 (term -> factor .)
-    DIVIDE          reduce using rule 6 (term -> factor .)
-    PLUS            reduce using rule 6 (term -> factor .)
-    MINUS           reduce using rule 6 (term -> factor .)
-    $end            reduce using rule 6 (term -> factor .)
-    RPAREN          reduce using rule 6 (term -> factor .)
+    LBRACKET        shift and go to state 4
 
 
 state 4
 
-    (7) factor -> NUMBER .
+    (1) p_play -> PLAY TWOPOINTS LBRACKET . seqacc RBRACKET
+    (2) seqacc -> . acc
+    (3) seqacc -> . acc COMMA seqacc
+    (4) acc -> . LPAREN seqnotas RPAREN
+    (5) acc -> . nota
+    (8) nota -> . INT
 
-    TIMES           reduce using rule 7 (factor -> NUMBER .)
-    DIVIDE          reduce using rule 7 (factor -> NUMBER .)
-    PLUS            reduce using rule 7 (factor -> NUMBER .)
-    MINUS           reduce using rule 7 (factor -> NUMBER .)
-    $end            reduce using rule 7 (factor -> NUMBER .)
-    RPAREN          reduce using rule 7 (factor -> NUMBER .)
+    LPAREN          shift and go to state 7
+    INT             shift and go to state 9
 
+    seqacc                         shift and go to state 5
+    acc                            shift and go to state 6
+    nota                           shift and go to state 8
 
 state 5
 
-    (8) factor -> LPAREN . expression RPAREN
-    (1) expression -> . expression PLUS term
-    (2) expression -> . expression MINUS term
-    (3) expression -> . term
-    (4) term -> . term TIMES factor
-    (5) term -> . term DIVIDE factor
-    (6) term -> . factor
-    (7) factor -> . NUMBER
-    (8) factor -> . LPAREN expression RPAREN
+    (1) p_play -> PLAY TWOPOINTS LBRACKET seqacc . RBRACKET
 
-    NUMBER          shift and go to state 4
-    LPAREN          shift and go to state 5
+    RBRACKET        shift and go to state 10
 
-    expression                     shift and go to state 10
-    term                           shift and go to state 2
-    factor                         shift and go to state 3
 
 state 6
 
-    (1) expression -> expression PLUS . term
-    (4) term -> . term TIMES factor
-    (5) term -> . term DIVIDE factor
-    (6) term -> . factor
-    (7) factor -> . NUMBER
-    (8) factor -> . LPAREN expression RPAREN
+    (2) seqacc -> acc .
+    (3) seqacc -> acc . COMMA seqacc
 
-    NUMBER          shift and go to state 4
-    LPAREN          shift and go to state 5
+    RBRACKET        reduce using rule 2 (seqacc -> acc .)
+    COMMA           shift and go to state 11
 
-    term                           shift and go to state 11
-    factor                         shift and go to state 3
 
 state 7
 
-    (2) expression -> expression MINUS . term
-    (4) term -> . term TIMES factor
-    (5) term -> . term DIVIDE factor
-    (6) term -> . factor
-    (7) factor -> . NUMBER
-    (8) factor -> . LPAREN expression RPAREN
+    (4) acc -> LPAREN . seqnotas RPAREN
+    (6) seqnotas -> . nota
+    (7) seqnotas -> . nota COMMA seqnotas
+    (8) nota -> . INT
 
-    NUMBER          shift and go to state 4
-    LPAREN          shift and go to state 5
+    INT             shift and go to state 9
 
-    term                           shift and go to state 12
-    factor                         shift and go to state 3
+    seqnotas                       shift and go to state 12
+    nota                           shift and go to state 13
 
 state 8
 
-    (4) term -> term TIMES . factor
-    (7) factor -> . NUMBER
-    (8) factor -> . LPAREN expression RPAREN
+    (5) acc -> nota .
 
-    NUMBER          shift and go to state 4
-    LPAREN          shift and go to state 5
+    COMMA           reduce using rule 5 (acc -> nota .)
+    RBRACKET        reduce using rule 5 (acc -> nota .)
 
-    factor                         shift and go to state 13
 
 state 9
 
-    (5) term -> term DIVIDE . factor
-    (7) factor -> . NUMBER
-    (8) factor -> . LPAREN expression RPAREN
+    (8) nota -> INT .
 
-    NUMBER          shift and go to state 4
-    LPAREN          shift and go to state 5
+    COMMA           reduce using rule 8 (nota -> INT .)
+    RBRACKET        reduce using rule 8 (nota -> INT .)
+    RPAREN          reduce using rule 8 (nota -> INT .)
 
-    factor                         shift and go to state 14
 
 state 10
 
-    (8) factor -> LPAREN expression . RPAREN
-    (1) expression -> expression . PLUS term
-    (2) expression -> expression . MINUS term
+    (1) p_play -> PLAY TWOPOINTS LBRACKET seqacc RBRACKET .
 
-    RPAREN          shift and go to state 15
-    PLUS            shift and go to state 6
-    MINUS           shift and go to state 7
+    $end            reduce using rule 1 (p_play -> PLAY TWOPOINTS LBRACKET seqacc RBRACKET .)
 
 
 state 11
 
-    (1) expression -> expression PLUS term .
-    (4) term -> term . TIMES factor
-    (5) term -> term . DIVIDE factor
+    (3) seqacc -> acc COMMA . seqacc
+    (2) seqacc -> . acc
+    (3) seqacc -> . acc COMMA seqacc
+    (4) acc -> . LPAREN seqnotas RPAREN
+    (5) acc -> . nota
+    (8) nota -> . INT
 
-    PLUS            reduce using rule 1 (expression -> expression PLUS term .)
-    MINUS           reduce using rule 1 (expression -> expression PLUS term .)
-    $end            reduce using rule 1 (expression -> expression PLUS term .)
-    RPAREN          reduce using rule 1 (expression -> expression PLUS term .)
-    TIMES           shift and go to state 8
-    DIVIDE          shift and go to state 9
+    LPAREN          shift and go to state 7
+    INT             shift and go to state 9
 
+    acc                            shift and go to state 6
+    seqacc                         shift and go to state 14
+    nota                           shift and go to state 8
 
 state 12
 
-    (2) expression -> expression MINUS term .
-    (4) term -> term . TIMES factor
-    (5) term -> term . DIVIDE factor
+    (4) acc -> LPAREN seqnotas . RPAREN
 
-    PLUS            reduce using rule 2 (expression -> expression MINUS term .)
-    MINUS           reduce using rule 2 (expression -> expression MINUS term .)
-    $end            reduce using rule 2 (expression -> expression MINUS term .)
-    RPAREN          reduce using rule 2 (expression -> expression MINUS term .)
-    TIMES           shift and go to state 8
-    DIVIDE          shift and go to state 9
+    RPAREN          shift and go to state 15
 
 
 state 13
 
-    (4) term -> term TIMES factor .
+    (6) seqnotas -> nota .
+    (7) seqnotas -> nota . COMMA seqnotas
 
-    TIMES           reduce using rule 4 (term -> term TIMES factor .)
-    DIVIDE          reduce using rule 4 (term -> term TIMES factor .)
-    PLUS            reduce using rule 4 (term -> term TIMES factor .)
-    MINUS           reduce using rule 4 (term -> term TIMES factor .)
-    $end            reduce using rule 4 (term -> term TIMES factor .)
-    RPAREN          reduce using rule 4 (term -> term TIMES factor .)
+    RPAREN          reduce using rule 6 (seqnotas -> nota .)
+    COMMA           shift and go to state 16
 
 
 state 14
 
-    (5) term -> term DIVIDE factor .
+    (3) seqacc -> acc COMMA seqacc .
 
-    TIMES           reduce using rule 5 (term -> term DIVIDE factor .)
-    DIVIDE          reduce using rule 5 (term -> term DIVIDE factor .)
-    PLUS            reduce using rule 5 (term -> term DIVIDE factor .)
-    MINUS           reduce using rule 5 (term -> term DIVIDE factor .)
-    $end            reduce using rule 5 (term -> term DIVIDE factor .)
-    RPAREN          reduce using rule 5 (term -> term DIVIDE factor .)
+    RBRACKET        reduce using rule 3 (seqacc -> acc COMMA seqacc .)
 
 
 state 15
 
-    (8) factor -> LPAREN expression RPAREN .
+    (4) acc -> LPAREN seqnotas RPAREN .
 
-    TIMES           reduce using rule 8 (factor -> LPAREN expression RPAREN .)
-    DIVIDE          reduce using rule 8 (factor -> LPAREN expression RPAREN .)
-    PLUS            reduce using rule 8 (factor -> LPAREN expression RPAREN .)
-    MINUS           reduce using rule 8 (factor -> LPAREN expression RPAREN .)
-    $end            reduce using rule 8 (factor -> LPAREN expression RPAREN .)
-    RPAREN          reduce using rule 8 (factor -> LPAREN expression RPAREN .)
+    COMMA           reduce using rule 4 (acc -> LPAREN seqnotas RPAREN .)
+    RBRACKET        reduce using rule 4 (acc -> LPAREN seqnotas RPAREN .)
+
+
+state 16
+
+    (7) seqnotas -> nota COMMA . seqnotas
+    (6) seqnotas -> . nota
+    (7) seqnotas -> . nota COMMA seqnotas
+    (8) nota -> . INT
+
+    INT             shift and go to state 9
+
+    nota                           shift and go to state 13
+    seqnotas                       shift and go to state 17
+
+state 17
+
+    (7) seqnotas -> nota COMMA seqnotas .
+
+    RPAREN          reduce using rule 7 (seqnotas -> nota COMMA seqnotas .)
 
