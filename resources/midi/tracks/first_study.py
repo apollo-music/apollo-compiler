@@ -21,10 +21,10 @@ track.append(trackname)
 instrument = midi.ProgramChangeEvent(tick=0, channel=0, data=[1])
 track.append(instrument)
 
-# Setting the tempo os the track
-self = midi.SetTempoEvent(data = [15, 66, 64])
-tempo = midi.SetTempoEvent.set_bpm(self, bpm = 240)
-track.append(self)
+# Setting the tempo of the song 
+a = midi.SetTempoEvent()
+a.set_bpm(bpm = 240)
+track.append(a)
 
 # Instantiate a MIDI note on event, append it to the track
 on = midi.NoteOnEvent(tick=0, velocity=250, pitch=midi.C_3)
