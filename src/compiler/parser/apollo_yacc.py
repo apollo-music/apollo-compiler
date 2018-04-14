@@ -12,7 +12,7 @@ import pdb
 
 def p_program2(p):
 	'program2 : START NEWLINE program END NEWLINE'
-	p[0] = p[3]
+	p[0] = AST.EntryNode(p[3])
 	
 def p_program_statement_newline(p):
 	'program : statement NEWLINE'
@@ -101,7 +101,7 @@ def parse(program):
 		Used to generate a AST parsing the program given as input
 		USAGE: open the file with open and read it and use it as input to parse()
 	'''
-    return yacc().parse(program)
+    return yacc(debug=True).parse(program)
 
 def run():
 	parser = yacc(debug=True)
