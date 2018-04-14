@@ -1,5 +1,5 @@
 # Yacc example
-from ..ply import yacc
+from ..ply.yacc import yacc
 
 # Get the token map from the lexer.  This is required.
 from ..lexer.apollo_lex import tokens
@@ -95,8 +95,16 @@ def p_nota_id(p):
 def p_error(p):
     print("Syntax error in input!")
 
+
+def parse(program):
+    '''
+		Used to generate a AST parsing the program given as input
+		USAGE: open the file with open and read it and use it as input to parse()
+	'''
+    return yacc().parse(program)
+
 def run():
-	parser = yacc.yacc(debug=True)
+	parser = yacc(debug=True)
 
 	f = open(sys.argv[1], 'r')
 	prog = f.read()

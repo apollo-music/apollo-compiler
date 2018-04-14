@@ -1,6 +1,6 @@
 #AST stuff to use the annotations
-from ..AST import AST
-from ..AST.AST import addToClass
+from compiler.AST import AST
+from compiler.AST.AST import addToClass
 
 AST.blockNb = 0
 
@@ -21,7 +21,7 @@ def compile(self):
 	print("track = midi.Track()")
 	print("beat = 0")
 	print("pattern.append(track)\n")
-    return self
+	return self
 
 @addToClass(AST.TokenNode)
 def compile(self):
@@ -38,23 +38,23 @@ def compile(self):
 	print("dur = " + self.tok)
 	dur = self.tok
 	return self
-	
+
 @addToClass(AST.VarNode)
 def compile(self):
-    left = self.children[0]
-    right = self.children[1]
-	
+	left = self.children[0]
+	right = self.children[1]
+
 	if right.type == "Acc":
 		print(str(left.tok) + " = " + str(right.compile()))
 	else:
 		print(str(left.tok) + " = [" + str(right.compile()) + "]")
-		
-    return self
+
+	return self
 
 @addToClass(AST.AccNode)
 def compile(self):
 	return (self.children[0].compile())
-    
+
 @addToClass(AST.SeqNotasNode)
 def compile(self):
 	if len(self.children) == 1:
@@ -68,49 +68,50 @@ def compile(self):
 		return [self.children[0].compile()]
 	else:
 		return [self.children[0].compile()] + [self.children[1].compile()]
-		
-@addToClass(AST.CommandNode) 
+
+@addToClass(AST.CommandNode)
 def compile(self):
-    left = self.children[0]
-    right = self.children[1]
-    
-    amp_before = amp
-    dur_before = dur
-    
-    left.compile()
-    right.compile()
+	left = self.children[0]
+	right = self.children[1]
+
+	amp_before = amp
+	dur_before = dur
+
+	left.compile()
+	right.compile()
 
 	amp = amp_before
 	dur = dur_before
-	
-    return self
+
+	return self
 
 def playNotes(notes):
 	for n in notes:
 		print("note_on = midi.NoteOnEvent(tick=beat, velocity= " + amp + ", pitch=" + n + ")")
 		print("track.append(note_on)")
-	
+
 	print("beat = " + dur)
-	
+
 	for n in notes:
 		print("note_off = midi.NoteOnEvent(tick=beat, velocity=0, pitch=" + n + ")")
 		print("track.append(note_off)")
 		print("beat = 0")
-	
+
 @addToClass(AST.PlayNode)
 def compile(self):
-    exp = self.children[0].compile()
-    
-    for acc in exp:
+	exp = self.children[0].compile()
+
+	for acc in exp:
 		playNotes(acc)
 
-if __name__ == "__main__":
-    from parser import parse
-    import sys, os
 
-    f = open(sys.argv[1], 'r')
-    prog = f.read()
-    f.close()
- 
-    ast = parse(prog)
-    compiled = ast.compile()
+def run():
+	from compiler.parser import apollo_yacc
+	import sys, os
+
+	f = open(sys.argv[1], 'r')
+	prog = f.read()
+	f.close()
+
+	ast = apollo_yacc.parse(prog)
+	compiled = ast.compile()

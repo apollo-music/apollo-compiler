@@ -1,15 +1,15 @@
 # Lexer Errors
 class LexerError(Exception):
-    """Base class for exceptions in this module."""
-    pass
+	"""Base class for exceptions in this module."""
+	pass
 
 class CharacterError(LexerError):
-    """Exception raised for errors in the input.
+	"""Exception raised for errors in the input.
 
-    Attributes:
-        expr -- input expression in which the error occurred
-        msg  -- explanation of the error
-    """
+	Attributes:
+		expr -- input expression in which the error occurred
+		msg  -- explanation of the error
+	"""
 
-    def __init__(self, msg):
-        self.msg = "Invalid Character: " + msg
+	def __init__(self, msg):
+		self.msg = "Invalid Character: " + msg

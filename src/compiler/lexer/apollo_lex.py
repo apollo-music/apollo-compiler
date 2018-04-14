@@ -46,15 +46,15 @@ t_MULTIPLY = r'\*'
 
 # Define a rule so we can track line numbers
 def t_NEWLINE(t):
-    r'\n+'
-    t.lexer.lineno += len(t.value)
-    return t
+	r'\n+'
+	t.lexer.lineno += len(t.value)
+	return t
 
 # A regular expression rule with some action code
 def t_INT(t):
-    r'\d+'
-    t.value = int(t.value)
-    return t
+	r'\d+'
+	t.value = int(t.value)
+	return t
 
 def t_AMP(t):
 	r'AMP | amp'
@@ -81,9 +81,9 @@ t_ignore  = ' \t'
 
 # Error handling rule
 def t_error(t):
-    print("Illegal character '%s'" % t.value[0])
-    t.lexer.skip(1)
-    raise exc.CharacterError("'%s' is not a valid Character for Apollo" % t.value[0])
+	print("Illegal character '%s'" % t.value[0])
+	t.lexer.skip(1)
+	raise exc.CharacterError("'%s' is not a valid Character for Apollo" % t.value[0])
 
 # Build the lexer
 lexer = lex.lex()
