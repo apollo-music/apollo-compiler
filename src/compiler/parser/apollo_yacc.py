@@ -3,6 +3,7 @@ from ..ply import yacc
 
 # Get the token map from the lexer.  This is required.
 from ..lexer.apollo_lex import tokens
+from ..exceptions import exceptions as exc
 
 #graphic AST stuff
 from ..AST import AST
@@ -94,6 +95,7 @@ def p_nota_id(p):
 # Error rule for syntax errors
 def p_error(p):
     print("Syntax error in input!")
+	raise exc.SyntaxError("Syntax error in input!")
 
 def run():
 	parser = yacc.yacc(debug=True)
