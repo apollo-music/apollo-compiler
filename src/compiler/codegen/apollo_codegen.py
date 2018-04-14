@@ -2,10 +2,8 @@
 from compiler.AST import AST
 from compiler.AST.AST import addToClass
 
-AST.blockNb = 0
-
-amp = 100
-dur = 200
+AST.amp = 100
+AST.dur = 200
 
 # GenericNode
 @addToClass(AST.Node)
@@ -35,7 +33,7 @@ def compile(self):
 @addToClass(AST.ProgramNode)
 def compile(self):
 	for c in self.children:
-		print(c)	#DEBUG
+		print('ProgramNode:\n' + str(c))	#DEBUG
 		c.compile()
 	return self
 
@@ -47,14 +45,14 @@ def compile(self):
 	left = self.children[0]
 	right = self.children[1]
 
-	amp_before = amp
-	dur_before = dur
+	amp_before = AST.amp
+	dur_before = AST.dur
 
 	left.compile()
 	right.compile()
 
-	amp = amp_before
-	dur = dur_before
+	AST.amp = amp_before
+	AST.dur = dur_before
 
 	return self
 
@@ -79,16 +77,20 @@ def compile(self):
 # - 'param : AMP TWOPOINTS INT' | p[0] = AST.AmpNode([AST.TokenNode(p[3])])
 @addToClass(AST.AmpNode)
 def compile(self):
-	print("amp = " + self.tok)
-	amp = self.tok
+	print('AmpNode:\n' +  str(self))	# DEBUG
+	if len(self.children) == 1:
+		print("amp = " + str(self.children[0]))
+	amp = self.children[0]
 	return self
 
 # DurNode
 # - 'param : DUR TWOPOINTS INT' | p[0] = AST.DurNode([AST.TokenNode(p[3])])
 @addToClass(AST.DurNode)
 def compile(self):
-	print("dur = " + self.tok)
-	dur = self.tok
+	print('DurNode:\n' + str(self))  # DEBUG
+	if len(self.children) == 1:
+		print("dur = " + str(self.children[0]))
+	amp = self.children[0]
 	return self
 
 # VarNode
@@ -112,6 +114,7 @@ def compile(self):
 # - 'acc : nota' |  AST.AccNode([p[1]])
 @addToClass(AST.AccNode)
 def compile(self):
+    # PRECISA COLOCAR QUE ESSA SEQ DE NOTAS É ACORDE
 	return (self.children[0].compile())
 
 
@@ -127,13 +130,13 @@ def compile(self):
 
 def playNotes(notes):
 	for n in notes:
-		print("note_on = midi.NoteOnEvent(tick=beat, velocity= " + amp + ", pitch=" + n + ")")
+		print("note_on = midi.NoteOnEvent(tick=beat, velocity= " + str(AST.amp) + ", pitch=" + str(n) + ")")
 		print("track.append(note_on)")
 
-	print("beat = " + dur)
+	print("beat = " + AST.dur)
 
 	for n in notes:
-		print("note_off = midi.NoteOnEvent(tick=beat, velocity=0, pitch=" + n + ")")
+		print("note_off = midi.NoteOnEvent(tick=beat, velocity=0, pitch=" + str(n) + ")")
 		print("track.append(note_off)")
 		print("beat = 0")
 
@@ -141,8 +144,9 @@ def playNotes(notes):
 # 'command : PLAY TWOPOINTS LBRACKET expression RBRACKET' | AST.PlayNode([p[4]])
 @addToClass(AST.PlayNode)
 def compile(self):
+	print('PlayNode:\n' + str(self.children))		#DEBUG
 	exp = self.children[0].compile()
-
+	print('exp:\n' + str(exp))  	# DEBUG
 	for acc in exp:
 		playNotes(acc)
 
@@ -150,6 +154,9 @@ def compile(self):
 def run():
 	from compiler.parser import apollo_yacc
 	import sys, os
+
+	global amp
+	global dur
 
 	f = open(sys.argv[1], 'r')
 	prog = f.read()

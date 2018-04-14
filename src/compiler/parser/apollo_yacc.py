@@ -30,11 +30,11 @@ def p_statement(p):
 		
 def p_param_AMP(p):
 	'param : AMP TWOPOINTS INT'
-	p[0] = AST.AmpNode([AST.TokenNode(p[3])])
+	p[0] = AST.AmpNode(AST.TokenNode(p[3]))
 
 def p_param_DUR(p):
 	'param : DUR TWOPOINTS INT'
-	p[0] = AST.DurNode([AST.TokenNode(p[3])])
+	p[0] = AST.DurNode(AST.TokenNode(p[3]))
 
 def p_command_param(p):
 	'command : command COMMA param'
