@@ -1,5 +1,5 @@
 # ------------------------------------------------------------
-# calclex.py
+# apollo_lex.py
 #
 # tokenizer for a simple expression evaluator for
 # numbers and +,-,*,/
