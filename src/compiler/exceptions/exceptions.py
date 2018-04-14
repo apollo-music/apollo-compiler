@@ -13,3 +13,11 @@ class CharacterError(LexerError):
 
 	def __init__(self, msg):
 		self.msg = "Invalid Character: " + msg
+
+
+class SemanticError(Exception):
+	pass
+
+class VariableNotDefinedError(SemanticError):
+	def __init__(self, msg):
+		self.msg = "ERROR: " + msg + " has not been defined"
