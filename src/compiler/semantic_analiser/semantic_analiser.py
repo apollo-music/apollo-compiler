@@ -1,69 +1,110 @@
 import sys
 from ..AST import AST
+from ..AST.AST import addToClass
 from ..AST.AST import Node
+from ..exceptions import exceptions
 
-class PreFunctions():
-    def pre_Token(node):
-        print("Token: " + str(node.tok))
-    def pre_Program(node):
-        print("pre Program")
-    def pre_Amp(node):
-        print("pre Amp")
-    def pre_Dur(node):
-        print("pre Dur")
-    def pre_Command(node):
-        print("pre Command")
-    def pre_Play(node):
-        print("pre Play")
-    def pre_Var(node):
-        print("pre Var")
-    def pre_Expression(node):
-        print("pre Expression")
-    def pre_Acc(node):
-        print("pre Acc")
-    def pre_SeqNotas(node):
-        print("pre SeqNotas")
-    def pre_Op(node):
-        print("pre Op")
-    def pre_default(node):
-        print("pre default")
-class PosFunctions():
-    def pos_Token(node):
-        print("pos Token")
-    def pos_Program(node):
-        print("pos Program")
-    def pos_Amp(node):
-        print("pos Amp")
-    def pos_Dur(node):
-        print("pos Dur")
-    def pos_Command(node):
-        print("pos Command")
-    def pos_Play(node):
-        print("pos Play")
-    def pos_Var(node):
-        print("pos Var")
-    def pos_Expression(node):
-        print("pos Expression")
-    def pos_Acc(node):
-        print("pos Acc")
-    def pos_SeqNotas(node):
-        print("pos SeqNotas")
-    def pos_Op(node):
-        print("pos Op")
-    def pos_default(node):
-        print("pos default")
+def run(ast):
+    symtable = SymTable("global")
+    #analise(ast, symtable)
+    print("Starting Semantic Analisys ...")
+    ast.analise(symtable)
+    print("Semantic Analisys Finished!")
 
-def analise( head: Node ):
-    if hasattr(PreFunctions, "pre_" + head.type):
-        getattr(PreFunctions, "pre_" + head.type)(head)
-    else:
-        getattr(PreFunctions, "pre_default")(head)
-    for child in head.children:
-        analise(child)
-    if hasattr(PosFunctions, "pos_" + head.type):
-        getattr(PosFunctions, "pos_" + head.type)(head)
-    else:
-        getattr(PosFunctions, "pos_default")(head)
+class SymTable():
+    scope = ""
+    parent = None
+    symbols = []
+    def __init__(self, scope, children=None):
+        self.scope = scope
+        if not children: self.children = []
+        elif hasattr(children,'__len__'):
+            self.children = children
+        else:
+            self.children = [children]
 
-def run(ast):  
-    analise(ast)
+        for child in self.children:
+            child.parent = self
+    
+    def AddChild(self, child):
+        self.children.append(child)
+        child.parent = self
+
+    # Check if element exists in scope
+    def FindInScope(self, elem):
+        node = self
+        if elem in self.symbols:
+            return True
+        while node.parent:
+            if elem in self.symbols:
+                return True
+            node = node.parent
+        return False
+
+    def AddSymbol(self, symbol):
+        self.symbols.append(symbol)
+
+########################
+## Analiser Functions ##
+########################
+
+@addToClass(AST.Node)
+def analise(self, scopeNode):
+    for child in self.children:
+        child.analise(scopeNode)
+
+@addToClass(AST.EntryNode)
+def analise(self, scopeNode):	
+    for child in self.children:
+        child.analise(scopeNode)
+
+@addToClass(AST.TokenNode)
+def analise(self, scopeNode):
+	if isinstance(self.tok, str):
+            if not scopeNode.FindInScope(self.tok):
+                raise exceptions.VariableNotDefinedError(self.tok)
+
+@addToClass(AST.AmpNode)
+def analise(self, scopeNode):
+    for child in self.children:
+        child.analise(scopeNode)
+
+@addToClass(AST.DurNode)
+def analise(self, scopeNode):
+    for child in self.children:
+        child.analise(scopeNode)
+	
+@addToClass(AST.VarNode)
+def analise(self, scopeNode):
+    left = self.children[0]
+    right = self.children[1]
+
+    scopeNode.AddSymbol(left.tok)
+	
+    if right.type == "Acc":
+        right.analise(scopeNode)
+
+@addToClass(AST.AccNode)
+def analise(self, scopeNode):
+    child = self.children[0]
+    child.analise(scopeNode)
+    
+@addToClass(AST.SeqNotasNode)
+def analise(self, scopeNode):
+    for child in self.children:
+        child.analise(scopeNode)
+
+@addToClass(AST.ExpressionNode)
+def analise(self, scopeNode):
+    for child in self.children:
+        child.analise(scopeNode)
+		
+@addToClass(AST.CommandNode) 
+def analise(self, scopeNode):
+    for child in self.children:
+        child.analise(scopeNode)
+	
+@addToClass(AST.PlayNode)
+def analise(self, scopeNode):
+    for child in self.children:
+        child.analise(scopeNode)
