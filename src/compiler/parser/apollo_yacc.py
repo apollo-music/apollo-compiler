@@ -54,28 +54,28 @@ def p_assignation(p):
 	p[0] = AST.VarNode([AST.TokenNode(p[2]), p[4]])
 		
 def p_seqacc_acc(p):
-    'expression : acc'
-    p[0] = AST.ExpressionNode([p[1]])
+	'expression : acc'
+	p[0] = AST.ExpressionNode([p[1]])
 
 def p_seqacc_accseqacc(p):
-    'expression : acc COMMA expression'
-    p[0] = AST.ExpressionNode([p[1], p[3]])
+	'expression : acc COMMA expression'
+	p[0] = AST.ExpressionNode([p[1], p[3]])
 
 def p_acc_seqnotas(p):
-    'acc : LPAREN seqnotas RPAREN'
-    p[0] = AST.AccNode([p[2]])
+	'acc : LPAREN seqnotas RPAREN'
+	p[0] = AST.AccNode([p[2]])
 
 def p_acc_nota(p):
-    'acc : nota'
-    p[0] = AST.AccNode([p[1]])
+	'acc : nota'
+	p[0] = AST.AccNode([p[1]])
 
 def p_seqnotas_nota(p):
-    'seqnotas : nota'
-    p[0] = AST.SeqNotasNode([p[1]])
+	'seqnotas : nota'
+	p[0] = AST.SeqNotasNode([p[1]])
 
 def p_seqnotas_notaseqnotas(p):
-    'seqnotas : nota COMMA seqnotas'
-    p[0] = AST.SeqNotasNode([p[1], p[3]])
+	'seqnotas : nota COMMA seqnotas'
+	p[0] = AST.SeqNotasNode([p[1], p[3]])
 
 def p_nota_op(p):
 	'''nota : nota SUM nota 
@@ -85,16 +85,16 @@ def p_nota_op(p):
 	p[0] = AST.OpNode(p[2], [p[1], p[3]])
 	
 def p_nota(p):
-    'nota : INT'
-    p[0] = AST.TokenNode(p[1])
+	'nota : INT'
+	p[0] = AST.TokenNode(p[1])
 
 def p_nota_id(p):
-    'nota : ID'
-    p[0] = AST.TokenNode(p[1])
+	'nota : ID'
+	p[0] = AST.TokenNode(p[1])
 
 # Error rule for syntax errors
 def p_error(p):
-    print("Syntax error in input!")
+	print("Syntax error in input!")
 	raise exc.SyntaxError("Syntax error in input!")
 
 def run():
