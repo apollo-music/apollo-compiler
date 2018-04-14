@@ -1,23 +1,36 @@
 # Lexer Errors
 class LexerError(Exception):
-	"""Base class for exceptions in this module."""
-	pass
+    """Base class for exceptions in the lexer module."""
+    pass
 
 class CharacterError(LexerError):
 	"""Exception raised for errors in the input.
 
-	Attributes:
-		expr -- input expression in which the error occurred
-		msg  -- explanation of the error
-	"""
+    Attributes:
+        msg  -- explanation of the error
+    """
 
 	def __init__(self, msg):
 		self.msg = "Invalid Character: " + msg
 
+# Parser Errors
+class ParserError(Exception):
+    """Base class for exceptions in the parser module."""
+    pass
 
+class SyntaxError(ParserError):
+    """Exception raised for syntax errors.
+    Attributes:
+        msg  -- explanation of the error
+    """
+
+    def __init__(self, msg):
+        self.msg = "Syntax Error: " + msg
+
+# Semantic Analysis Errors
 class SemanticError(Exception):
 	pass
 
 class VariableNotDefinedError(SemanticError):
-	def __init__(self, msg):
-		self.msg = "ERROR: " + msg + " has not been defined"
+    def __init__(self, msg):
+        self.msg = "Semantic Error: " + msg + " has not been defined"
