@@ -61,16 +61,21 @@ def compile(self):
 # - 'expression : acc COMMA expression' | AST.ExpressionNode([p[1], p[3]])
 @addToClass(AST.ExpressionNode)
 def compile(self):
+	print("ExpressionNode:\n", self)		# DEBUG
 	if len(self.children) == 1:
-		return [self.children[0].compile()]
+		uniqueNode = self.children[0].compile()
+		print(uniqueNode)					# DEBUG
+		return uniqueNode
 	else:
-		return [self.children[0].compile()] + [self.children[1].compile()]
+		left = self.children[0].compile() 
+		right = self.children[1].compile()
+		return [left + right]
 
 # TokenNode ()
 # - 	MULTIPLE USES :S - I'm very confused
 @addToClass(AST.TokenNode)
 def compile(self):
-	print(self.tok)		# DEBUG
+	print("TokenNode: " + str(self.tok))		# DEBUG
 	return self.tok
 
 # AmpNode
@@ -99,11 +104,16 @@ def compile(self):
 # 'assignation : VAR ID TWOPOINTS acc' | AST.VarNode([AST.TokenNode(p[2]), p[4]])
 @addToClass(AST.VarNode)
 def compile(self):
+	print("VarNode:\n" + str(self.children))
 	left = self.children[0]
 	right = self.children[1]
 
 	if right.type == "Acc":
-		print(str(left.tok) + " = " + str(right.compile()))
+		variable = right.compile()
+		print(str(left.tok) + " = (", end="")
+		for element in variable:
+			print(str(element) + ', ', end="")
+		print(")")
 	else:
 		print(str(left.tok) + " = [" + str(right.compile()) + "]")
 
@@ -114,8 +124,10 @@ def compile(self):
 # - 'acc : nota' |  AST.AccNode([p[1]])
 @addToClass(AST.AccNode)
 def compile(self):
-    # PRECISA COLOCAR QUE ESSA SEQ DE NOTAS É ACORDE
-	return (self.children[0].compile())
+	# PRECISA COLOCAR QUE ESSA SEQ DE NOTAS É ACORDE
+	music = self.children[0].compile()
+	print("AccNode:\n" + str(music))
+	return (music)
 
 
 # SeqNotasNode
@@ -123,10 +135,11 @@ def compile(self):
 # 'seqnotas : nota COMMA seqnotas' | AST.SeqNotasNode([p[1], p[3]])
 @addToClass(AST.SeqNotasNode)
 def compile(self):
+	print("SeqNotasNodeSeq:\n" + str(self.children))
 	if len(self.children) == 1:
-		return [self.children[0].compile()]
+		return self.children[0].compile()
 	else:
-		return [self.children[0].compile()] + [self.children[1].compile()]
+		return [self.children[0].compile(), self.children[1].compile()]
 
 def playNotes(notes):
 	for n in notes:
@@ -144,9 +157,10 @@ def playNotes(notes):
 # 'command : PLAY TWOPOINTS LBRACKET expression RBRACKET' | AST.PlayNode([p[4]])
 @addToClass(AST.PlayNode)
 def compile(self):
-	print('PlayNode:\n' + str(self.children))		#DEBUG
+	print('PlayNode:\n' + str(self))  	# DEBUG
+	print(str(self.children))			# DEBUG
 	exp = self.children[0].compile()
-	print('exp:\n' + str(exp))  	# DEBUG
+	print('exp:\n' + str(exp))  		# DEBUG
 	for acc in exp:
 		playNotes(acc)
 
