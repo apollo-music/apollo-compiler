@@ -5,6 +5,8 @@ from compiler.AST.AST import addToClass
 AST.amp = 100
 AST.dur = 200
 AST.table = {}
+AST.outfile = open('intermediate.py', 'w')
+	
 
 # GenericNode
 @addToClass(AST.Node)
@@ -17,11 +19,11 @@ def compile(self):
 # - 'program2 : START NEWLINE program END NEWLINE' | AST.EntryNode(p[3])
 @addToClass(AST.EntryNode)
 def compile(self):
-	print("import midi")
-	print("pattern = midi.Pattern(format=1, resolution = 100, tick_relative=1)")
-	print("track = midi.Track()")
-	print("beat = 0")
-	print("pattern.append(track)\n")
+	print("import midi", file=AST.outfile)
+	print("pattern = midi.Pattern(format=1, resolution = 100, tick_relative=1)", file=AST.outfile)
+	print("track = midi.Track()", file=AST.outfile)
+	print("beat = 0", file=AST.outfile)
+	print("pattern.append(track)\n", file=AST.outfile)
 
 	for c in self.children:
 		print(c)  # DEBUG
@@ -72,7 +74,10 @@ def compile(self):
 		expr = self.children[1].compile()
 		if type(acc) is not list:
 			acc = [acc]
-		acc.append(expr)
+		if type(expr) is list:
+			acc = acc + expr
+		else:
+			acc.append(expr)
 		return acc
 
 # TokenNode ()
@@ -88,8 +93,9 @@ def compile(self):
 def compile(self):
 	print('AmpNode:\n' +  str(self))	# DEBUG
 	if len(self.children) == 1:
-		print("amp = " + str(self.children[0]))
-	amp = self.children[0]
+		amp = self.children[0]
+		print("amp = " + str(amp), file=AST.outfile)
+		AST.amp = int(str(amp))
 	return self
 
 # DurNode
@@ -98,8 +104,9 @@ def compile(self):
 def compile(self):
 	print('DurNode:\n' + str(self))  # DEBUG
 	if len(self.children) == 1:
-		print("dur = " + str(self.children[0]))
-	amp = self.children[0]
+		dur = self.children[0]
+		print("dur = " + str(dur), file=AST.outfile)
+		AST.dur = int(str(dur))
 	return self
 
 # VarNode
@@ -114,11 +121,11 @@ def compile(self):
 
 	if right.type == "Acc":
 		acc = right.compile()
-		print(str(left.tok) + " = " + str(tuple(acc)))
+		print(str(left.tok) + " = " + str(tuple(acc)), file=AST.outfile)
 		AST.table[left.tok] = tuple(acc)
 	else:
 		expr = right.compile()
-		print(str(left.tok) + " = " + str(expr))
+		print(str(left.tok) + " = " + str(expr), file=AST.outfile)
 		AST.table[left.tok] = list(expr)
 
 	return self
@@ -129,11 +136,16 @@ def compile(self):
 @addToClass(AST.AccNode)
 def compile(self):
 	# PRECISA COLOCAR QUE ESSA SEQ DE NOTAS É ACORDE
-	music = self.children[0].compile()
-	print("AccNode:\n" + str(music))
-	if type(music) is str:
-		return (AST.table).get(music, "()")
-	return (music)
+	uniq_or_seq = self.children[0].compile()
+	print("AccNode2:\n" + str(uniq_or_seq))
+
+	if type(uniq_or_seq) is str:
+		return (AST.table).get(uniq_or_seq, "()")
+	
+	if self.children[0].type == "SeqNotas":
+		return tuple(uniq_or_seq)
+	else:
+		return uniq_or_seq
 
 
 # SeqNotasNode
@@ -155,16 +167,14 @@ def compile(self):
 
 
 def playNotes(notes):
-	for n in notes:
-		print("note_on = midi.NoteOnEvent(tick=beat, velocity= " + str(AST.amp) + ", pitch=" + str(n) + ")")
-		print("track.append(note_on)")
-
-	print("beat = " + AST.dur)
-
-	for n in notes:
-		print("note_off = midi.NoteOnEvent(tick=beat, velocity=0, pitch=" + str(n) + ")")
-		print("track.append(note_off)")
-		print("beat = 0")
+	if type(notes) is int:
+		print("beat = 0", file=AST.outfile)
+		print("note_on = midi.NoteOnEvent(tick=beat, velocity= " + str(AST.amp) + ", pitch=" + str(notes) + ")", file=AST.outfile)
+		print("track.append(note_on)", file=AST.outfile)
+		print("beat = " + str(AST.dur), file=AST.outfile)
+		print("note_off = midi.NoteOnEvent(tick=beat, velocity=0, pitch=" + str(notes) + ")", file=AST.outfile)
+		print("track.append(note_off)", file=AST.outfile)
+	# ELSE?
 
 # PlayNode
 # 'command : PLAY TWOPOINTS LBRACKET expression RBRACKET' | AST.PlayNode([p[4]])
@@ -181,9 +191,6 @@ def compile(self):
 def run():
 	from compiler.parser import apollo_yacc
 	import sys, os
-
-	global amp
-	global dur
 
 	f = open(sys.argv[1], 'r')
 	prog = f.read()
