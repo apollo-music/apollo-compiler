@@ -4,6 +4,7 @@ from compiler.AST.AST import addToClass
 
 AST.amp = 100
 AST.dur = 200
+AST.table = {}
 
 # GenericNode
 @addToClass(AST.Node)
@@ -63,13 +64,16 @@ def compile(self):
 def compile(self):
 	print("ExpressionNode:\n", self)		# DEBUG
 	if len(self.children) == 1:
-		uniqueNode = self.children[0].compile()
-		print(uniqueNode)					# DEBUG
-		return uniqueNode
+		acc = self.children[0].compile()
+		print(acc)							# DEBUG
+		return acc
 	else:
-		left = self.children[0].compile() 
-		right = self.children[1].compile()
-		return [left + right]
+		acc = self.children[0].compile()
+		expr = self.children[1].compile()
+		if type(acc) is not list:
+			acc = [acc]
+		acc.append(expr)
+		return acc
 
 # TokenNode ()
 # - 	MULTIPLE USES :S - I'm very confused
@@ -109,13 +113,13 @@ def compile(self):
 	right = self.children[1]
 
 	if right.type == "Acc":
-		variable = right.compile()
-		print(str(left.tok) + " = (", end="")
-		for element in variable:
-			print(str(element) + ', ', end="")
-		print(")")
+		acc = right.compile()
+		print(str(left.tok) + " = " + str(tuple(acc)))
+		AST.table[left.tok] = tuple(acc)
 	else:
-		print(str(left.tok) + " = [" + str(right.compile()) + "]")
+		expr = right.compile()
+		print(str(left.tok) + " = " + str(expr))
+		AST.table[left.tok] = list(expr)
 
 	return self
 
@@ -127,6 +131,8 @@ def compile(self):
 	# PRECISA COLOCAR QUE ESSA SEQ DE NOTAS É ACORDE
 	music = self.children[0].compile()
 	print("AccNode:\n" + str(music))
+	if type(music) is str:
+		return (AST.table).get(music, "()")
 	return (music)
 
 
@@ -136,10 +142,17 @@ def compile(self):
 @addToClass(AST.SeqNotasNode)
 def compile(self):
 	print("SeqNotasNodeSeq:\n" + str(self.children))
+	print(self.children[0].compile())
 	if len(self.children) == 1:
-		return self.children[0].compile()
+		nota = self.children[0].compile()
+		print(nota)
+		return [nota]
 	else:
-		return [self.children[0].compile(), self.children[1].compile()]
+		nota = [self.children[0].compile()]
+		seqnotas = self.children[1].compile()
+		nota = nota + seqnotas
+		return (nota)
+
 
 def playNotes(notes):
 	for n in notes:
