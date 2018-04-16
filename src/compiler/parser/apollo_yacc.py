@@ -12,7 +12,7 @@ import sys
 import pdb
 
 def p_program2(p):
-	'program2 : START NEWLINE program END NEWLINE'
+	'program2 : START NEWLINE program END'
 	p[0] = AST.EntryNode(p[3])
 	
 def p_program_statement_newline(p):

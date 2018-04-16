@@ -3,7 +3,7 @@ Created by PLY version 3.11 (http://www.dabeaz.com/ply)
 Grammar
 
 Rule 0     S' -> program2
-Rule 1     program2 -> START NEWLINE program END NEWLINE
+Rule 1     program2 -> START NEWLINE program END
 Rule 2     program -> statement NEWLINE
 Rule 3     program -> statement NEWLINE program
 Rule 4     statement -> command
@@ -39,7 +39,7 @@ LBRACKET             : 10 11
 LPAREN               : 15
 MINUS                : 20
 MULTIPLY             : 21
-NEWLINE              : 1 1 2 3
+NEWLINE              : 1 2 3
 PLAY                 : 10
 RBRACKET             : 10 11
 RPAREN               : 15
@@ -67,7 +67,7 @@ Parsing method: LALR
 state 0
 
     (0) S' -> . program2
-    (1) program2 -> . START NEWLINE program END NEWLINE
+    (1) program2 -> . START NEWLINE program END
 
     START           shift and go to state 2
 
@@ -81,14 +81,14 @@ state 1
 
 state 2
 
-    (1) program2 -> START . NEWLINE program END NEWLINE
+    (1) program2 -> START . NEWLINE program END
 
     NEWLINE         shift and go to state 3
 
 
 state 3
 
-    (1) program2 -> START NEWLINE . program END NEWLINE
+    (1) program2 -> START NEWLINE . program END
     (2) program -> . statement NEWLINE
     (3) program -> . statement NEWLINE program
     (4) statement -> . command
@@ -114,7 +114,7 @@ state 3
 
 state 4
 
-    (1) program2 -> START NEWLINE program . END NEWLINE
+    (1) program2 -> START NEWLINE program . END
 
     END             shift and go to state 13
 
@@ -181,9 +181,9 @@ state 12
 
 state 13
 
-    (1) program2 -> START NEWLINE program END . NEWLINE
+    (1) program2 -> START NEWLINE program END .
 
-    NEWLINE         shift and go to state 20
+    $end            reduce using rule 1 (program2 -> START NEWLINE program END .)
 
 
 state 14
@@ -209,7 +209,7 @@ state 14
     VAR             shift and go to state 12
 
     statement                      shift and go to state 5
-    program                        shift and go to state 21
+    program                        shift and go to state 20
     command                        shift and go to state 6
     param                          shift and go to state 7
     assignation                    shift and go to state 8
@@ -223,27 +223,27 @@ state 15
     AMP             shift and go to state 10
     DUR             shift and go to state 11
 
-    param                          shift and go to state 22
+    param                          shift and go to state 21
 
 state 16
 
     (10) command -> PLAY TWOPOINTS . LBRACKET expression RBRACKET
 
-    LBRACKET        shift and go to state 23
+    LBRACKET        shift and go to state 22
 
 
 state 17
 
     (7) param -> AMP TWOPOINTS . INT
 
-    INT             shift and go to state 24
+    INT             shift and go to state 23
 
 
 state 18
 
     (8) param -> DUR TWOPOINTS . INT
 
-    INT             shift and go to state 25
+    INT             shift and go to state 24
 
 
 state 19
@@ -251,24 +251,17 @@ state 19
     (11) assignation -> VAR ID . TWOPOINTS LBRACKET expression RBRACKET
     (12) assignation -> VAR ID . TWOPOINTS acc
 
-    TWOPOINTS       shift and go to state 26
+    TWOPOINTS       shift and go to state 25
 
 
 state 20
-
-    (1) program2 -> START NEWLINE program END NEWLINE .
-
-    $end            reduce using rule 1 (program2 -> START NEWLINE program END NEWLINE .)
-
-
-state 21
 
     (3) program -> statement NEWLINE program .
 
     END             reduce using rule 3 (program -> statement NEWLINE program .)
 
 
-state 22
+state 21
 
     (9) command -> command COMMA param .
 
@@ -276,7 +269,7 @@ state 22
     NEWLINE         reduce using rule 9 (command -> command COMMA param .)
 
 
-state 23
+state 22
 
     (10) command -> PLAY TWOPOINTS LBRACKET . expression RBRACKET
     (13) expression -> . acc
@@ -289,15 +282,15 @@ state 23
     (22) nota -> . INT
     (23) nota -> . ID
 
-    LPAREN          shift and go to state 29
-    INT             shift and go to state 31
-    ID              shift and go to state 32
+    LPAREN          shift and go to state 28
+    INT             shift and go to state 30
+    ID              shift and go to state 31
 
-    expression                     shift and go to state 27
-    acc                            shift and go to state 28
-    nota                           shift and go to state 30
+    expression                     shift and go to state 26
+    acc                            shift and go to state 27
+    nota                           shift and go to state 29
 
-state 24
+state 23
 
     (7) param -> AMP TWOPOINTS INT .
 
@@ -305,7 +298,7 @@ state 24
     COMMA           reduce using rule 7 (param -> AMP TWOPOINTS INT .)
 
 
-state 25
+state 24
 
     (8) param -> DUR TWOPOINTS INT .
 
@@ -313,7 +306,7 @@ state 25
     COMMA           reduce using rule 8 (param -> DUR TWOPOINTS INT .)
 
 
-state 26
+state 25
 
     (11) assignation -> VAR ID TWOPOINTS . LBRACKET expression RBRACKET
     (12) assignation -> VAR ID TWOPOINTS . acc
@@ -325,31 +318,31 @@ state 26
     (22) nota -> . INT
     (23) nota -> . ID
 
-    LBRACKET        shift and go to state 33
-    LPAREN          shift and go to state 29
-    INT             shift and go to state 31
-    ID              shift and go to state 32
+    LBRACKET        shift and go to state 32
+    LPAREN          shift and go to state 28
+    INT             shift and go to state 30
+    ID              shift and go to state 31
 
-    acc                            shift and go to state 34
-    nota                           shift and go to state 30
+    acc                            shift and go to state 33
+    nota                           shift and go to state 29
 
-state 27
+state 26
 
     (10) command -> PLAY TWOPOINTS LBRACKET expression . RBRACKET
 
-    RBRACKET        shift and go to state 35
+    RBRACKET        shift and go to state 34
 
 
-state 28
+state 27
 
     (13) expression -> acc .
     (14) expression -> acc . COMMA expression
 
     RBRACKET        reduce using rule 13 (expression -> acc .)
-    COMMA           shift and go to state 36
+    COMMA           shift and go to state 35
 
 
-state 29
+state 28
 
     (15) acc -> LPAREN . seqnotas RPAREN
     (17) seqnotas -> . nota
@@ -360,13 +353,13 @@ state 29
     (22) nota -> . INT
     (23) nota -> . ID
 
-    INT             shift and go to state 31
-    ID              shift and go to state 32
+    INT             shift and go to state 30
+    ID              shift and go to state 31
 
-    seqnotas                       shift and go to state 37
-    nota                           shift and go to state 38
+    seqnotas                       shift and go to state 36
+    nota                           shift and go to state 37
 
-state 30
+state 29
 
     (16) acc -> nota .
     (19) nota -> nota . SUM nota
@@ -376,12 +369,12 @@ state 30
     COMMA           reduce using rule 16 (acc -> nota .)
     RBRACKET        reduce using rule 16 (acc -> nota .)
     NEWLINE         reduce using rule 16 (acc -> nota .)
-    SUM             shift and go to state 39
-    MINUS           shift and go to state 40
-    MULTIPLY        shift and go to state 41
+    SUM             shift and go to state 38
+    MINUS           shift and go to state 39
+    MULTIPLY        shift and go to state 40
 
 
-state 31
+state 30
 
     (22) nota -> INT .
 
@@ -394,7 +387,7 @@ state 31
     RPAREN          reduce using rule 22 (nota -> INT .)
 
 
-state 32
+state 31
 
     (23) nota -> ID .
 
@@ -407,7 +400,7 @@ state 32
     RPAREN          reduce using rule 23 (nota -> ID .)
 
 
-state 33
+state 32
 
     (11) assignation -> VAR ID TWOPOINTS LBRACKET . expression RBRACKET
     (13) expression -> . acc
@@ -420,22 +413,22 @@ state 33
     (22) nota -> . INT
     (23) nota -> . ID
 
-    LPAREN          shift and go to state 29
-    INT             shift and go to state 31
-    ID              shift and go to state 32
+    LPAREN          shift and go to state 28
+    INT             shift and go to state 30
+    ID              shift and go to state 31
 
-    expression                     shift and go to state 42
-    acc                            shift and go to state 28
-    nota                           shift and go to state 30
+    expression                     shift and go to state 41
+    acc                            shift and go to state 27
+    nota                           shift and go to state 29
 
-state 34
+state 33
 
     (12) assignation -> VAR ID TWOPOINTS acc .
 
     NEWLINE         reduce using rule 12 (assignation -> VAR ID TWOPOINTS acc .)
 
 
-state 35
+state 34
 
     (10) command -> PLAY TWOPOINTS LBRACKET expression RBRACKET .
 
@@ -443,7 +436,7 @@ state 35
     NEWLINE         reduce using rule 10 (command -> PLAY TWOPOINTS LBRACKET expression RBRACKET .)
 
 
-state 36
+state 35
 
     (14) expression -> acc COMMA . expression
     (13) expression -> . acc
@@ -456,22 +449,22 @@ state 36
     (22) nota -> . INT
     (23) nota -> . ID
 
-    LPAREN          shift and go to state 29
-    INT             shift and go to state 31
-    ID              shift and go to state 32
+    LPAREN          shift and go to state 28
+    INT             shift and go to state 30
+    ID              shift and go to state 31
 
-    acc                            shift and go to state 28
-    expression                     shift and go to state 43
-    nota                           shift and go to state 30
+    acc                            shift and go to state 27
+    expression                     shift and go to state 42
+    nota                           shift and go to state 29
 
-state 37
+state 36
 
     (15) acc -> LPAREN seqnotas . RPAREN
 
-    RPAREN          shift and go to state 44
+    RPAREN          shift and go to state 43
 
 
-state 38
+state 37
 
     (17) seqnotas -> nota .
     (18) seqnotas -> nota . COMMA seqnotas
@@ -480,13 +473,13 @@ state 38
     (21) nota -> nota . MULTIPLY nota
 
     RPAREN          reduce using rule 17 (seqnotas -> nota .)
-    COMMA           shift and go to state 45
-    SUM             shift and go to state 39
-    MINUS           shift and go to state 40
-    MULTIPLY        shift and go to state 41
+    COMMA           shift and go to state 44
+    SUM             shift and go to state 38
+    MINUS           shift and go to state 39
+    MULTIPLY        shift and go to state 40
 
 
-state 39
+state 38
 
     (19) nota -> nota SUM . nota
     (19) nota -> . nota SUM nota
@@ -495,12 +488,12 @@ state 39
     (22) nota -> . INT
     (23) nota -> . ID
 
-    INT             shift and go to state 31
-    ID              shift and go to state 32
+    INT             shift and go to state 30
+    ID              shift and go to state 31
 
-    nota                           shift and go to state 46
+    nota                           shift and go to state 45
 
-state 40
+state 39
 
     (20) nota -> nota MINUS . nota
     (19) nota -> . nota SUM nota
@@ -509,12 +502,12 @@ state 40
     (22) nota -> . INT
     (23) nota -> . ID
 
-    INT             shift and go to state 31
-    ID              shift and go to state 32
+    INT             shift and go to state 30
+    ID              shift and go to state 31
 
-    nota                           shift and go to state 47
+    nota                           shift and go to state 46
 
-state 41
+state 40
 
     (21) nota -> nota MULTIPLY . nota
     (19) nota -> . nota SUM nota
@@ -523,26 +516,26 @@ state 41
     (22) nota -> . INT
     (23) nota -> . ID
 
-    INT             shift and go to state 31
-    ID              shift and go to state 32
+    INT             shift and go to state 30
+    ID              shift and go to state 31
 
-    nota                           shift and go to state 48
+    nota                           shift and go to state 47
 
-state 42
+state 41
 
     (11) assignation -> VAR ID TWOPOINTS LBRACKET expression . RBRACKET
 
-    RBRACKET        shift and go to state 49
+    RBRACKET        shift and go to state 48
 
 
-state 43
+state 42
 
     (14) expression -> acc COMMA expression .
 
     RBRACKET        reduce using rule 14 (expression -> acc COMMA expression .)
 
 
-state 44
+state 43
 
     (15) acc -> LPAREN seqnotas RPAREN .
 
@@ -551,7 +544,7 @@ state 44
     NEWLINE         reduce using rule 15 (acc -> LPAREN seqnotas RPAREN .)
 
 
-state 45
+state 44
 
     (18) seqnotas -> nota COMMA . seqnotas
     (17) seqnotas -> . nota
@@ -562,13 +555,13 @@ state 45
     (22) nota -> . INT
     (23) nota -> . ID
 
-    INT             shift and go to state 31
-    ID              shift and go to state 32
+    INT             shift and go to state 30
+    ID              shift and go to state 31
 
-    nota                           shift and go to state 38
-    seqnotas                       shift and go to state 50
+    nota                           shift and go to state 37
+    seqnotas                       shift and go to state 49
 
-state 46
+state 45
 
     (19) nota -> nota SUM nota .
     (19) nota -> nota . SUM nota
@@ -582,16 +575,16 @@ state 46
     RBRACKET        reduce using rule 19 (nota -> nota SUM nota .)
     NEWLINE         reduce using rule 19 (nota -> nota SUM nota .)
     RPAREN          reduce using rule 19 (nota -> nota SUM nota .)
-    SUM             shift and go to state 39
-    MINUS           shift and go to state 40
-    MULTIPLY        shift and go to state 41
+    SUM             shift and go to state 38
+    MINUS           shift and go to state 39
+    MULTIPLY        shift and go to state 40
 
   ! SUM             [ reduce using rule 19 (nota -> nota SUM nota .) ]
   ! MINUS           [ reduce using rule 19 (nota -> nota SUM nota .) ]
   ! MULTIPLY        [ reduce using rule 19 (nota -> nota SUM nota .) ]
 
 
-state 47
+state 46
 
     (20) nota -> nota MINUS nota .
     (19) nota -> nota . SUM nota
@@ -605,16 +598,16 @@ state 47
     RBRACKET        reduce using rule 20 (nota -> nota MINUS nota .)
     NEWLINE         reduce using rule 20 (nota -> nota MINUS nota .)
     RPAREN          reduce using rule 20 (nota -> nota MINUS nota .)
-    SUM             shift and go to state 39
-    MINUS           shift and go to state 40
-    MULTIPLY        shift and go to state 41
+    SUM             shift and go to state 38
+    MINUS           shift and go to state 39
+    MULTIPLY        shift and go to state 40
 
   ! SUM             [ reduce using rule 20 (nota -> nota MINUS nota .) ]
   ! MINUS           [ reduce using rule 20 (nota -> nota MINUS nota .) ]
   ! MULTIPLY        [ reduce using rule 20 (nota -> nota MINUS nota .) ]
 
 
-state 48
+state 47
 
     (21) nota -> nota MULTIPLY nota .
     (19) nota -> nota . SUM nota
@@ -628,23 +621,23 @@ state 48
     RBRACKET        reduce using rule 21 (nota -> nota MULTIPLY nota .)
     NEWLINE         reduce using rule 21 (nota -> nota MULTIPLY nota .)
     RPAREN          reduce using rule 21 (nota -> nota MULTIPLY nota .)
-    SUM             shift and go to state 39
-    MINUS           shift and go to state 40
-    MULTIPLY        shift and go to state 41
+    SUM             shift and go to state 38
+    MINUS           shift and go to state 39
+    MULTIPLY        shift and go to state 40
 
   ! SUM             [ reduce using rule 21 (nota -> nota MULTIPLY nota .) ]
   ! MINUS           [ reduce using rule 21 (nota -> nota MULTIPLY nota .) ]
   ! MULTIPLY        [ reduce using rule 21 (nota -> nota MULTIPLY nota .) ]
 
 
-state 49
+state 48
 
     (11) assignation -> VAR ID TWOPOINTS LBRACKET expression RBRACKET .
 
     NEWLINE         reduce using rule 11 (assignation -> VAR ID TWOPOINTS LBRACKET expression RBRACKET .)
 
 
-state 50
+state 49
 
     (18) seqnotas -> nota COMMA seqnotas .
 
@@ -653,12 +646,12 @@ state 50
 WARNING: 
 WARNING: Conflicts:
 WARNING: 
+WARNING: shift/reduce conflict for SUM in state 45 resolved as shift
+WARNING: shift/reduce conflict for MINUS in state 45 resolved as shift
+WARNING: shift/reduce conflict for MULTIPLY in state 45 resolved as shift
 WARNING: shift/reduce conflict for SUM in state 46 resolved as shift
 WARNING: shift/reduce conflict for MINUS in state 46 resolved as shift
 WARNING: shift/reduce conflict for MULTIPLY in state 46 resolved as shift
 WARNING: shift/reduce conflict for SUM in state 47 resolved as shift
 WARNING: shift/reduce conflict for MINUS in state 47 resolved as shift
 WARNING: shift/reduce conflict for MULTIPLY in state 47 resolved as shift
-WARNING: shift/reduce conflict for SUM in state 48 resolved as shift
-WARNING: shift/reduce conflict for MINUS in state 48 resolved as shift
-WARNING: shift/reduce conflict for MULTIPLY in state 48 resolved as shift

@@ -38,7 +38,7 @@ t_RBRACKET  = r'\]'
 t_COMMA  = r','
 t_TWOPOINTS = r':'
 t_START = r'\^'
-t_END = r'\$'
+t_END = r'\$\n*'
 
 t_SUM = r'\+'
 t_MINUS = r'\-'
