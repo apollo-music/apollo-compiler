@@ -1,5 +1,5 @@
 # Yacc example
-from ..ply import yacc
+from ..ply.yacc import yacc
 
 # Get the token map from the lexer.  This is required.
 from ..lexer.apollo_lex import tokens
@@ -12,8 +12,8 @@ import sys
 import pdb
 
 def p_program2(p):
-	'program2 : START NEWLINE program END NEWLINE'
-	p[0] = p[3]
+	'program2 : START NEWLINE program END'
+	p[0] = AST.EntryNode(p[3])
 	
 def p_program_statement_newline(p):
 	'program : statement NEWLINE'
@@ -31,11 +31,11 @@ def p_statement(p):
 		
 def p_param_AMP(p):
 	'param : AMP TWOPOINTS INT'
-	p[0] = AST.AmpNode([AST.TokenNode(p[3])])
+	p[0] = AST.AmpNode(AST.TokenNode(p[3]))
 
 def p_param_DUR(p):
 	'param : DUR TWOPOINTS INT'
-	p[0] = AST.DurNode([AST.TokenNode(p[3])])
+	p[0] = AST.DurNode(AST.TokenNode(p[3]))
 
 def p_command_param(p):
 	'command : command COMMA param'
@@ -94,11 +94,19 @@ def p_nota_id(p):
 
 # Error rule for syntax errors
 def p_error(p):
-	print("Syntax error in input!")
+	print("Syntax error on line: %s" % p.lineno)
 	raise exc.SyntaxError("Syntax error in input!")
 
+
+def parse(program):
+    '''
+		Used to generate a AST parsing the program given as input
+		USAGE: open the file with open and read it and use it as input to parse()
+	'''
+    return yacc(debug=True).parse(program)
+
 def run():
-	parser = yacc.yacc(debug=True)
+	parser = yacc(debug=True)
 
 	f = open(sys.argv[1], 'r')
 	prog = f.read()

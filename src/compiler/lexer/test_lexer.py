@@ -25,7 +25,7 @@ with open(dir_path + '/test_files/test3_lex.apollo', 'r') as myfile:
 
 tokens_v12 = ['^', '\n', 'var', 'bixo', ':', '(', '1', ',', '3', '+', '4', ')', '\n',
 'amp', ':', '10', '\n', 'dur', ':', '2', '\n', 'play', ':', '[', '72', ',', 'bixo',
-']', ',', 'amp', ':', '10', ',', 'dur', ':', '3', '\n', '$']
+']', ',', 'amp', ':', '10', ',', 'dur', ':', '3', '\n', '$\n']
 
 tokens_t12 = ['START', 'NEWLINE', 'VAR', 'ID', 'TWOPOINTS', 'LPAREN', 'INT', 'COMMA', 'INT',
 'SUM', 'INT', 'RPAREN', 'NEWLINE', 'AMP', 'TWOPOINTS', 'INT', 'NEWLINE', 'DUR',
