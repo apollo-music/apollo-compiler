@@ -1,2 +1,2 @@
 all:
-	pip3 install -r ./src/requirements.txt && python3  ./src/test.py
+	pip3 install -r ./src/requirements.txt && ./src/run_tests.sh
