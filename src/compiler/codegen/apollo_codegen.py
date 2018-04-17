@@ -243,6 +243,42 @@ def compile(self):
 		playNotes(acc)
 
 
+def test(file_path):
+	from compiler.parser import apollo_yacc
+	from compiler.semantic_analiser import semantic_analiser
+	import sys, os
+	
+	f = open(file_path, 'r')
+	prog = f.read()
+	f.close()
+
+	AST.midiName = "testing"
+	AST.outfile = open(file_path + '_intermediate.py', 'w')
+
+	try:
+		# Generate ast
+		ast = apollo_yacc.parse(prog)
+	except:
+		print(sys.exc_info()[0])
+	
+	try:
+		# Run semantic analysis
+		semantic_analiser.run(ast)
+	except:
+		print(sys.exc_info()[0])
+	
+	try:
+		# Generate code (analrapist)
+		ast.compile()
+		AST.outfile.close()
+		with open(file_path + '_intermediate.py', 'r') as myfile:
+			outputString = myfile.read()
+			myfile.close()
+		return outputString
+
+	except:
+		print(sys.exc_info()[0])
+
 def run():
 	from compiler.parser import apollo_yacc
 	from compiler.semantic_analiser import semantic_analiser
@@ -271,7 +307,7 @@ def run():
 		# Generate code (analrapist)
 		ast.compile()
 		AST.outfile.close()
-		print("New intermidiate generated %s" % AST.midiName)
+		print("New intermediate generated %s" % AST.midiName)
 	except:
 		print(sys.exc_info()[0])
 

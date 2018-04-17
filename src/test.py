@@ -1,6 +1,7 @@
 import os
 import compiler.lexer.test_lexer as testlexer
 import compiler.parser.test_parser as testparser
+import compiler.codegen.test_codegen as testcodegen
 
 #def run_tests():
 	#dirs = os.listdir()
@@ -14,3 +15,5 @@ if __name__ == '__main__':
 	testlexer.run()
 	print("\n----------------------- Testing: Parser ------------------------------")
 	testparser.run()
+	print("\n----------------------- Testing: CodeGen -----------------------------")
+	testcodegen.run()
