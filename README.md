@@ -23,4 +23,4 @@ Com isso, execute
 ```docker run -it --rm --volume="/tmp/.X11-unix:/tmp/.X11-unix:rw" -v=$(pwd)/..:$(pwd)/.. -w=$(pwd) apollo bash```
 
 E assim estará dentro de um terminal em que poderá executar
-```./start.py <nome to arquivo>```
+```python3 start.py test.apollo```
