@@ -9,8 +9,8 @@ datas = []
 expected = []
 datas_e = []
 
-n_correct_tests = 2
-n_incorrect_tests = 1
+n_correct_tests = 3
+n_incorrect_tests = 0
 
 dir_path = os.path.dirname(os.path.realpath(__file__))
 print (dir_path)
@@ -41,7 +41,9 @@ class ParserTest(unittest.TestCase):
 # Tests performed:
 # - Test 1: regular program. Should be OK.
 # - Test 2: like test 1, with empty spaces added. Should be OK.
-# - Test 3: doesn't contain a needed character ']'. Should raise exception MySyntaxError.
+# - Test 3: like test 1, with a variable using '[]' instead of '()'. Should be OK.
+# - Test 4: uses '[]' inside of a '()'. Should raise exception MySyntaxError.
+# - Test 5: doesn't contain a needed character ']'. Should raise exception MySyntaxError.
 
 def run():
     suite = unittest.TestLoader().loadTestsFromTestCase(ParserTest)
