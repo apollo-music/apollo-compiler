@@ -39,5 +39,7 @@ RUN git clone https://github.com/vishnubob/python-midi && \
     cd python-midi && \
     python2 setup.py install
 
+RUN pip3 install pydot
+
 # Define default command.
 CMD ["bash"]
