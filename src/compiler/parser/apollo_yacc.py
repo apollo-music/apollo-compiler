@@ -95,20 +95,25 @@ def p_nota_id(p):
 # Error rule for syntax errors
 def p_error(p):
 	print("Syntax error in input!")
-	raise exc.SyntaxError("Syntax error in input!")
+	raise exc.MySyntaxError("Syntax error in input!")
 
-def run():
-	parser = yacc.yacc(debug=True)
+def run(arq=None):
+	if(arq==None):
+		parser = yacc.yacc(debug=True)
 
-	f = open(sys.argv[1], 'r')
-	prog = f.read()
-	f.close()
+		f = open(sys.argv[1], 'r')
+		prog = f.read()
+		f.close()
 
-	print("input:")
-	print(prog)
+		print("input:")
+		print(prog)
 
-	result = parser.parse(prog, debug = 1)
-	print(result)
+		result = parser.parse(prog, debug = 1)
+		print(result)
 
-	graph = result.makegraphicaltree()
-	graph.write_pdf('out.pdf')
+		graph = result.makegraphicaltree()
+		graph.write_pdf('out.pdf')
+
+	else:
+		parser = yacc.yacc(debug=False)
+		result = parser.parse(arq, debug = 0)

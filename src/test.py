@@ -1,6 +1,6 @@
 import os
-import compiler.parser.apollo_yacc as parser
 import compiler.lexer.test_lexer as testlexer
+import compiler.parser.test_parser as testparser
 
 #def run_tests():
     #dirs = os.listdir()
@@ -11,3 +11,4 @@ import compiler.lexer.test_lexer as testlexer
 
 if __name__ == '__main__':
     testlexer.run()
+    testparser.run()

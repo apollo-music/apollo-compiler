@@ -18,7 +18,7 @@ class ParserError(Exception):
     """Base class for exceptions in the parser module."""
     pass
 
-class SyntaxError(ParserError):
+class MySyntaxError(ParserError):
     """Exception raised for syntax errors.
     Attributes:
         msg  -- explanation of the error
