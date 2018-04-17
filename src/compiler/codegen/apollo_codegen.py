@@ -19,7 +19,7 @@ def compile(self):
 # - 'program2 : START NEWLINE program END NEWLINE' | AST.EntryNode(p[3])
 @addToClass(AST.EntryNode)
 def compile(self):
-	print("import midi", file=AST.outfile)
+	print("import midi\n", file=AST.outfile)
 	print("pattern = midi.Pattern(format=1, resolution = 100, tick_relative=1)", file=AST.outfile)
 	print("track = midi.Track()", file=AST.outfile)
 	print("pattern.append(track)\n", file=AST.outfile)
@@ -124,11 +124,17 @@ def compile(self):
 	if right.type == "Acc":
 		acc = right.compile()
 		# print(str(left.tok) + " = " + str(tuple(acc)), file=AST.outfile)
-		AST.table[left.tok] = tuple(acc)
+		if type(acc) is int:
+			AST.table[left.tok] = acc
+		else:
+			AST.table[left.tok] = tuple(acc)
 	else:
 		expr = right.compile()
 		# print(str(left.tok) + " = " + str(expr), file=AST.outfile)
-		AST.table[left.tok] = list(expr)
+		if type(expr) is int:
+			AST.table[left.tok] = expr
+		else:
+			AST.table[left.tok] = list(expr)
 
 	return self
 
@@ -157,12 +163,16 @@ def compile(self):
 def compile(self):
 	print("SeqNotasNodeSeq:\n" + str(self.children))
 	print(self.children[0].compile())
+	nota = self.children[0].compile()
+	
+	if type(nota) is str:
+		nota = AST.table.get(nota, ())
+		
 	if len(self.children) == 1:
-		nota = self.children[0].compile()
 		print(nota)
 		return [nota]
 	else:
-		nota = [self.children[0].compile()]
+		nota = [nota]
 		seqnotas = self.children[1].compile()
 		nota = nota + seqnotas
 		return (nota)
@@ -170,31 +180,27 @@ def compile(self):
 
 def playNotes(notes):
 	def playNotesTuple(acchord):
-		print("beat = 0\n", file=AST.outfile)
 		for note in acchord:
-			print("note_on = midi.NoteOnEvent(tick=beat, velocity= " +
+			print("note_on = midi.NoteOnEvent(tick=0, velocity= " +
 			      str(AST.amp) + ", pitch=" + str(note) + ")", file=AST.outfile)
-			print("track.append(note_on)\n", file=AST.outfile)
-		
-		print("beat = " + str(AST.dur), file=AST.outfile)
+			print("track.append(note_on)", file=AST.outfile)
+
+		print("", file=AST.outfile)
 		for i, note in enumerate(acchord):
 			if i == 0:
-				print("note_off = midi.NoteOnEvent(tick=beat, velocity=0, pitch=" +
+				print("note_off = midi.NoteOnEvent(tick=" + str(AST.dur) + ", velocity=0, pitch=" +
                         str(note) + ")", file=AST.outfile)
-				print("track.append(note_off)\n", file=AST.outfile)
-				print("beat = 0\n", file=AST.outfile)
 			else:
-				print("note_off = midi.NoteOnEvent(tick=beat, velocity=0, pitch=" +
+				print("note_off = midi.NoteOnEvent(tick=0, velocity=0, pitch=" +
 						str(note) + ")", file=AST.outfile)
-				print("track.append(note_off)\n", file=AST.outfile)
+			print("track.append(note_off)", file=AST.outfile)
+		print("", file=AST.outfile)
 
 
 	if type(notes) is int:
-		print("beat = 0\n", file=AST.outfile)
-		print("note_on = midi.NoteOnEvent(tick=beat, velocity= " + str(AST.amp) + ", pitch=" + str(notes) + ")", file=AST.outfile)
-		print("track.append(note_on)\n", file=AST.outfile)
-		print("beat = " + str(AST.dur) + "\n", file=AST.outfile)
-		print("note_off = midi.NoteOnEvent(tick=beat, velocity=0, pitch=" + str(notes) + ")", file=AST.outfile)
+		print("note_on = midi.NoteOnEvent(tick=0, velocity= " + str(AST.amp) + ", pitch=" + str(notes) + ")", file=AST.outfile)
+		print("track.append(note_on)", file=AST.outfile)
+		print("note_off = midi.NoteOnEvent(tick=" + str(AST.dur) + ", velocity=0, pitch=" + str(notes) + ")", file = AST.outfile)
 		print("track.append(note_off)\n", file=AST.outfile)
 	elif type(notes) is tuple:
 		playNotesTuple(notes)
@@ -215,6 +221,7 @@ def compile(self):
 
 def run():
 	from compiler.parser import apollo_yacc
+	from compiler.semantic_analiser import semantic_analiser
 	import sys, os
 
 	f = open(sys.argv[1], 'r')
@@ -223,6 +230,20 @@ def run():
 
 	AST.midiName = '.'.join(sys.argv[1].split('.')[:-1]) + ".mid"
 
-	ast = apollo_yacc.parse(prog)
+	
+	try:
+		# Generate ast
+		ast = apollo_yacc.parse(prog)
+	except:
+		print(sys.exc_info()[0])
+	
+	try:
+		# Run semantic analysis
+		semantic_analiser.run(ast)
+	except:
+		print(sys.exc_info()[0])
+	
+
+	# Generate code (analrapist)
 	compiled = ast.compile()
 	AST.outfile.close()
