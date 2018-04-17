@@ -21,12 +21,10 @@ REPOSITORY                    TAG                 IMAGE ID            CREATED   
 apollo                        latest              a21557abd738        About a minute ago   511MB
 ```
 
-Com isso, execute:
-
-```./docker_start.sh```
+Com isso, execute `./start_docker.sh`
 
 Se você tiver problemas com permissão, execute `chmod u+x docker_start.sh` e tente novamente.
 
 E assim estará dentro de um terminal em que poderá executar:
 
-```python3 start.py test.apollo```
+```./start.sh```
