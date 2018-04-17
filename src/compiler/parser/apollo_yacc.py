@@ -1,5 +1,5 @@
 # Yacc example
-from ..ply.yacc import yacc
+from ply.yacc import yacc
 
 # Get the token map from the lexer.  This is required.
 from ..lexer.apollo_lex import tokens
