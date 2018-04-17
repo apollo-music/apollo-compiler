@@ -1,0 +1,31 @@
+Entry
+|  Program
+|  |  Var
+|  |  |  'bixo'
+|  |  |  Acc
+|  |  |  |  SeqNotas
+|  |  |  |  |  1
+|  |  |  |  |  SeqNotas
+|  |  |  |  |  |  + (2)
+|  |  |  |  |  |  |  3
+|  |  |  |  |  |  |  4
+|  |  Program
+|  |  |  Amp
+|  |  |  |  10
+|  |  |  Program
+|  |  |  |  Dur
+|  |  |  |  |  2
+|  |  |  |  Program
+|  |  |  |  |  Command
+|  |  |  |  |  |  Dur
+|  |  |  |  |  |  |  3
+|  |  |  |  |  |  Command
+|  |  |  |  |  |  |  Amp
+|  |  |  |  |  |  |  |  10
+|  |  |  |  |  |  |  Play
+|  |  |  |  |  |  |  |  Expression
+|  |  |  |  |  |  |  |  |  Acc
+|  |  |  |  |  |  |  |  |  |  72
+|  |  |  |  |  |  |  |  |  Expression
+|  |  |  |  |  |  |  |  |  |  Acc
+|  |  |  |  |  |  |  |  |  |  |  'bixo'

@@ -10,5 +10,7 @@ import compiler.parser.test_parser as testparser
 	#os.system('python3 compiler/lexer/test_lexer.py')
 
 if __name__ == '__main__':
-    testlexer.run()
-    testparser.run()
+	print("\n----------------------- Testing: Lexer ------------------------------")
+	testlexer.run()
+	print("\n----------------------- Testing: Parser ------------------------------")
+	testparser.run()

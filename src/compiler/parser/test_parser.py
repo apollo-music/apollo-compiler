@@ -6,6 +6,7 @@ import os
 from ..exceptions import exceptions as exc
 
 datas = []
+expected = []
 datas_e = []
 
 n_correct_tests = 2
@@ -18,6 +19,9 @@ for i in range(n_correct_tests):
     with open(dir_path + '/test_files/test' + str(i+1) + '_parser.apollo', 'r') as myfile:
         datas.append(myfile.read())
         myfile.close()
+    with open(dir_path + '/expected_results/exp_test' + str(i+1) + '_parser.txt', 'r') as myfile:
+        expected.append(myfile.read())
+        myfile.close()
 
 for i in range(n_incorrect_tests):
     with open(dir_path + '/test_files/test' + str(i+n_correct_tests+1) + '_parser.apollo', 'r') as myfile:
@@ -27,7 +31,7 @@ for i in range(n_incorrect_tests):
 class ParserTest(unittest.TestCase):
     def test_parser(self):
         for i in range(len(datas)):
-            parser.parse(datas[i])
+            self.assertEqual(str(parser.parse(datas[i])), str(expected[i]))
 
     def test_parser_errors(self):
         for i in range(len(datas_e)):
