@@ -8,5 +8,4 @@ build:
   - docker-kvm
   stage: build
   script:
-    - pip3 install -r ./src/requirements.txt
-    - ./src/run_tests.sh
+    - make
