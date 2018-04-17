@@ -3,3 +3,5 @@ __pycache__/
 *.py[cod]
 src/*.pdf
 src/intermediate.py
+src/.coverage
+src/htmlcov

@@ -10,18 +10,21 @@ datas_e = []
 tokens_types = []
 tokens_values = []
 
+n_correct_tests = 2
+n_incorrect_tests = 1
 
 dir_path = os.path.dirname(os.path.realpath(__file__))
 print (dir_path)
 
-with open(dir_path + '/test_files/test1_lex.apollo', 'r') as myfile:
-    datas.append(myfile.read())
+for i in range(n_correct_tests):
+    with open(dir_path + '/test_files/test' + str(i+1) + '_lex.apollo', 'r') as myfile:
+        datas.append(myfile.read())
+        myfile.close()
 
-with open(dir_path + '/test_files/test2_lex.apollo', 'r') as myfile:
-    datas.append(myfile.read())
-
-with open(dir_path + '/test_files/test3_lex.apollo', 'r') as myfile:
-    datas_e.append(myfile.read())
+for i in range(n_incorrect_tests):
+    with open(dir_path + '/test_files/test' + str(i+n_correct_tests+1) + '_lex.apollo', 'r') as myfile:
+        datas_e.append(myfile.read())
+        myfile.close()
 
 tokens_v12 = ['^', '\n', 'var', 'bixo', ':', '(', '1', ',', '3', '+', '4', ')', '\n',
 'amp', ':', '10', '\n', 'dur', ':', '2', '\n', 'play', ':', '[', '72', ',', 'bixo',
@@ -54,10 +57,10 @@ class LexTest(unittest.TestCase):
         for i in range(len(datas)):
             # Give the lexer some input
             apollo_lex.lexer.input(datas[i])
-            # Test using values
-            for t_val in tokens_values[i]:
+            # Test using types
+            for t_type in tokens_types[i]:
                 tok = apollo_lex.lexer.token()
-                self.assertEqual(t_val, str(tok.value))
+                self.assertEqual(t_type, str(tok.type))
 
     def test_lex_errors(self):
         for i in range(len(datas_e)):

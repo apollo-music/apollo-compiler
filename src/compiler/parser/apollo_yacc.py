@@ -95,7 +95,7 @@ def p_nota_id(p):
 # Error rule for syntax errors
 def p_error(p):
 	print("Syntax error on line: %s" % p.lineno)
-	raise exc.SyntaxError("Syntax error in input!")
+	raise exc.MySyntaxError("Syntax error on line: %s" % p.lineno)
 
 
 def parse(program):
