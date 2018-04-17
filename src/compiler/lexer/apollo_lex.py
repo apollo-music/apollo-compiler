@@ -4,7 +4,7 @@
 # tokenizer for a simple expression evaluator for
 # numbers and +,-,*,/
 # ------------------------------------------------------------
-from ..ply import lex
+from ply import lex
 import sys
 from ..exceptions import exceptions as exc
 
