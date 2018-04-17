@@ -4,14 +4,14 @@ class LexerError(Exception):
     pass
 
 class CharacterError(LexerError):
-    """Exception raised for errors in the input.
+	"""Exception raised for errors in the input.
 
     Attributes:
         msg  -- explanation of the error
     """
 
-    def __init__(self, msg):
-        self.msg = "Invalid Character: " + msg
+	def __init__(self, msg):
+		self.msg = "Invalid Character: " + msg
 
 # Parser Errors
 class ParserError(Exception):
@@ -29,7 +29,7 @@ class MySyntaxError(ParserError):
 
 # Semantic Analysis Errors
 class SemanticError(Exception):
-    pass
+	pass
 
 class VariableNotDefinedError(SemanticError):
     def __init__(self, msg):
