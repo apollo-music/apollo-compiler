@@ -8,4 +8,4 @@ build:
   - docker-kvm
   stage: build
   script:
-    - make
+    - ./src/run_tests.sh
