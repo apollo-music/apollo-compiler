@@ -25,9 +25,9 @@ def compile(self):
 	print("pattern.append(track)\n", file=AST.outfile)
 
 	for c in self.children:
-		print(c)  # DEBUG
+		# DEBUG print(c)
 		c.compile()
-	
+
 	print("eot=midi.EndOfTrackEvent(tick=0)\ntrack.append(eot)\n", file=AST.outfile)
 	print("midi.write_midifile(\"" + AST.midiName + "\", pattern)", file=AST.outfile)
 	return self
@@ -38,7 +38,7 @@ def compile(self):
 @addToClass(AST.ProgramNode)
 def compile(self):
 	for c in self.children:
-		print('ProgramNode:\n' + str(c))	#DEBUG
+		# DEBUG print('ProgramNode:\n' + str(c))
 		c.compile()
 	return self
 
@@ -66,10 +66,10 @@ def compile(self):
 # - 'expression : acc COMMA expression' | AST.ExpressionNode([p[1], p[3]])
 @addToClass(AST.ExpressionNode)
 def compile(self):
-	print("ExpressionNode:\n", self)		# DEBUG
+	# DEBUG print("ExpressionNode:\n", self)
 	if len(self.children) == 1:
 		acc = self.children[0].compile()
-		print(acc)							# DEBUG
+		# DEBUG print(acc)
 		return acc
 	else:
 		acc = self.children[0].compile()
@@ -86,17 +86,16 @@ def compile(self):
 # - 	MULTIPLE USES :S - I'm very confused
 @addToClass(AST.TokenNode)
 def compile(self):
-	print("TokenNode: " + str(self.tok))		# DEBUG
+	# DEBUG print("TokenNode: " + str(self.tok))
 	return self.tok
 
 # AmpNode
 # - 'param : AMP TWOPOINTS INT' | p[0] = AST.AmpNode([AST.TokenNode(p[3])])
 @addToClass(AST.AmpNode)
 def compile(self):
-	print('AmpNode:\n' +  str(self))	# DEBUG
+	# DEBUG print('AmpNode:\n' +  str(self))
 	if len(self.children) == 1:
 		amp = self.children[0]
-		# print("amp = " + str(amp), file=AST.outfile)
 		AST.amp = int(str(amp))
 	return self
 
@@ -104,10 +103,9 @@ def compile(self):
 # - 'param : DUR TWOPOINTS INT' | p[0] = AST.DurNode([AST.TokenNode(p[3])])
 @addToClass(AST.DurNode)
 def compile(self):
-	print('DurNode:\n' + str(self))  # DEBUG
+	# DEBUG print('DurNode:\n' + str(self))
 	if len(self.children) == 1:
 		dur = self.children[0]
-		# print("dur = " + str(dur), file=AST.outfile)
 		AST.dur = int(str(dur))
 	return self
 
@@ -117,7 +115,7 @@ def compile(self):
 # 'assignation : VAR ID TWOPOINTS acc' | AST.VarNode([AST.TokenNode(p[2]), p[4]])
 @addToClass(AST.VarNode)
 def compile(self):
-	print("VarNode:\n" + str(self.children))
+	# DEBUG print("VarNode:\n" + str(self.children))
 	left = self.children[0]
 	right = self.children[1]
 
@@ -145,7 +143,7 @@ def compile(self):
 def compile(self):
 	# PRECISA COLOCAR QUE ESSA SEQ DE NOTAS É ACORDE
 	uniq_or_seq = self.children[0].compile()
-	print("AccNode2:\n" + str(uniq_or_seq))
+	# DEBUG print("AccNode2:\n" + str(uniq_or_seq))
 
 	if type(uniq_or_seq) is str:
 		return (AST.table).get(uniq_or_seq, "()")
@@ -161,15 +159,15 @@ def compile(self):
 # 'seqnotas : nota COMMA seqnotas' | AST.SeqNotasNode([p[1], p[3]])
 @addToClass(AST.SeqNotasNode)
 def compile(self):
-	print("SeqNotasNodeSeq:\n" + str(self.children))
-	print(self.children[0].compile())
+	# DEBUG print("SeqNotasNodeSeq:\n" + str(self.children))
+	# DEBUG print(self.children[0].compile())
 	nota = self.children[0].compile()
 	
 	if type(nota) is str:
 		nota = AST.table.get(nota, ())
 		
 	if len(self.children) == 1:
-		print(nota)
+		# DEBUG print(nota)
 		return [nota]
 	else:
 		nota = [nota]
@@ -182,14 +180,14 @@ def playNotes(notes):
 	def playNotesTuple(acchord):
 		for note in acchord:
 			print("note_on = midi.NoteOnEvent(tick=0, velocity= " +
-			      str(AST.amp) + ", pitch=" + str(note) + ")", file=AST.outfile)
+				  str(AST.amp) + ", pitch=" + str(note) + ")", file=AST.outfile)
 			print("track.append(note_on)", file=AST.outfile)
 
 		print("", file=AST.outfile)
 		for i, note in enumerate(acchord):
 			if i == 0:
 				print("note_off = midi.NoteOnEvent(tick=" + str(AST.dur) + ", velocity=0, pitch=" +
-                        str(note) + ")", file=AST.outfile)
+						str(note) + ")", file=AST.outfile)
 			else:
 				print("note_off = midi.NoteOnEvent(tick=0, velocity=0, pitch=" +
 						str(note) + ")", file=AST.outfile)
@@ -211,10 +209,10 @@ def playNotes(notes):
 # 'command : PLAY TWOPOINTS LBRACKET expression RBRACKET' | AST.PlayNode([p[4]])
 @addToClass(AST.PlayNode)
 def compile(self):
-	print('PlayNode:\n' + str(self))  	# DEBUG
-	print(str(self.children))			# DEBUG
+  	# DEBUG	print('PlayNode:\n' + str(self))
+	# DEBUG print(str(self.children))
 	exp = self.children[0].compile()
-	print('exp:\n' + str(exp))  		# DEBUG
+	# DEBUG print('exp:\n' + str(exp))
 	for acc in exp:
 		playNotes(acc)
 
@@ -243,7 +241,12 @@ def run():
 	except:
 		print(sys.exc_info()[0])
 	
+	try:
+		# Generate code (analrapist)
+		ast.compile()
+		AST.outfile.close()
+		print("New intermidiate generated %s" % AST.midiName)
+	except:
+		print(sys.exc_info()[0])
 
-	# Generate code (analrapist)
-	compiled = ast.compile()
-	AST.outfile.close()
+	
