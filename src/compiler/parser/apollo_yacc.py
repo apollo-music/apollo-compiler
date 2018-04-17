@@ -106,7 +106,7 @@ def parse(program):
     return yacc(debug=True).parse(program)
 
 def run():
-	parser = yacc.yacc(debug=True)
+	parser = yacc(debug=True)
 
 	f = open(sys.argv[1], 'r')
 	prog = f.read()
