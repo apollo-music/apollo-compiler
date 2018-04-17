@@ -6,10 +6,10 @@ from ..exceptions import exceptions
 
 def run(ast):
 	symtable = SymTable("global")
-	#analise(ast, symtable)
-	print("Starting Semantic Analisys ...")
+	# analise(ast, symtable)
+	# print("Starting Semantic Analisys ...")
 	ast.analise(symtable)
-	print("Semantic Analisys Finished!")
+	print("Semantic Analisys Completed...")
 
 class SymTable():
 	scope = ""
