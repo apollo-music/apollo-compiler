@@ -23,7 +23,9 @@ apollo                        latest              a21557abd738        About a mi
 
 Com isso, execute:
 
-```docker run -it --rm --volume="/tmp/.X11-unix:/tmp/.X11-unix:rw" -v=$(pwd)/..:$(pwd)/.. -w=$(pwd) apollo bash```
+```./docker_start.sh```
+
+Se você tiver problemas com permissão, execute `chmod u+x docker_start.sh` e tente novamente.
 
 E assim estará dentro de um terminal em que poderá executar:
 
