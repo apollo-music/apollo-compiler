@@ -25,4 +25,4 @@ Com isso, execute `./start_docker.sh`
 
 Se você tiver problemas com permissão, execute `chmod u+x docker_start.sh` e tente novamente.
 
-E assim estará dentro de um terminal em que poderá executar `./start.sh`
+E assim estará dentro de um terminal em que poderá executar `./run.sh`
