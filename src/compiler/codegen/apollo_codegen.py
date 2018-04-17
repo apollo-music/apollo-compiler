@@ -22,12 +22,14 @@ def compile(self):
 	print("import midi", file=AST.outfile)
 	print("pattern = midi.Pattern(format=1, resolution = 100, tick_relative=1)", file=AST.outfile)
 	print("track = midi.Track()", file=AST.outfile)
-	print("beat = 0", file=AST.outfile)
 	print("pattern.append(track)\n", file=AST.outfile)
 
 	for c in self.children:
 		print(c)  # DEBUG
 		c.compile()
+	
+	print("eot=midi.EndOfTrackEvent(tick=0)\ntrack.append(eot)\n", file=AST.outfile)
+	print("midi.write_midifile(\"" + AST.midiName + "\", pattern)", file=AST.outfile)
 	return self
 
 # ProgramNode (generic)
@@ -94,7 +96,7 @@ def compile(self):
 	print('AmpNode:\n' +  str(self))	# DEBUG
 	if len(self.children) == 1:
 		amp = self.children[0]
-		print("amp = " + str(amp), file=AST.outfile)
+		# print("amp = " + str(amp), file=AST.outfile)
 		AST.amp = int(str(amp))
 	return self
 
@@ -105,7 +107,7 @@ def compile(self):
 	print('DurNode:\n' + str(self))  # DEBUG
 	if len(self.children) == 1:
 		dur = self.children[0]
-		print("dur = " + str(dur), file=AST.outfile)
+		# print("dur = " + str(dur), file=AST.outfile)
 		AST.dur = int(str(dur))
 	return self
 
@@ -121,11 +123,11 @@ def compile(self):
 
 	if right.type == "Acc":
 		acc = right.compile()
-		print(str(left.tok) + " = " + str(tuple(acc)), file=AST.outfile)
+		# print(str(left.tok) + " = " + str(tuple(acc)), file=AST.outfile)
 		AST.table[left.tok] = tuple(acc)
 	else:
 		expr = right.compile()
-		print(str(left.tok) + " = " + str(expr), file=AST.outfile)
+		# print(str(left.tok) + " = " + str(expr), file=AST.outfile)
 		AST.table[left.tok] = list(expr)
 
 	return self
@@ -167,14 +169,37 @@ def compile(self):
 
 
 def playNotes(notes):
-	if type(notes) is int:
-		print("beat = 0", file=AST.outfile)
-		print("note_on = midi.NoteOnEvent(tick=beat, velocity= " + str(AST.amp) + ", pitch=" + str(notes) + ")", file=AST.outfile)
-		print("track.append(note_on)", file=AST.outfile)
+	def playNotesTuple(acchord):
+		print("beat = 0\n", file=AST.outfile)
+		for note in acchord:
+			print("note_on = midi.NoteOnEvent(tick=beat, velocity= " +
+			      str(AST.amp) + ", pitch=" + str(note) + ")", file=AST.outfile)
+			print("track.append(note_on)\n", file=AST.outfile)
+		
 		print("beat = " + str(AST.dur), file=AST.outfile)
+		for i, note in enumerate(acchord):
+			if i == 0:
+				print("note_off = midi.NoteOnEvent(tick=beat, velocity=0, pitch=" +
+                        str(note) + ")", file=AST.outfile)
+				print("track.append(note_off)\n", file=AST.outfile)
+				print("beat = 0\n", file=AST.outfile)
+			else:
+				print("note_off = midi.NoteOnEvent(tick=beat, velocity=0, pitch=" +
+						str(note) + ")", file=AST.outfile)
+				print("track.append(note_off)\n", file=AST.outfile)
+
+
+	if type(notes) is int:
+		print("beat = 0\n", file=AST.outfile)
+		print("note_on = midi.NoteOnEvent(tick=beat, velocity= " + str(AST.amp) + ", pitch=" + str(notes) + ")", file=AST.outfile)
+		print("track.append(note_on)\n", file=AST.outfile)
+		print("beat = " + str(AST.dur) + "\n", file=AST.outfile)
 		print("note_off = midi.NoteOnEvent(tick=beat, velocity=0, pitch=" + str(notes) + ")", file=AST.outfile)
-		print("track.append(note_off)", file=AST.outfile)
-	# ELSE?
+		print("track.append(note_off)\n", file=AST.outfile)
+	elif type(notes) is tuple:
+		playNotesTuple(notes)
+	else:
+		print("ERROR", str(notes), str(type(notes)))
 
 # PlayNode
 # 'command : PLAY TWOPOINTS LBRACKET expression RBRACKET' | AST.PlayNode([p[4]])
@@ -196,6 +221,8 @@ def run():
 	prog = f.read()
 	f.close()
 
+	AST.midiName = '.'.join(sys.argv[1].split('.')[:-1]) + ".mid"
+
 	ast = apollo_yacc.parse(prog)
-	print(ast)
 	compiled = ast.compile()
+	AST.outfile.close()
