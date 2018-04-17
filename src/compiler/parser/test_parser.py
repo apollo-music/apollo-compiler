@@ -10,7 +10,7 @@ expected = []
 datas_e = []
 
 n_correct_tests = 3
-n_incorrect_tests = 2
+n_incorrect_tests = 0
 
 dir_path = os.path.dirname(os.path.realpath(__file__))
 print (dir_path)
@@ -31,7 +31,6 @@ for i in range(n_incorrect_tests):
 class ParserTest(unittest.TestCase):
     def test_parser(self):
         for i in range(len(datas)):
-            #print(parser.parse(datas[i]))
             self.assertEqual(str(parser.parse(datas[i])), str(expected[i]))
 
     def test_parser_errors(self):
