@@ -1,6 +1,9 @@
 FROM ubuntu:rolling
 MAINTAINER grupo-9
 
+# Change working dirs
+WORKDIR /build
+
 # Install python3-pip and project requirements
 RUN apt-get update -qqy && \
     apt-get install --no-install-recommends -y \
@@ -32,8 +35,9 @@ RUN apt-get update -qqy && \
                /tmp/* \
                /var/tmp/*
 
-# Change working dirs
-WORKDIR /build
+RUN git clone https://github.com/vishnubob/python-midi && \
+    cd python-midi && \
+    python2 setup.py install
 
 # Define default command.
 CMD ["bash"]
