@@ -1,1 +1,3 @@
-python3 test.py
+coverage run test.py
+coverage report -m
+coverage html
