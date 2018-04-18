@@ -48,5 +48,6 @@ Abaixo podemos ver os testes que foram feitos para cada um dos passos do compila
     * Test 1: regular program.
     * Test 2: use undefined variable inside play. Should raise VariableNotDefinedError.
     * Test 3: use undefined variable inside another variable. Should raise VariableNotDefinedError.
+    * Test 4: use variable that stores a sequence inside a chord. Should raise SequenceInsideAccError.
  4. __Code Generation__
     * Tests 1-3: regular programs.
