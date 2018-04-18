@@ -14,7 +14,6 @@ n_correct_tests = 4
 n_incorrect_tests = 1
 
 dir_path = os.path.dirname(os.path.realpath(__file__))
-print (dir_path)
 
 for i in range(n_correct_tests):
     with open(dir_path + '/test_files/test' + str(i+1) + '_lex.apollo', 'r') as myfile:
