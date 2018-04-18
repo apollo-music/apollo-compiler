@@ -1,5 +1,5 @@
-[![pipeline status](https://gitlab.ic.unicamp.br/mc911/2018-s1/group-9/badges/development/pipeline.svg)](https://gitlab.ic.unicamp.br/mc911/2018-s1/group-9/commits/development)
-[![coverage report](https://gitlab.ic.unicamp.br/mc911/2018-s1/group-9/badges/development/coverage.svg)](https://gitlab.ic.unicamp.br/mc911/2018-s1/group-9/commits/development)
+[![pipeline status](https://gitlab.ic.unicamp.br/mc911/2018-s1/group-9/badges/master/pipeline.svg)](https://gitlab.ic.unicamp.br/mc911/2018-s1/group-9/commits/master)
+[![coverage report](https://gitlab.ic.unicamp.br/mc911/2018-s1/group-9/badges/master/coverage.svg)](https://gitlab.ic.unicamp.br/mc911/2018-s1/group-9/commits/master)
 # Apollo music generator
 
 Este é o repositório para o código da linguagem musical Apollo.
