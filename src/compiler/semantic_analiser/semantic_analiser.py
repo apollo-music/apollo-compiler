@@ -111,7 +111,6 @@ def analise(self, scopeNode):
 	left = self.children[0]
 
 	left.analise(scopeNode)
-	print(left.type)
 	if left.type == 'Token' and isinstance(left.tok, str):		
 		sym = scopeNode.FindInScope(left.tok)
 		if sym != None and sym[1].children[1].type == 'Expression':
