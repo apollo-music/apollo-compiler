@@ -19,11 +19,19 @@ class SemTest(unittest.TestCase):
             semantic_analiser.run,
             ast_gen_var_not_found02()
             )
+    def test_SeqInsideAcc(self):
+        self.assertRaises(
+            exceptions.SequenceInsideAccError,
+            semantic_analiser.run,
+            ast_gen_SeqInsideAcc()
+            )
+        
 
 # Tests performed:
 # - Test 1: regular program. Should be OK.
-# - Test 2: like test 1, with empty spaces added. Should be OK.
-# - Test 3: contains invalid character '#'. Should raise exception CharacterError.
+# - Test 2: use undefined variable inside play. Should raise VariableNotDefinedError.
+# - Test 3: use undefined variable inside another variable. Should raise VariableNotDefinedError.
+# - Test 4: use variable that stores a sequence inside a chord. Should raise SequenceInsideAccError
 
 def run():
     suite = unittest.TestLoader().loadTestsFromTestCase(SemTest)
@@ -42,6 +50,54 @@ def ast_gen_ok():
                             AST.TokenNode(66)
                         ])
                     ])
+                ])
+            ]),
+            AST.ProgramNode([
+                AST.AmpNode([AST.TokenNode(100)]),
+                AST.ProgramNode([
+                    AST.DurNode([AST.TokenNode(200)]),
+                    AST.ProgramNode([
+                        AST.CommandNode([
+                            AST.DurNode([AST.TokenNode(3)]),
+                            AST.CommandNode([
+                                AST.AmpNode([AST.TokenNode(10)]),
+                                AST.PlayNode([
+                                    AST.ExpressionNode([
+                                        AST.AccNode([AST.TokenNode(72)]),
+                                        AST.ExpressionNode([
+                                            AST.AccNode([
+                                                AST.SeqNotasNode([
+                                                    AST.TokenNode(60),
+                                                    AST.SeqNotasNode([
+                                                        AST.TokenNode(61),
+                                                        AST.SeqNotasNode([
+                                                            AST.TokenNode(62)
+                                                        ])
+                                                    ])
+                                                ])
+                                            ]),
+                                            AST.ExpressionNode([
+                                                AST.AccNode([AST.TokenNode('bixo')])
+                                            ])
+                                        ])
+                                    ])
+                                ])
+                            ])
+                        ])
+                    ])
+                ])
+            ])
+        ])
+    ])
+    return head
+
+def ast_gen_SeqInsideAcc():
+    head = AST.EntryNode([
+        AST.ProgramNode([
+            AST.VarNode([
+                AST.TokenNode('bixo'),
+                AST.ExpressionNode([
+                    AST.AccNode([AST.TokenNode(62)])
                 ])
             ]),
             AST.ProgramNode([

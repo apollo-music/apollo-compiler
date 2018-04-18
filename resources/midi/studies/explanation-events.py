@@ -24,7 +24,7 @@ midi.NoteOffEvent(tick=100, pitch=midi.G_3)
 
 # AfterTouchEvent(Event)
 
-# ControlChangeEvent(Event)
+# ProgramChangeEvent(Event)
 
 ### ProgramChangeEvent(Event) ++
 ### Choose the instrument
