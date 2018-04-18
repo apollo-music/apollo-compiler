@@ -1,0 +1,39 @@
+import midi
+
+pattern = midi.Pattern(format=1, resolution = 100, tick_relative=1)
+track = midi.Track()
+pattern.append(track)
+
+note_on = midi.NoteOnEvent(tick=0, velocity= 10, pitch=72)
+track.append(note_on)
+note_off = midi.NoteOnEvent(tick=3, velocity=0, pitch=72)
+track.append(note_off)
+
+note_on = midi.NoteOnEvent(tick=0, velocity= 10, pitch=60)
+track.append(note_on)
+note_on = midi.NoteOnEvent(tick=0, velocity= 10, pitch=61)
+track.append(note_on)
+note_on = midi.NoteOnEvent(tick=0, velocity= 10, pitch=62)
+track.append(note_on)
+
+note_off = midi.NoteOnEvent(tick=3, velocity=0, pitch=60)
+track.append(note_off)
+note_off = midi.NoteOnEvent(tick=0, velocity=0, pitch=61)
+track.append(note_off)
+note_off = midi.NoteOnEvent(tick=0, velocity=0, pitch=62)
+track.append(note_off)
+
+note_on = midi.NoteOnEvent(tick=0, velocity= 10, pitch=65)
+track.append(note_on)
+note_on = midi.NoteOnEvent(tick=0, velocity= 10, pitch=66)
+track.append(note_on)
+
+note_off = midi.NoteOnEvent(tick=3, velocity=0, pitch=65)
+track.append(note_off)
+note_off = midi.NoteOnEvent(tick=0, velocity=0, pitch=66)
+track.append(note_off)
+
+eot=midi.EndOfTrackEvent(tick=0)
+track.append(eot)
+
+midi.write_midifile("testing", pattern)

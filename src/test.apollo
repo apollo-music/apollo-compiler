@@ -1,6 +1,6 @@
 ^
 var bixo: (65, 66)
-amp: 100
+amp: 10
 dur: 200
-play: [72, (60, 61, 62), bixo], amp: 10, dur: 3
+play: [72, (60, 61, 62), bixo], amp: 100, dur: 30
 $

@@ -13,13 +13,11 @@ n_correct_tests = 3
 n_incorrect_tests = 0
 
 dir_path = os.path.dirname(os.path.realpath(__file__))
-print (dir_path)
-
 for i in range(n_correct_tests):
     with open(dir_path + '/test_files/test' + str(i+1) + '_parser.apollo', 'r') as myfile:
         datas.append(myfile.read())
         myfile.close()
-    with open(dir_path + '/expected_results/exp_test' + str(i+1) + '_parser.txt', 'r') as myfile:
+    with open(dir_path + '/__snapshot__/exp_test' + str(i+1) + '_parser.txt', 'r') as myfile:
         expected.append(myfile.read())
         myfile.close()
 

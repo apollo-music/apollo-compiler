@@ -227,7 +227,11 @@ def playNotes(notes):
 		print("note_off = midi.NoteOnEvent(tick=" + str(AST.dur) + ", velocity=0, pitch=" + str(notes) + ")", file = AST.outfile)
 		print("track.append(note_off)\n", file=AST.outfile)
 	elif type(notes) is tuple:
+		# It would be better to achieve this perfection with 
 		playNotesTuple(notes)
+	elif type(notes) is list:
+		for note in notes:
+			playNotes(note)
 	else:
 		print("ERROR", str(notes), str(type(notes)))
 
@@ -239,9 +243,44 @@ def compile(self):
 	# DEBUG print(str(self.children))
 	exp = self.children[0].compile()
 	# DEBUG print('exp:\n' + str(exp))
-	for acc in exp:
-		playNotes(acc)
+	playNotes(exp)
 
+
+def test(file_path):
+	from compiler.parser import apollo_yacc
+	from compiler.semantic_analiser import semantic_analiser
+	import sys, os
+	
+	f = open(file_path, 'r')
+	prog = f.read()
+	f.close()
+
+	AST.midiName = "testing"
+	AST.outfile = open(file_path + '_intermediate.py', 'w')
+
+	try:
+		# Generate ast
+		ast = apollo_yacc.parse(prog)
+	except:
+		print(sys.exc_info()[0])
+	
+	try:
+		# Run semantic analysis
+		semantic_analiser.run(ast)
+	except:
+		print(sys.exc_info()[0])
+	
+	try:
+		# Generate code (analrapist)
+		ast.compile()
+		AST.outfile.close()
+		with open(file_path + '_intermediate.py', 'r') as myfile:
+			outputString = myfile.read()
+			myfile.close()
+		return outputString
+
+	except:
+		print(sys.exc_info()[0])
 
 def run():
 	from compiler.parser import apollo_yacc
@@ -271,7 +310,7 @@ def run():
 		# Generate code (analrapist)
 		ast.compile()
 		AST.outfile.close()
-		print("New intermidiate generated %s" % AST.midiName)
+		print("New intermediate generated %s" % AST.midiName)
 	except:
 		print(sys.exc_info()[0])
 

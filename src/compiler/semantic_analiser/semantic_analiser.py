@@ -9,7 +9,7 @@ def run(ast):
 	# analise(ast, symtable)
 	# print("Starting Semantic Analisys ...")
 	ast.analise(symtable)
-	print("Semantic Analisys Completed...")
+	#print("Semantic Analisys Completed...")
 
 class SymTable():
 	scope = ""
