@@ -39,10 +39,10 @@ As operações em cima das variáveis serão simples operações de adição e s
 i.e. uma operação var += 1 poderá ir para a próxima nota dentro da escala pré definida ou simplesmente a próxima nota.
 
 __Representação das Notas:__
-As notas poderao ser reprentadas com letras e nao apenas números. Em vez de escrever 36, poderemos escrever C_3 que terá o mesmo sentido.
+As notas poderão ser reprentadas com letras e não apenas números. Em vez de escrever 36, poderemos escrever C_3 que terá o mesmo efeito.
 
 __Suporte a Tonalidades:__
-Unido com a ultima feature apresentada, poderemos fazer com que as notas sejam tocadas de acordo com o tom que esta sendo usado. Ao escrever C_3 em Ré Maior sera tocado C_3 #, pois Ré maior ja tem Dó com um sustenido em sua armadura.
+Além da última feature apresentada, poderemos fazer com que as notas sejam tocadas de acordo com o tom que está sendo usado. Ao escrever C_3 em Ré Maior sera tocado C_3 #, pois Ré maior ja tem Dó com um sustenido em sua armadura.
 
 ## Etapa 3
 Essa etapa será a mais desafiadora: aqui objetivamos implementar paralelismo de instrumentos para que vários sons de diversos instrumentos toquem simultaneamente.
