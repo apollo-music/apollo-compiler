@@ -1,0 +1,10 @@
+# .coveragerc to control coverage.py
+[run]
+branch = True
+source = 
+    src/compiler/AST
+    src/compiler/lexer
+    src/compiler/codegen
+    src/compiler/parser
+    src/compiler/semantic_analiser
+    src/compiler/exceptions
