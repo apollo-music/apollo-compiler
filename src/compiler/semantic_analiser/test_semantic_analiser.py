@@ -22,8 +22,8 @@ class SemTest(unittest.TestCase):
 
 # Tests performed:
 # - Test 1: regular program. Should be OK.
-# - Test 2: like test 1, with empty spaces added. Should be OK.
-# - Test 3: contains invalid character '#'. Should raise exception CharacterError.
+# - Test 2: use undefined variable inside play. Should raise VariableNotDefinedError.
+# - Test 3: use undefined variable inside another variable. Should raise VariableNotDefinedError.
 
 def run():
     suite = unittest.TestLoader().loadTestsFromTestCase(SemTest)
