@@ -2,7 +2,7 @@
 O projeto será realizado em três etapas (*milestones*):
 
 ## Etapa 1
-Para entrega da primeira etapa faremos um compilador que converterá um código em uma música. A idéia é que ao final da entrega tenhamos o esqueleto da lingagem *Apollo*, com a função de criar uma música simples através das configurações necessárias do .midi e do uso de variáveis. 
+Para entrega da primeira etapa faremos um compilador que converterá um código em uma música. A idéia é que ao final da entrega tenhamos o esqueleto da linguagem *Apollo*, com a função de criar uma música simples através das configurações necessárias do .mid e do uso de variáveis. 
 
 Os componentes basicos das nossas "partituras" serão:
 
