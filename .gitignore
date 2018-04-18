@@ -3,6 +3,8 @@ __pycache__/
 *.py[cod]
 src/*.pdf
 src/intermediate.py
-src/.coverage
+**/.coverage
 src/htmlcov
 src/cov.xml
+*.midi
+*.mp3
