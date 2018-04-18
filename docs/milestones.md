@@ -20,21 +20,31 @@ play: [72, (60, 61, 62), 73]
 Neste caso, teremos as notas correspondentes aos pitches `60`, `61` e `62` tocando ao mesmo tempo, formando um acorde.
 
 ## Etapa 2
-Na segunda etapa do projeto iremos implementar labels, loops e synthesizers.
+Na segunda etapa do projeto iremos implementar labels, loops, synthesizers e operações em variáveis.
 
+*Labels*
 A ideia de labels é que a linguagem ofereça suporte para que o programador designe um nome para um bloco de código. Assim, se desejarmos repetir uma 
 sequência de instruções, é possível executar o bloco especificando somente o nome do bloco e não repetir o código do bloco.
 
+*Loops*
 Loops também são estruturas da linguagem que faz muito sentido dado o seu propósito (produzir música). Podemos, por exemplo, designar por um label um refrão, e repetir
 dentro do loop o refrão.
 
+*Synthesizer*
 Synthesizers podem ser interpretados como os "instrumentos" que irão tocar as notas especificadas pelo programador. Assim é possível, por exemplo, que toquemos
 uma música com uma guitarra ou com um berimbau.
 
-## Etapa 3
-Essa etapa será a mais desafiadora: aqui objetivamos implementar paralelismo de instrumentos para que vários sons de diversos instrumentos toquem simultaneamente. 
+*Operações*
+As operações em cima das variáveis serão simples operações de adição e subtração. As operações poderão ser feitas em cima de uma escala pré definida ou cromaticamente,
+i.e. uma operação var += 1 poderá ir para a próxima nota dentro da escala pré definida ou simplesmente a próxima nota.
 
-Também implementaremos variáveis, operações entre variáveis e definição de um tom para as operações entre as notas. Por exemplo, se somarmos 1 a uma nota, ao invés do resultado ser a nota seguinte, seria a próxima nota no tom dado.
+## Etapa 3
+Essa etapa será a mais desafiadora: aqui objetivamos implementar paralelismo de instrumentos para que vários sons de diversos instrumentos toquem simultaneamente.
+
+Será implementado arpeggios em forma de uma função. O usuário poderá chamar uma função na forma arpeggio( nota_inicial, tamanho, tom ) que retornará a próxima nota dentro do arpeggio.
+Poderá também reiniciar o arpeggio chamando apenas arpeggio() para retornar ao estado inicial.
+
+Será implementado funções para o usuário.
 
 
 # Distribuição do trabalho
