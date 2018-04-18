@@ -1,3 +1,5 @@
+[![pipeline status](https://gitlab.ic.unicamp.br/mc911/2018-s1/group-9/badges/development/pipeline.svg)](https://gitlab.ic.unicamp.br/mc911/2018-s1/group-9/commits/development)
+[![coverage report](https://gitlab.ic.unicamp.br/mc911/2018-s1/group-9/badges/development/coverage.svg)](https://gitlab.ic.unicamp.br/mc911/2018-s1/group-9/commits/development)
 # Apollo music generator
 
 Este é o repositório para o código da linguagem musical Apollo.
@@ -21,10 +23,8 @@ REPOSITORY                    TAG                 IMAGE ID            CREATED   
 apollo                        latest              a21557abd738        About a minute ago   511MB
 ```
 
-Com isso, execute:
+Com isso, execute `./start_docker.sh`
 
-```docker run -it --rm --volume="/tmp/.X11-unix:/tmp/.X11-unix:rw" -v=$(pwd)/..:$(pwd)/.. -w=$(pwd) apollo bash```
+Se você tiver problemas com permissão, execute `chmod u+x docker_start.sh` e tente novamente.
 
-E assim estará dentro de um terminal em que poderá executar:
-
-```python3 start.py test.apollo```
+E assim estará dentro de um terminal em que poderá executar `./run.sh`
