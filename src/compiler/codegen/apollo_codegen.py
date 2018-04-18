@@ -288,7 +288,7 @@ def run():
 	prog = f.read()
 	f.close()
 
-	AST.midiName = '.'.join(sys.argv[1].split('.')[:-1]) + ".mid"
+	AST.midiName = '.'.join(sys.argv[1].split('.')[:-1]) + ".midi"
 
 	
 	try:
