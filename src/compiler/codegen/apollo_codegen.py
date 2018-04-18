@@ -227,7 +227,11 @@ def playNotes(notes):
 		print("note_off = midi.NoteOnEvent(tick=" + str(AST.dur) + ", velocity=0, pitch=" + str(notes) + ")", file = AST.outfile)
 		print("track.append(note_off)\n", file=AST.outfile)
 	elif type(notes) is tuple:
+		# It would be better to achieve this perfection with 
 		playNotesTuple(notes)
+	elif type(notes) is list:
+		for note in notes:
+			playNotes(note)
 	else:
 		print("ERROR", str(notes), str(type(notes)))
 
@@ -239,8 +243,7 @@ def compile(self):
 	# DEBUG print(str(self.children))
 	exp = self.children[0].compile()
 	# DEBUG print('exp:\n' + str(exp))
-	for acc in exp:
-		playNotes(acc)
+	playNotes(exp)
 
 
 def run():
@@ -252,7 +255,7 @@ def run():
 	prog = f.read()
 	f.close()
 
-	AST.midiName = '.'.join(sys.argv[1].split('.')[:-1]) + ".midi"
+	AST.midiName = '.'.join(sys.argv[1].split('.')[:-1]) + ".mid"
 
 	
 	try:
