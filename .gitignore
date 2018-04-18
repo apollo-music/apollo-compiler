@@ -6,3 +6,5 @@ src/intermediate.py
 src/.coverage
 src/htmlcov
 src/cov.xml
+*.midi
+*.mp3
