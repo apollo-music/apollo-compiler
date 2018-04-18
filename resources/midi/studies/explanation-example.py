@@ -14,7 +14,7 @@ track = midi.Track()
 pattern.append(track)
 
 # Instantiate a MIDI note on event, append it to the track
-on = midi.NoteOnEvent(tick=0, velocity=20, pitch=midi.G_3)
+on = midi.NoteOnEvent(tick=0, velocity=200, pitch=midi.G_3)
 track.append(on)
 
 # Instantiate a MIDI note off event, append it to the track
@@ -51,4 +51,4 @@ track.append(eot)
 print pattern
 
 # Save the pattern to disk
-midi.write_midifile("example.mid", pattern)
+midi.write_midifile("explanation-example.mid", pattern)
