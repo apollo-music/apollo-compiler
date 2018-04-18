@@ -5,13 +5,9 @@
 Este é o repositório para o código da linguagem musical Apollo.
 
 ## Como executar
-Para execução é desejável o docker instalado.
+Para execução é desejável o docker instalado e executando.
 
-Primeiro inicie o docker executando:
-
-```systemctl start docker```
-
-Após isso entre na pasta `src` e execute:
+Primeiro inicie  entre na pasta `src` e execute:
 
 ```docker build -t apollo .```
 
