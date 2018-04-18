@@ -1,5 +1,5 @@
 # Yacc example
-from ..ply.yacc import yacc
+from ply.yacc import yacc
 
 # Get the token map from the lexer.  This is required.
 from ..lexer.apollo_lex import tokens
@@ -94,19 +94,21 @@ def p_nota_id(p):
 
 # Error rule for syntax errors
 def p_error(p):
-	print("Syntax error on line: %s" % p.lineno)
-	raise exc.SyntaxError("Syntax error in input!")
+	print("\nSyntax error on line: %s" % (p.lineno))
+	(AST.parser).errok()
+	raise exc.MySyntaxError("Syntax error on line: %s" % (p.lineno))
 
 
 def parse(program):
-    '''
+	'''
 		Used to generate a AST parsing the program given as input
 		USAGE: open the file with open and read it and use it as input to parse()
 	'''
-    return yacc(debug=True).parse(program)
+	AST.parser = yacc(debug=True)
+	return (AST.parser).parse(program)
 
 def run():
-	parser = yacc(debug=True)
+	AST.parser = yacc(debug=True)
 
 	f = open(sys.argv[1], 'r')
 	prog = f.read()
@@ -115,7 +117,7 @@ def run():
 	print("input:")
 	print(prog)
 
-	result = parser.parse(prog, debug = 1)
+	result = (AST.parser).parse(prog, debug=1)
 	print(result)
 
 	graph = result.makegraphicaltree()

@@ -154,6 +154,32 @@ def compile(self):
 		return uniq_or_seq
 
 
+# OpNode
+# 	| nota : nota SUM nota 
+#	| nota MINUS nota 
+#	| nota MULTIPLY nota
+# AST.OpNode(p[2], [p[1], p[3]])
+@addToClass(AST.OpNode)
+def compile(self):
+	op = self.op
+	operand1 = self.children[0]
+	operand2 = self.children[1]
+
+	operand1 = operand1.compile()
+	operand2 = operand2.compile()
+
+	if op == '+':
+		return operand1 + operand2
+
+	if op == '-':
+		return operand1 - operand2
+	
+	if op == '*':
+		return operand1 * operand2
+
+	return self
+
+
 # SeqNotasNode
 # 'seqnotas : nota' | AST.SeqNotasNode([p[1]])
 # 'seqnotas : nota COMMA seqnotas' | AST.SeqNotasNode([p[1], p[3]])
@@ -201,7 +227,11 @@ def playNotes(notes):
 		print("note_off = midi.NoteOnEvent(tick=" + str(AST.dur) + ", velocity=0, pitch=" + str(notes) + ")", file = AST.outfile)
 		print("track.append(note_off)\n", file=AST.outfile)
 	elif type(notes) is tuple:
+		# It would be better to achieve this perfection with 
 		playNotesTuple(notes)
+	elif type(notes) is list:
+		for note in notes:
+			playNotes(note)
 	else:
 		print("ERROR", str(notes), str(type(notes)))
 
@@ -213,8 +243,7 @@ def compile(self):
 	# DEBUG print(str(self.children))
 	exp = self.children[0].compile()
 	# DEBUG print('exp:\n' + str(exp))
-	for acc in exp:
-		playNotes(acc)
+	playNotes(exp)
 
 
 def run():

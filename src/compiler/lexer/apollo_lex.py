@@ -4,7 +4,7 @@
 # tokenizer for a simple expression evaluator for
 # numbers and +,-,*,/
 # ------------------------------------------------------------
-from ..ply import lex
+from ply import lex
 import sys
 from ..exceptions import exceptions as exc
 
@@ -81,9 +81,9 @@ t_ignore  = ' \t'
 
 # Error handling rule
 def t_error(t):
-	print("Illegal character '%s'" % t.value[0])
+	print("Illegal character '%s' in line '%s'" % (t.value[0], t.lineno))
 	t.lexer.skip(1)
-	raise exc.CharacterError("'%s' is not a valid Character for Apollo" % t.value[0])
+	raise exc.CharacterError("In line '%s': '%s' is not a valid Character for Apollo" % (t.lineno, t.value[0]))
 
 # Build the lexer
 lexer = lex.lex()
