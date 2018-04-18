@@ -2,17 +2,16 @@
 O projeto será realizado em três etapas (*milestones*):
 
 ## Etapa 1
-Para entrega da primeira etapa faremos um compilador que converterá um código em uma música. A idéia é que ao final da entrega tenhamos uma linguagem que terá duas funções:
+Para entrega da primeira etapa faremos um compilador que converterá um código em uma música. A idéia é que ao final da entrega tenhamos o esqueleto da lingagem *Apollo*, com a função de criar uma música simples através das configurações necessárias do .midi e do uso de variáveis. 
 
-Os componentes basicos das nossas "partituras" serao:
+Os componentes basicos das nossas "partituras" serão:
 
   - notas musicais:
-    - `play: [pitch1, pitch2, ...]` - essa funcao irá tocar quantas notas forem fornecidas, de acordo com seus pitchs.
-      - `pitch`: definimos a nota a ser tocada de acordo com seu pitch, que varia de 0 a 127, de acordo com os chamados "MIDI numbers".
-    - `AMP: amp` - definimos a amplitude das próximas notas que serão tocadas, definindo a dinamica da musica.
-    - `DUR: dur` - definimos a duracao das próximas notas que serão tocadas dentro da musica em função da batida do metronomo.
-    - `metronomo: bpm` - definimos o valor de beats per minute (bpm), que sera o valor base da duracao das notas.
-    - `sleep: dur` - essa funcao irá indicar que o programa deve não tocar nenhum som por uma dada duracao (*dur*).
+    - `play: [pitch1, pitch2, ...]` - essa função irá tocar quantas notas forem fornecidas, de acordo com seus pitchs.
+      - `pitch`: define a nota à ser tocada de acordo com seu pitch, que varia de 0 a 127, de acordo com os chamados "MIDI numbers".
+    - `AMP: amp` - define a amplitude das próximas notas que serão tocadas, definindo a dinâmica da música.
+    - `DUR: dur` - define a duração das próximas notas que serão tocadas dentro da música.
+    - `VAR: var_id` - define uma variável que pode ser usada dentro da função `play` para substituir parte da sequência de notas.
 
 Com esses componentes, será possível já tocar algumas melodias simples. Além disso, podemos tocar acordes (conjunto de notas tocadas ao mesmo tempo), determinando quais notas devem ser tocadas simultaneamente com o uso de `()`, como por exemplo:
 ```
@@ -22,8 +21,6 @@ Neste caso, teremos as notas correspondentes aos pitches `60`, `61` e `62` tocan
 
 ## Etapa 2
 Na segunda etapa do projeto iremos implementar labels, loops e synthesizers.
-
-Também iremos estender a função do método play para suportar diferentes notas tocando ao mesmo tempo de um mesmo instrumento (i.e. um acorde)
 
 A ideia de labels é que a linguagem ofereça suporte para que o programador designe um nome para um bloco de código. Assim, se desejarmos repetir uma 
 sequência de instruções, é possível executar o bloco especificando somente o nome do bloco e não repetir o código do bloco.

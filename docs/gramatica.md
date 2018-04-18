@@ -31,6 +31,17 @@ play: [72, 73], amp: 8, dur: 2
 play: [72, (60, 61, 62), 73]
 ```
 Apenas o segundo `play` irá tocar as duas notas com `amp: 8` e `dur: 2`.
+
+## Adicionando silêncio
+Para inserir tempos de silêncio na música, é possível usar a função `sleep`:
+```
+play: [70, 71]
+sleep 10
+play: [72, 73]
+```
+
+Isso irá criar um tempo de silêncio em *milisegundos* conforme especificado na função.
+
 ## Criando repetições
 Repetições podem ser criadas usando a função `repeat`, seguida pelo número de vezes que o trecho de código entre `repeat` e `end repeat` irá ser repetido:
 ```

@@ -2,7 +2,7 @@
 A linguagem de programação *Apollo* é a linguagem de programação para a criação de músicas de maneira intuitiva, voltada aos usuários que queiram explorar possibilidades musicais usando as facilidades de programação para modificar, visualizar e estruturar composições.
 
 ## Compilando *Apollo*
-Para compilar um script na linguagem *Apollo*, apenas passe seu arquivo ".egg" como parâmetro ao compilador *Apollo* "compiler_apollo.py".
+O setup da linguagem depende do setup do projeto *Docker* em que o compilador está construído; para mais detalhes, ler o arquivo *README* do projeto. 
 
 ## Design da Linguagem
 A proposta da linguagem é de criar um jeito intuitivo de se criar músicas aproveitando a natureza linear de programação e da leitura do computador; por isso, é priorizado a ordem sequencial das instruções dadas em um script *Apollo* para se tocar a música, intuitivamente como se o código da linguagem fosse a "partitura" lida pelo computador.
