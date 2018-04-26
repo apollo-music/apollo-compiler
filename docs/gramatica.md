@@ -50,6 +50,7 @@ play: [70]
 end repeat
 ```
 Irá tocar a nota `70` em sequência 10 vezes.
+
 ## Criando variáveis
 Variáveis podem ser criadas usando o termo `var`, seguido pelo nome da variável e o valor que ela irá receber:
 ```
@@ -63,6 +64,15 @@ var sequencia: [70, 71, acorde, 70]
 play: sequencia
 ```
 Vale notar que variáveis não são passadas por referência às outras; portanto, no exemplo acima, se `acorde` fosse modificado após a variável `sequencia` ter sido declarada, as notas em `sequencia` não seriam modificadas.
+
+## Criando `Funções`
+As funções serão somente sequências de notas sequencias. Se funçãoA é chamada antes de funçãoB, toca-se funçãoA e depois funçãoB.
+
+```
+sequence seqA, instrument = I, amp = A, dur = D:
+end sequence
+```
+
 ## Criando `Tracks`
 Para paralelizar notas, é necessário o uso de `tracks`; por exemplo:
 ```
