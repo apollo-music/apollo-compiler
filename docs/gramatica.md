@@ -65,13 +65,22 @@ play: sequencia
 ```
 Vale notar que variáveis não são passadas por referência às outras; portanto, no exemplo acima, se `acorde` fosse modificado após a variável `sequencia` ter sido declarada, as notas em `sequencia` não seriam modificadas.
 
-## Criando `Funções`
-As funções serão somente sequências de notas sequencias. Se funçãoA é chamada antes de funçãoB, toca-se funçãoA e depois funçãoB.
+## Criando `Sequences`
+As sequences serão somente sequências de notas sequenciais. Se seqA é chamada antes de seqB, toca-se seqA e depois seqB.
 
 ```
-sequence seqA, instrument = I, amp = A, dur = D:
+sequence seqA, inst = I, amp = A, dur = D:
 end sequence
 ```
+
+## Criando `Instruments`
+Os instruments definem qual o instrumento será utilizado. Por exemplo, após chamarmos
+
+```
+inst = bass
+```
+
+Todos as notas seguintes serão tocadas com o instrumento "baixo".
 
 ## Criando `Tracks`
 Para paralelizar notas, é necessário o uso de `tracks`; por exemplo:
