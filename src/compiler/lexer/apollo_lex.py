@@ -7,9 +7,10 @@
 from ply import lex
 import sys
 from ..exceptions import exceptions as exc
+from ..lexer import instruments
 
 # List of token names. This is always required
-tokens = (
+tokens = [
    'INT',
    'PLAY',
    'TWOPOINTS',
@@ -19,6 +20,7 @@ tokens = (
    'RPAREN',
    'AMP',
    'DUR',
+   'INSTR',
    'COMMA',
    'NEWLINE',
    'START',
@@ -28,7 +30,7 @@ tokens = (
    'SUM',
    'MINUS',
    'MULTIPLY'
-)
+]
 
 # Regular expression rules for simple tokens
 t_LPAREN  = r'\('
@@ -72,8 +74,17 @@ def t_PLAY(t):
 	r'PLAY | play'
 	return t
 
+def t_INSTR(t):
+	r'INSTR | instr'
+	return t
+
 def t_ID(t):
 	r'[a-zA-Z_][a-zA-Z0-9_]*'
+
+	if t.value in instruments.instr2int.keys():
+		t.type = 'INT'
+		t.value = instruments.instr2int[t.value]
+
 	return t
 
 # A string containing ignored characters (spaces and tabs)
@@ -88,16 +99,21 @@ def t_error(t):
 # Build the lexer
 lexer = lex.lex()
 
-# # Test it out
-# f = open(sys.argv[1], 'r')
-# prog = f.read()
-#
-# # Give the lexer some input
-# lexer.input(prog)
-#
-# # Tokenize
-# while True:
-#     tok = lexer.token()
-#     if not tok:
-#         break      # No more input
-#     print(tok)
+
+"""
+# Test it out
+f = open(sys.argv[1], 'r')
+prog = f.read()
+
+# Give the lexer some input
+lexer.input(prog)
+
+#Tokenize
+while True:
+	tok = lexer.token()
+	
+	if not tok:
+		break      # No more input
+	
+	print(tok)
+"""

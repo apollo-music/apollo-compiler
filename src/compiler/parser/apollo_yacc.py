@@ -37,6 +37,10 @@ def p_param_DUR(p):
 	'param : DUR TWOPOINTS INT'
 	p[0] = AST.DurNode(AST.TokenNode(p[3]))
 
+def p_param_INSTR(p):
+	'param : INSTR TWOPOINTS INT'
+	p[0] = AST.InstrNode(AST.TokenNode(p[3]))
+
 def p_command_param(p):
 	'command : command COMMA param'
 	p[0] = AST.CommandNode([p[3], p[1]])

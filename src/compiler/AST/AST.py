@@ -115,7 +115,10 @@ class AmpNode(Node):
 
 class DurNode(Node):
     type = 'Dur'
-    
+
+class InstrNode(Node):
+    type = 'Instr'
+
 class ExpressionNode(Node):
     type = 'Expression'
 

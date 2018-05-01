@@ -25,7 +25,7 @@ def compile(self):
 	print("pattern.append(track)\n", file=AST.outfile)
 
 	for c in self.children:
-		# DEBUG print(c)
+	# DEBUG print(c)
 		c.compile()
 
 	print("eot=midi.EndOfTrackEvent(tick=0)\ntrack.append(eot)\n", file=AST.outfile)
@@ -107,6 +107,17 @@ def compile(self):
 	if len(self.children) == 1:
 		dur = self.children[0]
 		AST.dur = int(str(dur))
+	return self
+
+# InstrNode
+# - 'param : INSTR TWOPOINTS INT' | p[0] = AST.InstNode([AST.TokenNode(p[3])])
+@addToClass(AST.InstrNode)
+def compile(self):
+	# DEBUG print('InstrNode:\n' + str(self.children[0]))
+	if len(self.children) == 1:
+		instrCode = self.children[0]
+		print("track.append(midi.ProgramChangeEvent(tick=0, channel=0, data=[" + str(instrCode) + "]))\n", file=AST.outfile)
+
 	return self
 
 # VarNode
@@ -293,7 +304,6 @@ def run():
 
 	AST.midiName = '.'.join(sys.argv[1].split('.')[:-1]) + ".mid"
 
-	
 	try:
 		# Generate ast
 		ast = apollo_yacc.parse(prog)

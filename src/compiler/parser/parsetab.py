@@ -6,9 +6,9 @@ _tabversion = '3.10'
 
 _lr_method = 'LALR'
 
-_lr_signature = 'AMP COMMA DUR END ID INT LBRACKET LPAREN MINUS MULTIPLY NEWLINE PLAY RBRACKET RPAREN START SUM TWOPOINTS VARprogram2 : START NEWLINE program ENDprogram : statement NEWLINEprogram : statement NEWLINE programstatement : command\n\t\t| param\n\t\t| assignationparam : AMP TWOPOINTS INTparam : DUR TWOPOINTS INTcommand : command COMMA paramcommand : PLAY TWOPOINTS LBRACKET expression RBRACKETassignation : VAR ID TWOPOINTS LBRACKET expression RBRACKETassignation : VAR ID TWOPOINTS accexpression : accexpression : acc COMMA expressionacc : LPAREN seqnotas RPARENacc : notaseqnotas : notaseqnotas : nota COMMA seqnotasnota : nota SUM nota \n\t| nota MINUS nota \n\t| nota MULTIPLY notanota : INTnota : ID'
+_lr_signature = 'AMP COMMA DUR END ID INSTR INT LBRACKET LPAREN MINUS MULTIPLY NEWLINE PLAY RBRACKET RPAREN START SUM TWOPOINTS VARprogram2 : START NEWLINE program ENDprogram : statement NEWLINEprogram : statement NEWLINE programstatement : command\n\t\t| param\n\t\t| assignationparam : AMP TWOPOINTS INTparam : DUR TWOPOINTS INTparam : INSTR TWOPOINTS INTcommand : command COMMA paramcommand : PLAY TWOPOINTS LBRACKET expression RBRACKETassignation : VAR ID TWOPOINTS LBRACKET expression RBRACKETassignation : VAR ID TWOPOINTS accexpression : accexpression : acc COMMA expressionacc : LPAREN seqnotas RPARENacc : notaseqnotas : notaseqnotas : nota COMMA seqnotasnota : nota SUM nota \n\t| nota MINUS nota \n\t| nota MULTIPLY notanota : INTnota : ID'
     
-_lr_action_items = {'START':([0,],[2,]),'$end':([1,13,],[0,-1,]),'NEWLINE':([2,5,6,7,8,21,23,24,29,30,31,33,34,43,45,46,47,48,],[3,14,-4,-5,-6,-9,-7,-8,-16,-22,-23,-12,-10,-15,-19,-20,-21,-11,]),'PLAY':([3,14,],[9,9,]),'AMP':([3,14,15,],[10,10,10,]),'DUR':([3,14,15,],[11,11,11,]),'VAR':([3,14,],[12,12,]),'END':([4,14,20,],[13,-2,-3,]),'COMMA':([6,21,23,24,27,29,30,31,34,37,43,45,46,47,],[15,-9,-7,-8,35,-16,-22,-23,-10,44,-15,-19,-20,-21,]),'TWOPOINTS':([9,10,11,19,],[16,17,18,25,]),'ID':([12,22,25,28,32,35,38,39,40,44,],[19,31,31,31,31,31,31,31,31,31,]),'LBRACKET':([16,25,],[22,32,]),'INT':([17,18,22,25,28,32,35,38,39,40,44,],[23,24,30,30,30,30,30,30,30,30,30,]),'LPAREN':([22,25,32,35,],[28,28,28,28,]),'RBRACKET':([26,27,29,30,31,41,42,43,45,46,47,],[34,-13,-16,-22,-23,48,-14,-15,-19,-20,-21,]),'SUM':([29,30,31,37,45,46,47,],[38,-22,-23,38,38,38,38,]),'MINUS':([29,30,31,37,45,46,47,],[39,-22,-23,39,39,39,39,]),'MULTIPLY':([29,30,31,37,45,46,47,],[40,-22,-23,40,40,40,40,]),'RPAREN':([30,31,36,37,45,46,47,49,],[-22,-23,43,-17,-19,-20,-21,-18,]),}
+_lr_action_items = {'START':([0,],[2,]),'$end':([1,14,],[0,-1,]),'NEWLINE':([2,5,6,7,8,23,25,26,27,32,33,34,36,37,46,48,49,50,51,],[3,15,-4,-5,-6,-10,-7,-8,-9,-17,-23,-24,-13,-11,-16,-20,-21,-22,-12,]),'PLAY':([3,15,],[9,9,]),'AMP':([3,15,16,],[10,10,10,]),'DUR':([3,15,16,],[11,11,11,]),'INSTR':([3,15,16,],[12,12,12,]),'VAR':([3,15,],[13,13,]),'END':([4,15,22,],[14,-2,-3,]),'COMMA':([6,23,25,26,27,30,32,33,34,37,40,46,48,49,50,],[16,-10,-7,-8,-9,38,-17,-23,-24,-11,47,-16,-20,-21,-22,]),'TWOPOINTS':([9,10,11,12,21,],[17,18,19,20,28,]),'ID':([13,24,28,31,35,38,41,42,43,47,],[21,34,34,34,34,34,34,34,34,34,]),'LBRACKET':([17,28,],[24,35,]),'INT':([18,19,20,24,28,31,35,38,41,42,43,47,],[25,26,27,33,33,33,33,33,33,33,33,33,]),'LPAREN':([24,28,35,38,],[31,31,31,31,]),'RBRACKET':([29,30,32,33,34,44,45,46,48,49,50,],[37,-14,-17,-23,-24,51,-15,-16,-20,-21,-22,]),'SUM':([32,33,34,40,48,49,50,],[41,-23,-24,41,41,41,41,]),'MINUS':([32,33,34,40,48,49,50,],[42,-23,-24,42,42,42,42,]),'MULTIPLY':([32,33,34,40,48,49,50,],[43,-23,-24,43,43,43,43,]),'RPAREN':([33,34,39,40,48,49,50,52,],[-23,-24,46,-18,-20,-21,-22,-19,]),}
 
 _lr_action = {}
 for _k, _v in _lr_action_items.items():
@@ -17,7 +17,7 @@ for _k, _v in _lr_action_items.items():
       _lr_action[_x][_k] = _y
 del _lr_action_items
 
-_lr_goto_items = {'program2':([0,],[1,]),'program':([3,14,],[4,20,]),'statement':([3,14,],[5,5,]),'command':([3,14,],[6,6,]),'param':([3,14,15,],[7,7,21,]),'assignation':([3,14,],[8,8,]),'expression':([22,32,35,],[26,41,42,]),'acc':([22,25,32,35,],[27,33,27,27,]),'nota':([22,25,28,32,35,38,39,40,44,],[29,29,37,29,29,45,46,47,37,]),'seqnotas':([28,44,],[36,49,]),}
+_lr_goto_items = {'program2':([0,],[1,]),'program':([3,15,],[4,22,]),'statement':([3,15,],[5,5,]),'command':([3,15,],[6,6,]),'param':([3,15,16,],[7,7,23,]),'assignation':([3,15,],[8,8,]),'expression':([24,35,38,],[29,44,45,]),'acc':([24,28,35,38,],[30,36,30,30,]),'nota':([24,28,31,35,38,41,42,43,47,],[32,32,40,32,32,48,49,50,40,]),'seqnotas':([31,47,],[39,52,]),}
 
 _lr_goto = {}
 for _k, _v in _lr_goto_items.items():
@@ -35,19 +35,20 @@ _lr_productions = [
   ('statement -> assignation','statement',1,'p_statement','apollo_yacc.py',29),
   ('param -> AMP TWOPOINTS INT','param',3,'p_param_AMP','apollo_yacc.py',33),
   ('param -> DUR TWOPOINTS INT','param',3,'p_param_DUR','apollo_yacc.py',37),
-  ('command -> command COMMA param','command',3,'p_command_param','apollo_yacc.py',41),
-  ('command -> PLAY TWOPOINTS LBRACKET expression RBRACKET','command',5,'p_command_PLAY','apollo_yacc.py',45),
-  ('assignation -> VAR ID TWOPOINTS LBRACKET expression RBRACKET','assignation',6,'p_assignation_expression','apollo_yacc.py',49),
-  ('assignation -> VAR ID TWOPOINTS acc','assignation',4,'p_assignation','apollo_yacc.py',53),
-  ('expression -> acc','expression',1,'p_seqacc_acc','apollo_yacc.py',57),
-  ('expression -> acc COMMA expression','expression',3,'p_seqacc_accseqacc','apollo_yacc.py',61),
-  ('acc -> LPAREN seqnotas RPAREN','acc',3,'p_acc_seqnotas','apollo_yacc.py',65),
-  ('acc -> nota','acc',1,'p_acc_nota','apollo_yacc.py',69),
-  ('seqnotas -> nota','seqnotas',1,'p_seqnotas_nota','apollo_yacc.py',73),
-  ('seqnotas -> nota COMMA seqnotas','seqnotas',3,'p_seqnotas_notaseqnotas','apollo_yacc.py',77),
-  ('nota -> nota SUM nota','nota',3,'p_nota_op','apollo_yacc.py',81),
-  ('nota -> nota MINUS nota','nota',3,'p_nota_op','apollo_yacc.py',82),
-  ('nota -> nota MULTIPLY nota','nota',3,'p_nota_op','apollo_yacc.py',83),
-  ('nota -> INT','nota',1,'p_nota','apollo_yacc.py',88),
-  ('nota -> ID','nota',1,'p_nota_id','apollo_yacc.py',92),
+  ('param -> INSTR TWOPOINTS INT','param',3,'p_param_INSTR','apollo_yacc.py',41),
+  ('command -> command COMMA param','command',3,'p_command_param','apollo_yacc.py',45),
+  ('command -> PLAY TWOPOINTS LBRACKET expression RBRACKET','command',5,'p_command_PLAY','apollo_yacc.py',49),
+  ('assignation -> VAR ID TWOPOINTS LBRACKET expression RBRACKET','assignation',6,'p_assignation_expression','apollo_yacc.py',53),
+  ('assignation -> VAR ID TWOPOINTS acc','assignation',4,'p_assignation','apollo_yacc.py',57),
+  ('expression -> acc','expression',1,'p_seqacc_acc','apollo_yacc.py',61),
+  ('expression -> acc COMMA expression','expression',3,'p_seqacc_accseqacc','apollo_yacc.py',65),
+  ('acc -> LPAREN seqnotas RPAREN','acc',3,'p_acc_seqnotas','apollo_yacc.py',69),
+  ('acc -> nota','acc',1,'p_acc_nota','apollo_yacc.py',73),
+  ('seqnotas -> nota','seqnotas',1,'p_seqnotas_nota','apollo_yacc.py',77),
+  ('seqnotas -> nota COMMA seqnotas','seqnotas',3,'p_seqnotas_notaseqnotas','apollo_yacc.py',81),
+  ('nota -> nota SUM nota','nota',3,'p_nota_op','apollo_yacc.py',85),
+  ('nota -> nota MINUS nota','nota',3,'p_nota_op','apollo_yacc.py',86),
+  ('nota -> nota MULTIPLY nota','nota',3,'p_nota_op','apollo_yacc.py',87),
+  ('nota -> INT','nota',1,'p_nota','apollo_yacc.py',92),
+  ('nota -> ID','nota',1,'p_nota_id','apollo_yacc.py',96),
 ]
