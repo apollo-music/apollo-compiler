@@ -77,10 +77,10 @@ end sequence
 Os instruments definem qual o instrumento será utilizado. Por exemplo, após chamarmos
 
 ```
-inst = bass
+instr = ACOUSTICBASS
 ```
 
-Todos as notas seguintes serão tocadas com o instrumento "baixo".
+Todos as notas seguintes serão tocadas com o instrumento "baixo". A lista de instrumentos suportados pode ser vista aqui: http://www.pjb.com.au/muscript/gm.html
 
 ## Criando `Tracks`
 Para paralelizar notas, é necessário o uso de `tracks`; por exemplo:
