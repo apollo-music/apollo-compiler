@@ -124,6 +124,12 @@ class ExpressionNode(Node):
 
 class PlayNode(Node):
     type = 'Play'
+
+class RepeatNode(Node):
+    type = 'Repeat'
+
+class EndrepeatNode(Node):
+    type = 'Endrepeat'
     
 class TokenNode(Node):
     type = 'Token'

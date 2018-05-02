@@ -21,6 +21,8 @@ tokens = [
    'AMP',
    'DUR',
    'INSTR',
+   'REPEAT',
+   'ENDREPEAT',
    'COMMA',
    'NEWLINE',
    'START',
@@ -40,7 +42,7 @@ t_RBRACKET  = r'\]'
 t_COMMA  = r','
 t_TWOPOINTS = r':'
 t_START = r'\^'
-t_END = r'\$\n*'
+t_END = r'\$[\n ]*'
 
 t_SUM = r'\+'
 t_MINUS = r'\-'
@@ -76,6 +78,14 @@ def t_PLAY(t):
 
 def t_INSTR(t):
 	r'INSTR | instr'
+	return t
+
+def t_REPEAT(t):
+	r'REPEAT | repeat'
+	return t
+
+def t_ENDREPEAT(t):
+	r'ENDREPEAT | endrepeat'
 	return t
 
 def t_ID(t):

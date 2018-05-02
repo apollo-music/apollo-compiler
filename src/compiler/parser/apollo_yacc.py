@@ -96,6 +96,14 @@ def p_nota_id(p):
 	'nota : ID'
 	p[0] = AST.TokenNode(p[1])
 
+def p_repeat(p):
+	'repeat : INT TWOPOINTS PROGRAM ENDREPEAT'
+	p[0] = AST.RepeatNode([p[1], p[3], p[4]])
+
+def p_endrepeat(p):
+	'endrepeat : PROGRAM'
+	p[0] = AST.EndrepeatNode(p[1])
+
 # Error rule for syntax errors
 def p_error(p):
 	print("\nSyntax error on line: %s" % (p.lineno))
