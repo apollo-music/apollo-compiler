@@ -4,68 +4,67 @@ from ..AST.AST import addToClass
 from ..AST.AST import Node
 from ..exceptions import exceptions
 
-def run(ast):
-	symtable = SymTable("global")
-	# analise(ast, symtable)
-	# print("Starting Semantic Analisys ...")
-	ast.analise(symtable)
-	#print("Semantic Analisys Completed...")
 
-class SymTable():
-	scope = ""
-	parent = None
-	symbols = []
-	def __init__(self, scope, children=None):
-		self.scope = scope
-		if not children: self.children = []
-		elif hasattr(children,'__len__'):
-			self.children = children
-		else:
-			self.children = [children]
+AST.ScopeStack = []
 
-		for child in self.children:
-			child.parent = self
+###############
+# Op on Stack #
+###############
+def pushScope(scope):
+	AST.ScopeStack.append(scope)
+
+def popScope():
+	AST.ScopeStack.pop()
+
+
+def findSymbol(symbol):
+	currentScope = len(AST.ScopeStack) - 1
+
+	while currentScope is not None:
+		scope_symbol = AST.ScopeStack[currentScope].isInScope(symbol)
+		if scope_symbol:
+			return scope_symbol
+
+		if AST.ScopeStack[currentScope].dependency == currentScope:
+			return False
+
+		currentScope = AST.ScopeStack[currentScope].dependency
+
+###############
+# Scope class #
+###############
+class Scope():
+	'''
+		The scope class defines a scope holding the value of the variables
+		ans which scopes the scope can access
+	'''
+	name = ""
+	dependency = 0
+	definitions = {}
 	
-	def AddChild(self, child):
-		self.children.append(child)
-		child.parent = self
-
-	# Check if element exists in scope
-	def FindInScope(self, elem):
-		node = self
-		sym = FindSymbol(self.symbols, elem)
-		if sym != None:
-			return sym
-		while node.parent:
-			sym = FindSymbol(self.symbols, elem)
-			if sym != None:
-				return sym
-			node = node.parent
-		return None
+	def __init__(self, name, dependency=0, definitions={}):
+		'''
+			depency: dependencie is a int position on the stack
+		'''
+		self.name = name
+		if dependency is not None:
+			self.dependency = dependency
+		if definitions is not None:
+			self.definitions = definitions
 	
-	# def FindScopeParent(self, scope):
-	# 	node = self
-	# 	if scope == self.scope:
-	# 		return True
-	# 	while node.parent:
-	# 		if scope == self.scope:
-	# 			return True
-	# 		node = node.parent
-	# 	return False
+	def __str__(self):
+		return (self.name + str(self.dependency) + str(self.definitions))
+		
+	def addDefiniton(self, key, value):
+		self.definitions[key] = value
+	
+	def isInScope(self, d):
+		self.definitions.get(key, False)
 
-	def AddSymbol(self, symbol, ASTNode):
-		self.symbols.append([symbol,ASTNode])
-
-def FindSymbol(symbols, target):
-	for sym in symbols:
-		if sym[0] == target:
-			return sym
-	return None
 
 ########################
 ## Analiser Functions ##
 ########################
-
 @addToClass(AST.Node)
 def analise(self, scopeNode):
 	for child in self.children:
@@ -138,3 +137,56 @@ def analise(self, scopeNode):
 def analise(self, scopeNode):
 	for child in self.children:
 		child.analise(scopeNode)
+
+
+## This is the function to execute the semantic analiser
+def run(ast):
+	# analise(ast, symtable)
+	# print("Starting Semantic Analisys ...")
+	ast.analise()
+	#print("Semantic Analisys Completed...")
+
+
+# scope = ""
+# parent = None
+# symbols = []
+# def __init__(self, scope, children=None):
+# 	self.scope = scope
+# 	if not children: self.children = []
+# 	elif hasattr(children,'__len__'):
+# 		self.children = children
+# 	else:
+# 		self.children = [children]
+
+# 	for child in self.children:
+# 		child.parent = self
+
+# def AddChild(self, child):
+# 	self.children.append(child)
+# 	child.parent = self
+
+# # Check if element exists in scope
+# def FindInScope(self, elem):
+# 	node = self
+# 	sym = FindSymbol(self.symbols, elem)
+# 	if sym != None:
+# 		return sym
+# 	while node.parent:
+# 		sym = FindSymbol(self.symbols, elem)
+# 		if sym != None:
+# 			return sym
+# 		node = node.parent
+# 	return None
+
+# # def FindScopeParent(self, scope):
+# # 	node = self
+# # 	if scope == self.scope:
+# # 		return True
+# # 	while node.parent:
+# # 		if scope == self.scope:
+# # 			return True
+# # 		node = node.parent
+# # 	return False
+
+# def AddSymbol(self, symbol, ASTNode):
+# 	self.symbols.append([symbol,ASTNode])
