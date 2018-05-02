@@ -26,7 +26,8 @@ def p_program_statement_program(p):
 def p_statement(p):
 	'''statement : command
 		| param
-		| assignation'''
+		| assignation
+		| loop'''
 	p[0] = p[1]
 		
 def p_param_AMP(p):
@@ -95,6 +96,14 @@ def p_nota(p):
 def p_nota_id(p):
 	'nota : ID'
 	p[0] = AST.TokenNode(p[1])
+
+# def p_loop(p):
+# 	'loop : repeat'
+# 	p[0] = AST.LoopNode(p[1])
+
+def p_loop_repeat(p):
+	'loop : REPEAT INT TWOPOINTS NEWLINE program ENDREPEAT'
+	p[0] = AST.RepeatNode([AST.TokenNode(p[2]), p[5]])
 
 # Error rule for syntax errors
 def p_error(p):

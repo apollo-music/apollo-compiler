@@ -27,6 +27,8 @@ RUN apt-get update -qqy && \
                         timidity \
                         timidity-interfaces-extra \
                         lame \
+                        python3-pydot \
+                        graphviz \
                        &&\
     \
     # Clean the cache to keep the image small
