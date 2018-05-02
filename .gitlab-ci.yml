@@ -5,7 +5,7 @@ stages:
 
 build:
   tags:
-  - docker-kvm
+  - docker
   stage: build
   script:
     - make
