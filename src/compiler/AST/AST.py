@@ -125,11 +125,11 @@ class ExpressionNode(Node):
 class PlayNode(Node):
     type = 'Play'
 
-class RepeatNode(Node):
+class LoopNode(Node):
     type = 'Repeat'
 
-class EndrepeatNode(Node):
-    type = 'Endrepeat'
+class RepeatNode(Node):
+    type = 'Repeat'
     
 class TokenNode(Node):
     type = 'Token'
