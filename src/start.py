@@ -6,5 +6,6 @@ import compiler.codegen.apollo_codegen as codegen
 # parser.run()
 # For usage of codegen, uncomment codege.run() and execute ./start.py filein
 codegen.run()
+#parser.run()
 
 
