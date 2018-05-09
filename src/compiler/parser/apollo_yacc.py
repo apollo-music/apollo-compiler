@@ -47,32 +47,53 @@ def p_command_param(p):
 	p[0] = AST.CommandNode([p[3], p[1]])
 	
 def p_command_PLAY(p):
-	'command : PLAY TWOPOINTS LBRACKET expression RBRACKET'
+	'command : PLAY TWOPOINTS LBRACKET seqsound RBRACKET'
 	p[0] = AST.PlayNode([p[4]])
 
 def p_assignation_expression(p):
-	'assignation : VAR ID TWOPOINTS LBRACKET expression RBRACKET'
-	p[0] = AST.VarNode([AST.TokenNode(p[2]), p[5]])
-
-def p_assignation(p):
-	'assignation : VAR ID TWOPOINTS acc'
+	'assignation : VAR ID TWOPOINTS exp'
 	p[0] = AST.VarNode([AST.TokenNode(p[2]), p[4]])
-		
-def p_seqacc_acc(p):
-	'expression : acc'
-	p[0] = AST.ExpressionNode([p[1]])
 
-def p_seqacc_accseqacc(p):
-	'expression : acc COMMA expression'
-	p[0] = AST.ExpressionNode([p[1], p[3]])
+def p_expression_seq(p):
+	'exp : LBRACKET seqsound RBRACKET rec_op'
+	p[0] = AST.ExpressionNode([p[2], p[4]])
+
+def p_expression_nota(p):
+	'exp : nota rec_op'
+	p[0] = AST.ExpressionNode([p[1], p[2]])
+
+def p_expression_acc(p):
+	'exp : acc rec_op'
+	p[0] = AST.ExpressionNode([p[1], p[2]])
+
+def p_recursive_op_empty(p):
+	'rec_op : '
+	p[0] = AST.EmptyNode()
+
+def p_recursive_op_sum(p):
+	'rec_op : SUM exp'
+	p[0] = AST.OpNode(p[1], [p[2]])
+
+def p_recursive_op_minus(p):
+	'rec_op : MINUS exp'
+	p[0] = AST.OpNode(p[1], [p[2]])
+
+def p_seqsound_comma(p):
+	'seqsound : sound COMMA seqsound'
+	p[0] = AST.SeqsoundNode([p[1], p[3]])
+
+def p_seqsound(p):
+	'seqsound : sound'
+	p[0] = AST.SeqsoundNode(p[1])
+
+def p_sound(p):
+	'''sound : acc
+	| nota'''
+	p[0] = AST.SoundNode(p[1])
 
 def p_acc_seqnotas(p):
 	'acc : LPAREN seqnotas RPAREN'
 	p[0] = AST.AccNode([p[2]])
-
-def p_acc_nota(p):
-	'acc : nota'
-	p[0] = AST.AccNode([p[1]])
 
 def p_seqnotas_nota(p):
 	'seqnotas : nota'
@@ -82,13 +103,6 @@ def p_seqnotas_notaseqnotas(p):
 	'seqnotas : nota COMMA seqnotas'
 	p[0] = AST.SeqNotasNode([p[1], p[3]])
 
-def p_nota_op(p):
-	'''nota : nota SUM nota 
-	| nota MINUS nota 
-	| nota MULTIPLY nota'''
-	
-	p[0] = AST.OpNode(p[2], [p[1], p[3]])
-	
 def p_nota(p):
 	'nota : INT'
 	p[0] = AST.TokenNode(p[1])
