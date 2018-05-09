@@ -10,12 +10,14 @@ AST.ScopeStack = []
 ###############
 # Op on Stack #
 ###############
+def getCurrentScope():
+	return AST.ScopeStack[-1]
+
 def pushScope(scope):
 	AST.ScopeStack.append(scope)
 
 def popScope():
 	AST.ScopeStack.pop()
-
 
 def findSymbol(symbol):
 	currentScope = len(AST.ScopeStack) - 1
@@ -30,6 +32,9 @@ def findSymbol(symbol):
 
 		currentScope = AST.ScopeStack[currentScope].dependency
 
+def insertSymbol(symbol, value):
+	getCurrentScope().addDefiniton(symbol, value)
+
 ###############
 # Scope class #
 ###############
@@ -39,7 +44,7 @@ class Scope():
 		ans which scopes the scope can access
 	'''
 	name = ""
-	dependency = 0
+	dependency = 0 		## This is not in use as theres no scolpe multlevel
 	definitions = {}
 	
 	def __init__(self, name, dependency=0, definitions={}):
@@ -58,14 +63,14 @@ class Scope():
 	def addDefiniton(self, key, value):
 		self.definitions[key] = value
 	
-	def isInScope(self, d):
+	def isInScope(self, key):
 		self.definitions.get(key, False)
 
 
 ########################
 ## Analiser Functions ##
 ########################
-# GenericNode
+# GenericNode - Default
 @addToClass(AST.Node)
 def analise(self):
 	for c in self.children:
@@ -76,7 +81,9 @@ def analise(self):
 # - 'program2 : START NEWLINE program END NEWLINE' | AST.EntryNode(p[3])
 @addToClass(AST.EntryNode)
 def analise(self):
-	return self
+	pushScope(Scope('global'))
+	c = self.children[0]
+	return c.analise()
 
 # ProgramNode (generic)
 # - 'program : statement NEWLINE' | AST.ProgramNode(p[1])
@@ -84,68 +91,49 @@ def analise(self):
 @addToClass(AST.ProgramNode)
 def analise(self):
 	for c in self.children:
-		# DEBUG print('ProgramNode:\n' + str(c))
 		c.analise()
 	return self
 
-# CommandNode
-# - 'command : command COMMA param' | AST.CommandNode([p[3], p[1]])
-# - 'command : PLAY TWOPOINTS LBRACKET expression RBRACKET' | AST.PlayNode([p[4]])
-@addToClass(AST.CommandNode)
-def analise(self):
-	return self
-
-# ExpressionNode
-# - 'expression : acc' | AST.ExpressionNode([p[1]])
-# - 'expression : acc COMMA expression' | AST.ExpressionNode([p[1], p[3]])
-@addToClass(AST.ExpressionNode)
-def analise(self):
-	return acc
-
-# TokenNode ()
-# - 	MULTIPLE USES :S - I'm very confused
-@addToClass(AST.TokenNode)
-def analise(self):
-	return self.tok
-
 # AmpNode
-# - 'param : AMP TWOPOINTS INT' | p[0] = AST.AmpNode([AST.TokenNode(p[3])])
+# - 'param : AMP TWOPOINTS INT' | AST.AmpNode([AST.TokenNode(p[3])])
 @addToClass(AST.AmpNode)
 def analise(self):
-	return self
+	return self.children[0].analise()
 
 # DurNode
-# - 'param : DUR TWOPOINTS INT' | p[0] = AST.DurNode([AST.TokenNode(p[3])])
+# - 'param : DUR TWOPOINTS INT' | AST.DurNode([AST.TokenNode(p[3])])
 @addToClass(AST.DurNode)
 def analise(self):
-	return self
+	return self.children[0].analise()
 
 # InstrNode
-# - 'param : INSTR TWOPOINTS INT' | p[0] = AST.InstNode([AST.TokenNode(p[3])])
+# - 'param : INSTR TWOPOINTS INT' | AST.InstNode([AST.TokenNode(p[3])])
 @addToClass(AST.InstrNode)
 def analise(self):
+	return self.children[0].analise()
+
+# CommandNode
+# - 'command : command COMMA param' | AST.CommandNode([p[3], p[1]])
+@addToClass(AST.CommandNode)
+def analise(self):
+	for c in self.children:
+		c.analise()
 	return self
 
-# VarNode
-# 'assignation : VAR ID TWOPOINTS LBRACKET expression RBRACKET' |
-# 	 AST.VarNode([AST.TokenNode(p[2]), p[5]])
-# 'assignation : VAR ID TWOPOINTS acc' | AST.VarNode([AST.TokenNode(p[2]), p[4]])
-@addToClass(AST.VarNode)
+# PlayNode
+# 'command : PLAY TWOPOINTS LBRACKET seqsound RBRACKET' | AST.PlayNode([p[4]])
+@addToClass(AST.PlayNode)
 def analise(self):
-	return self
+	exp = self.children[0].analise()
 
-# AccNode
-# - 'acc : LPAREN seqnotas RPAREN' | AccNode([p[2]])
-# - 'acc : nota' |  AST.AccNode([p[1]])
-@addToClass(AST.AccNode)
+# ExpressionNode
+# - 'exp : LBRACKET seqsound RBRACKET rec_op' |  AST.ExpressionNode([p[2], p[4]])
+# - 'exp : nota rec_op'| AST.ExpressionNode([p[1], p[2]])
+# - 'exp : acc rec_op' | AST.ExpressionNode([p[1], p[2]])
+@addToClass(AST.ExpressionNode)
 def analise(self):
-	# PRECISA COLOCAR QUE ESSA SEQ DE NOTAS É ACORDE
-	return self
-
-# RepeatNode
-# 'loop : REPEAT INT TWOPOINTS NEWLINE program ENDREPEAT' | p[0] = AST.RepeatNode([AST.TokenNode(p[2]), p[5]])
-@addToClass(AST.RepeatNode)
-def analise(self):
+	for c in self.children:
+		c.analise()
 	return self
 
 # OpNode
@@ -157,6 +145,49 @@ def analise(self):
 def analise(self):
 	return self
 
+# TokenNode ()
+@addToClass(AST.TokenNode)
+def analise(self):
+	return self.tok
+
+# VarNode
+# 'assignation : VAR ID TWOPOINTS exp' | AST.VarNode([AST.TokenNode(p[2]), p[4]])
+@addToClass(AST.VarNode)
+def analise(self):
+	ID = self.children[0]
+	exp = self.children[1].analise()
+	
+	insertSymbol(ID, exp)
+	
+	return self
+
+
+# 'seqnotas : nota' | 'seqnotas : nota COMMA seqnotas'
+@addToClass(AST.SeqNotasNode)
+def analise(self):
+	nota = self.children[0].analise()
+	if not (type(nota) is str and findSymbol(nota)):
+		return False # ERRO DE ESCOPO
+
+	ret = [nota]
+	if len(self.children) > 1:
+		ret = ret + self.children[1]
+
+	return ret
+
+# AccNode
+# - 'acc : LPAREN seqnotas RPAREN' | AccNode([p[2]])
+# - 'acc : nota' |  AST.AccNode([p[1]])
+@addToClass(AST.AccNode)
+def analise(self):
+	# PRECISA COLOCAR QUE ESSA SEQ DE NOTAS É ACORDE
+	return self
+
+# RepeatNode
+# 'loop : REPEAT INT TWOPOINTS NEWLINE program ENDREPEAT' | AST.RepeatNode([AST.TokenNode(p[2]), p[5]])
+@addToClass(AST.RepeatNode)
+def analise(self):
+	return self
 
 # SeqNotasNode
 # 'seqnotas : nota' | AST.SeqNotasNode([p[1]])
@@ -168,135 +199,9 @@ def analise(self):
 	nota = self.children[0].analise()
 	return [nota]
 
-# PlayNode
-# 'command : PLAY TWOPOINTS LBRACKET expression RBRACKET' | AST.PlayNode([p[4]])
-@addToClass(AST.PlayNode)
-def analise(self):
-	exp = self.children[0].analise()
-	playNotes(exp)
+
 
 ## This is the function to execute the semantic analiser
 def run(ast):
-	# analise(ast, symtable)
-	# print("Starting Semantic Analisys ...")
 	ast.analise()
 	#print("Semantic Analisys Completed...")
-
-
-# scope = ""
-# parent = None
-# symbols = []
-# def __init__(self, scope, children=None):
-# 	self.scope = scope
-# 	if not children: self.children = []
-# 	elif hasattr(children,'__len__'):
-# 		self.children = children
-# 	else:
-# 		self.children = [children]
-
-# 	for child in self.children:
-# 		child.parent = self
-
-# def AddChild(self, child):
-# 	self.children.append(child)
-# 	child.parent = self
-
-# # Check if element exists in scope
-# def FindInScope(self, elem):
-# 	node = self
-# 	sym = FindSymbol(self.symbols, elem)
-# 	if sym != None:
-# 		return sym
-# 	while node.parent:
-# 		sym = FindSymbol(self.symbols, elem)
-# 		if sym != None:
-# 			return sym
-# 		node = node.parent
-# 	return None
-
-# # def FindScopeParent(self, scope):
-# # 	node = self
-# # 	if scope == self.scope:
-# # 		return True
-# # 	while node.parent:
-# # 		if scope == self.scope:
-# # 			return True
-# # 		node = node.parent
-# # 	return False
-
-# def AddSymbol(self, symbol, ASTNode):
-# 	self.symbols.append([symbol,ASTNode])
-
-
-# @addToClass(AST.Node)
-# def analise(self, scopeNode):
-# 	for child in self.children:
-# 		child.analise(scopeNode)
-
-# @addToClass(AST.EntryNode)
-# def analise(self, scopeNode):
-# 	for child in self.children:
-# 		child.analise(scopeNode)
-
-# @addToClass(AST.TokenNode)
-# def analise(self, scopeNode):
-# 	if isinstance(self.tok, str):
-# 			if scopeNode.FindInScope(self.tok) == None:
-# 				raise exceptions.VariableNotDefinedError(self.tok)
-
-# @addToClass(AST.AmpNode)
-# def analise(self, scopeNode):
-# 	for child in self.children:
-# 		child.analise(scopeNode)
-
-# @addToClass(AST.DurNode)
-# def analise(self, scopeNode):
-# 	for child in self.children:
-# 		child.analise(scopeNode)
-
-# @addToClass(AST.InstrNode)
-# def analise(self, scopeNode):
-# 	for child in self.children:
-# 		child.analise(scopeNode)
-
-# @addToClass(AST.VarNode)
-# def analise(self, scopeNode):
-# 	left = self.children[0]
-# 	right = self.children[1]
-
-# 	scopeNode.AddSymbol(left.tok, self)
-
-# 	right.analise(scopeNode)
-
-# @addToClass(AST.AccNode)
-# def analise(self, scopeNode):
-# 	child = self.children[0]
-# 	child.analise(scopeNode)
-
-# @addToClass(AST.SeqNotasNode)
-# def analise(self, scopeNode):
-# 	left = self.children[0]
-
-# 	left.analise(scopeNode)
-# 	if left.type == 'Token' and isinstance(left.tok, str):
-# 		sym = scopeNode.FindInScope(left.tok)
-# 		if sym != None and sym[1].children[1].type == 'Expression':
-# 			raise exceptions.SequenceInsideAccError()
-
-# 	if len(self.children)==2:
-# 		self.children[1].analise(scopeNode)
-
-# @addToClass(AST.ExpressionNode)
-# def analise(self, scopeNode):
-# 	for child in self.children:
-# 		child.analise(scopeNode)
-
-# @addToClass(AST.CommandNode)
-# def analise(self, scopeNode):
-# 	for child in self.children:
-# 		child.analise(scopeNode)
-
-# @addToClass(AST.PlayNode)
-# def analise(self, scopeNode):
-# 	for child in self.children:
-# 		child.analise(scopeNode)
