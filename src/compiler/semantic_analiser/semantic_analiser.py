@@ -92,6 +92,11 @@ def analise(self, scopeNode):
 	for child in self.children:
 		child.analise(scopeNode)
 
+@addToClass(AST.RepeatNode)
+def analise(self, scopeNode):
+	for child in self.children:
+		child.analise(scopeNode)
+
 @addToClass(AST.InstrNode)
 def analise(self, scopeNode):
 	for child in self.children:
