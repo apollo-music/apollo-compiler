@@ -57,6 +57,14 @@ def p_assignation_expression(p):
 def p_assignation(p):
 	'assignation : VAR ID TWOPOINTS acc'
 	p[0] = AST.VarNode([AST.TokenNode(p[2]), p[4]])
+# new
+def p_assignation_var_int(p):
+	'assignation : VAR ID TWOPOINTS INT'
+	p[0] = AST.VarNode([AST.TokenNode(p[2]), AST.TokenNode(p[4])])
+#new
+def p_assignation_var_id(p):
+	'assignation : VAR ID TWOPOINTS ID'
+	p[0] = AST.VarNode([AST.TokenNode(p[2]), AST.TokenNode(p[4])])
 		
 def p_seqacc_acc(p):
 	'expression : acc'
@@ -88,7 +96,14 @@ def p_nota_op(p):
 	| nota MULTIPLY nota'''
 	
 	p[0] = AST.OpNode(p[2], [p[1], p[3]])
-	
+#new
+def p_intvar_op(p):	
+	'''var_op : INT SUM INT
+	| INT MINUS INT
+	| INT MULTIPLY INT'''
+
+	p[0] = AST.OpNode(AST.TokenNode(p[2]), [AST.TokenNode(p[1]), AST.TokenNode(p[3])])
+
 def p_nota(p):
 	'nota : INT'
 	p[0] = AST.TokenNode(p[1])
