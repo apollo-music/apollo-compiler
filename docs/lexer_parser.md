@@ -33,19 +33,27 @@
 | statement -> command |
 | statement -> param |
 | statement -> assignation |
+| statement -> loop |
 | param -> AMP TWOPOINTS INT |
 | param -> DUR TWOPOINTS INT |
+| param -> INSTR TWOPOINTS INT |
 | command -> command COMMA param |
-| command -> PLAY TWOPOINTS LBRACKET expression RBRACKET |
-| assignation -> VAR ID TWOPOINTS LBRACKET expression RBRACKET |
-| assignation -> VAR ID TWOPOINTS acc |
+| command -> PLAY TWOPOINTS LBRACKET seqsound RBRACKET |
+| assignation -> VAR ID TWOPOINTS exp |
+| exp -> LBRACKET seqsound RBRACKET rec_op |
+| exp -> nota rec_op |
+| exp -> acc rec_op |
+| rec_op -> SUM exp |
+| rec_op -> MINUS exp |
+| rec_op -> |
+| seqsound -> sound COMMA seqsound|
+| seqsound -> sound |
+| sound -> acc |
+| sound -> nota |
 | expression -> acc |
 | expression -> acc COMMA expression |
 | acc -> LPAREN seqnotas RPAREN |
-| acc -> nota |
 | seqnotas -> nota |
 | seqnotas -> nota COMMA seqnotas |
-| nota -> nota SUM nota |
-| nota -> nota MINUS nota |
 | nota -> INT |
 | nota -> ID |
