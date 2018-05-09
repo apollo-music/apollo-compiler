@@ -20,11 +20,7 @@ play: [72, (60, 61, 62), 73]
 Neste caso, teremos as notas correspondentes aos pitches `60`, `61` e `62` tocando ao mesmo tempo, formando um acorde.
 
 ## Etapa 2
-Na segunda etapa do projeto iremos implementar labels, loops, synthesizers e operações em variáveis.
-
-__Labels:__
-A ideia de labels é que a linguagem ofereça suporte para que o programador designe um nome para um bloco de código. Assim, se desejarmos repetir uma 
-sequência de instruções, é possível executar o bloco especificando somente o nome do bloco e não repetir o código do bloco.
+Na segunda etapa do projeto iremos implementar loops, synthesizers e operações em variáveis.
 
 __Loops:__
 Loops também são estruturas da linguagem que faz muito sentido dado o seu propósito (produzir música). Podemos, por exemplo, designar por um label um refrão, e repetir
