@@ -25,6 +25,7 @@
 
 # Parser
 
+| Regra |
 |---|
 | program2 -> START program END NEWLINE |
 | program -> statement NEWLINE |
