@@ -126,6 +126,17 @@ def analise(self):
 def analise(self):
 	exp = self.children[0].analise()
 
+# VarNode
+# 'assignation : VAR ID TWOPOINTS exp' | AST.VarNode([AST.TokenNode(p[2]), p[4]])
+@addToClass(AST.VarNode)
+def analise(self):
+	ID = self.children[0]
+	exp = self.children[1].analise()
+
+	insertSymbol(ID, exp)
+
+	return self
+
 # ExpressionNode
 # - 'exp : LBRACKET seqsound RBRACKET rec_op' |  AST.ExpressionNode([p[2], p[4]])
 # - 'exp : nota rec_op'| AST.ExpressionNode([p[1], p[2]])
@@ -137,56 +148,30 @@ def analise(self):
 	return self
 
 # OpNode
-# 	| nota : nota SUM nota
-#	| nota MINUS nota
-#	| nota MULTIPLY nota
-# AST.OpNode(p[2], [p[1], p[3]])
+# 'rec_op : SUM exp' |  AST.OpNode(p[1], [p[2]])
+# 'rec_op : MINUS exp' | AST.OpNode(p[1], [p[2]])
 @addToClass(AST.OpNode)
 def analise(self):
 	return self
 
-# TokenNode ()
-@addToClass(AST.TokenNode)
+# SeqSoundNode
+# 'seqsound : sound COMMA seqsound' | AST.SeqsoundNode([p[1], p[3]])
+# 'seqsound : sound' | AST.SeqsoundNode(p[1])
+@addToClass(AST.SeqsoundNode)
 def analise(self):
 	return self.tok
 
-# VarNode
-# 'assignation : VAR ID TWOPOINTS exp' | AST.VarNode([AST.TokenNode(p[2]), p[4]])
-@addToClass(AST.VarNode)
+# SoundNode
+# 	'''sound : acc | nota''' | AST.SoundNode(p[1])
+@addToClass(AST.SeqsoundNode)
 def analise(self):
-	ID = self.children[0]
-	exp = self.children[1].analise()
-	
-	insertSymbol(ID, exp)
-	
-	return self
-
-
-# 'seqnotas : nota' | 'seqnotas : nota COMMA seqnotas'
-@addToClass(AST.SeqNotasNode)
-def analise(self):
-	nota = self.children[0].analise()
-	if not (type(nota) is str and findSymbol(nota)):
-		return False # ERRO DE ESCOPO
-
-	ret = [nota]
-	if len(self.children) > 1:
-		ret = ret + self.children[1]
-
-	return ret
+	return self.tok
 
 # AccNode
-# - 'acc : LPAREN seqnotas RPAREN' | AccNode([p[2]])
-# - 'acc : nota' |  AST.AccNode([p[1]])
+# 'acc : LPAREN seqnotas RPAREN' | AST.AccNode([p[2]])
 @addToClass(AST.AccNode)
 def analise(self):
 	# PRECISA COLOCAR QUE ESSA SEQ DE NOTAS É ACORDE
-	return self
-
-# RepeatNode
-# 'loop : REPEAT INT TWOPOINTS NEWLINE program ENDREPEAT' | AST.RepeatNode([AST.TokenNode(p[2]), p[5]])
-@addToClass(AST.RepeatNode)
-def analise(self):
 	return self
 
 # SeqNotasNode
@@ -194,12 +179,26 @@ def analise(self):
 # 'seqnotas : nota COMMA seqnotas' | AST.SeqNotasNode([p[1], p[3]])
 @addToClass(AST.SeqNotasNode)
 def analise(self):
-	# DEBUG print("SeqNotasNodeSeq:\n" + str(self.children))
-	# DEBUG print(self.children[0].analise())
 	nota = self.children[0].analise()
-	return [nota]
+	if not (type(nota) is str and findSymbol(nota)):
+		return False  # ERRO DE ESCOPO
 
+	ret = [nota]
+	if len(self.children) > 1:
+		ret = ret + self.children[1]
 
+	return ret
+
+# TokenNode ()
+@addToClass(AST.TokenNode)
+def analise(self):
+	return self.tok
+
+# RepeatNode
+# 'loop : REPEAT INT TWOPOINTS NEWLINE program ENDREPEAT' | AST.RepeatNode([AST.TokenNode(p[2]), p[5]])
+@addToClass(AST.RepeatNode)
+def analise(self):
+	return self
 
 ## This is the function to execute the semantic analiser
 def run(ast):
