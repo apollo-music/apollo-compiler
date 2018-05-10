@@ -4,6 +4,10 @@ from ..AST.AST import addToClass
 from ..AST.AST import Node
 from ..exceptions import exceptions
 
+## Testes a serem feitos
+# - Passar variável no amp, dur, instr
+
+
 
 AST.ScopeStack = []
 
@@ -13,8 +17,9 @@ AST.ScopeStack = []
 def getCurrentScope():
 	return AST.ScopeStack[-1]
 
-def pushScope(scope):
-	AST.ScopeStack.append(scope)
+def pushScope(scope, dependency=len(AST.ScopeStack)-1):
+	print('dependency:', str(dependency))
+	AST.ScopeStack.append(scope, dependency)
 
 def popScope():
 	AST.ScopeStack.pop()
@@ -44,9 +49,9 @@ class Scope():
 		ans which scopes the scope can access
 	'''
 	name = ""
-	dependency = 0 		## This is not in use as theres no scolpe multlevel
+	dependency = 0
 	definitions = {}
-	
+
 	def __init__(self, name, dependency=0, definitions={}):
 		'''
 			depency: dependencie is a int position on the stack
@@ -56,13 +61,13 @@ class Scope():
 			self.dependency = dependency
 		if definitions is not None:
 			self.definitions = definitions
-	
+
 	def __str__(self):
 		return (self.name + str(self.dependency) + str(self.definitions))
-		
+
 	def addDefiniton(self, key, value):
 		self.definitions[key] = value
-	
+
 	def isInScope(self, key):
 		self.definitions.get(key, False)
 
@@ -81,9 +86,10 @@ def analise(self):
 # - 'program2 : START NEWLINE program END NEWLINE' | AST.EntryNode(p[3])
 @addToClass(AST.EntryNode)
 def analise(self):
+	print('EntryNode', str(self))
 	pushScope(Scope('global'))
-	c = self.children[0]
-	return c.analise()
+	c = self.children[0].analyse()
+	return c
 
 # ProgramNode (generic)
 # - 'program : statement NEWLINE' | AST.ProgramNode(p[1])
@@ -98,42 +104,63 @@ def analise(self):
 # - 'param : AMP TWOPOINTS INT' | AST.AmpNode([AST.TokenNode(p[3])])
 @addToClass(AST.AmpNode)
 def analise(self):
-	return self.children[0].analise()
+	amp = self.children[0].analise()
+	insertSymbol('AMP', amp)
+	return amp
 
 # DurNode
 # - 'param : DUR TWOPOINTS INT' | AST.DurNode([AST.TokenNode(p[3])])
 @addToClass(AST.DurNode)
 def analise(self):
-	return self.children[0].analise()
+	dur = self.children[0].analise()
+	insertSymbol('DUR', dur)
+	return dur
 
 # InstrNode
 # - 'param : INSTR TWOPOINTS INT' | AST.InstNode([AST.TokenNode(p[3])])
 @addToClass(AST.InstrNode)
 def analise(self):
-	return self.children[0].analise()
+	ins = self.children[0].analise()
+	insertSymbol('INSTR', ins)
+	return ins
 
 # CommandNode
 # - 'command : command COMMA param' | AST.CommandNode([p[3], p[1]])
 @addToClass(AST.CommandNode)
 def analise(self):
+	pushScope(Scope('comand_' + str(len(AST.ScopeStack))))
 	for c in self.children:
 		c.analise()
+	popScope()
 	return self
 
 # PlayNode
 # 'command : PLAY TWOPOINTS LBRACKET seqsound RBRACKET' | AST.PlayNode([p[4]])
 @addToClass(AST.PlayNode)
 def analise(self):
+	# Check if amp, dur, and instruments are declared on the scope
+	exists_amp = findSymbol('AMP')
+	exists_dur = findSymbol('DUR')
+	exists_inst = findSymbol('INSTR')
+
+	if not (exists_amp and exists_dur and exists_inst):
+		return False 	# Error, amp, dur inst not set
+
 	exp = self.children[0].analise()
+	return exp
 
 # VarNode
 # 'assignation : VAR ID TWOPOINTS exp' | AST.VarNode([AST.TokenNode(p[2]), p[4]])
 @addToClass(AST.VarNode)
 def analise(self):
-	ID = self.children[0]
+	varName = self.children[0]
 	exp = self.children[1].analise()
 
-	insertSymbol(ID, exp)
+	print('AST.VarNode')
+	print(varName)
+	print(exp)
+
+	insertSymbol(varName, exp)
 
 	return self
 
@@ -165,13 +192,17 @@ def analise(self):
 # 	'''sound : acc | nota''' | AST.SoundNode(p[1])
 @addToClass(AST.SeqsoundNode)
 def analise(self):
-	return self.tok
+	acc_or_nota = self.children[0].analise()
+	print('SeqSound', str(acc_or_nota))
+	## Se for uma nota, tem que analisar ver se é uma variavel valida ??
+	return acc_or_nota
 
 # AccNode
 # 'acc : LPAREN seqnotas RPAREN' | AST.AccNode([p[2]])
 @addToClass(AST.AccNode)
 def analise(self):
 	# PRECISA COLOCAR QUE ESSA SEQ DE NOTAS É ACORDE
+	seq_notas = self.children[0].analise()
 	return self
 
 # SeqNotasNode
@@ -180,6 +211,7 @@ def analise(self):
 @addToClass(AST.SeqNotasNode)
 def analise(self):
 	nota = self.children[0].analise()
+	print('SeqNotasNode', str(nota))
 	if not (type(nota) is str and findSymbol(nota)):
 		return False  # ERRO DE ESCOPO
 
