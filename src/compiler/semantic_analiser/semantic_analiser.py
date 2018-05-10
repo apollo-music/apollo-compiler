@@ -239,17 +239,14 @@ def run(ast):
 	#print("Semantic Analisys Completed...")
 
 
-def test(file_path):
+def test():
 	import sys
 	import os
 	from compiler.parser import apollo_yacc
 
-	f = open(file_path, 'r')
+	f = open(sys.argv[1], 'r')
 	prog = f.read()
 	f.close()
-
-	AST.midiName = "testing"
-	AST.outfile = open(file_path + '_intermediate.py', 'w')
 
 	try:
 		# Generate ast
