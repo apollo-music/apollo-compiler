@@ -8,6 +8,7 @@ from ply import lex
 import sys
 from ..exceptions import exceptions as exc
 from ..lexer import instruments
+from .. lexer import notes
 
 # List of token names. This is always required
 tokens = [
@@ -94,6 +95,9 @@ def t_ID(t):
 	if t.value in instruments.instr2int.keys():
 		t.type = 'INT'
 		t.value = instruments.instr2int[t.value]
+	if t.value in notes.note2int.keys():
+		t.type = 'INT'
+		t.value = notes.note2int[t.value]
 
 	return t
 

@@ -130,7 +130,19 @@ class LoopNode(Node):
 
 class RepeatNode(Node):
     type = 'Repeat'
-    
+
+class OperandNode(Node):
+    type = 'Operand'
+
+class EmptyNode(Node):
+    type = 'Empty'
+
+class SeqsoundNode(Node):
+    type = 'Secsound'
+
+class SoundNode(Node):
+    type = 'Sound'
+
 class TokenNode(Node):
     type = 'Token'
     def __init__(self, tok):

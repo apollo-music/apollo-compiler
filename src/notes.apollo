@@ -1,0 +1,11 @@
+^
+var test: 40
+test: 20 + 40
+instr: OCARINA
+amp: 255
+
+play: [C3 + 8], dur: 150
+play: [D3, E3, F3], dur: 50
+
+
+$

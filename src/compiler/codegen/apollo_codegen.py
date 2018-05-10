@@ -164,6 +164,17 @@ def compile(self):
 	else:
 		return uniq_or_seq
 
+# RepeatNode
+# 'loop : REPEAT INT TWOPOINTS NEWLINE program ENDREPEAT' | p[0] = AST.RepeatNode([AST.TokenNode(p[2]), p[5]])
+@addToClass(AST.RepeatNode)
+def compile(self):
+	# DEBUG print('RepeatNode:\n' + str(self))
+	num_repeats = self.children[0].compile()
+	prog = self.children[1]
+
+	for i in range(num_repeats):
+		prog.compile()
+	return self
 
 # OpNode
 # 	| nota : nota SUM nota 

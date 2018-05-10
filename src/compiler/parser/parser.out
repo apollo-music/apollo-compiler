@@ -1,5 +1,9 @@
 Created by PLY version 3.11 (http://www.dabeaz.com/ply)
 
+Unused terminals:
+
+    MULTIPLY
+
 Grammar
 
 Rule 0     S' -> program2
@@ -14,59 +18,65 @@ Rule 8     param -> AMP TWOPOINTS INT
 Rule 9     param -> DUR TWOPOINTS INT
 Rule 10    param -> INSTR TWOPOINTS INT
 Rule 11    command -> command COMMA param
-Rule 12    command -> PLAY TWOPOINTS LBRACKET expression RBRACKET
-Rule 13    assignation -> VAR ID TWOPOINTS LBRACKET expression RBRACKET
-Rule 14    assignation -> VAR ID TWOPOINTS acc
-Rule 15    expression -> acc
-Rule 16    expression -> acc COMMA expression
-Rule 17    acc -> LPAREN seqnotas RPAREN
-Rule 18    acc -> nota
-Rule 19    seqnotas -> nota
-Rule 20    seqnotas -> nota COMMA seqnotas
-Rule 21    nota -> nota SUM nota
-Rule 22    nota -> nota MINUS nota
-Rule 23    nota -> nota MULTIPLY nota
-Rule 24    nota -> INT
-Rule 25    nota -> ID
-Rule 26    loop -> REPEAT INT TWOPOINTS NEWLINE program ENDREPEAT
+Rule 12    command -> PLAY TWOPOINTS LBRACKET seqsound RBRACKET
+Rule 13    assignation -> VAR ID TWOPOINTS exp
+Rule 14    exp -> LBRACKET seqsound RBRACKET rec_op
+Rule 15    exp -> nota rec_op
+Rule 16    exp -> acc rec_op
+Rule 17    rec_op -> <empty>
+Rule 18    rec_op -> SUM exp
+Rule 19    rec_op -> MINUS exp
+Rule 20    seqsound -> sound COMMA seqsound
+Rule 21    seqsound -> sound
+Rule 22    sound -> acc
+Rule 23    sound -> nota
+Rule 24    acc -> LPAREN seqnotas RPAREN
+Rule 25    seqnotas -> nota
+Rule 26    seqnotas -> nota COMMA seqnotas
+Rule 27    nota -> INT
+Rule 28    nota -> ID
+Rule 29    loop -> REPEAT INT TWOPOINTS NEWLINE program ENDREPEAT
 
 Terminals, with rules where they appear
 
 AMP                  : 8
-COMMA                : 11 16 20
+COMMA                : 11 20 26
 DUR                  : 9
 END                  : 1
-ENDREPEAT            : 26
-ID                   : 13 14 25
+ENDREPEAT            : 29
+ID                   : 13 28
 INSTR                : 10
-INT                  : 8 9 10 24 26
-LBRACKET             : 12 13
-LPAREN               : 17
-MINUS                : 22
-MULTIPLY             : 23
-NEWLINE              : 1 2 3 26
+INT                  : 8 9 10 27 29
+LBRACKET             : 12 14
+LPAREN               : 24
+MINUS                : 19
+MULTIPLY             : 
+NEWLINE              : 1 2 3 29
 PLAY                 : 12
-RBRACKET             : 12 13
-REPEAT               : 26
-RPAREN               : 17
+RBRACKET             : 12 14
+REPEAT               : 29
+RPAREN               : 24
 START                : 1
-SUM                  : 21
-TWOPOINTS            : 8 9 10 12 13 14 26
-VAR                  : 13 14
+SUM                  : 18
+TWOPOINTS            : 8 9 10 12 13 29
+VAR                  : 13
 error                : 
 
 Nonterminals, with rules where they appear
 
-acc                  : 14 15 16
+acc                  : 16 22
 assignation          : 6
 command              : 4 11
-expression           : 12 13 16
+exp                  : 13 18 19
 loop                 : 7
-nota                 : 18 19 20 21 21 22 22 23 23
+nota                 : 15 23 25 26
 param                : 5 11
-program              : 1 3 26
+program              : 1 3 29
 program2             : 0
-seqnotas             : 17 20
+rec_op               : 14 15 16
+seqnotas             : 24 26
+seqsound             : 12 14 20
+sound                : 20 21
 statement            : 2 3
 
 Parsing method: LALR
@@ -76,21 +86,21 @@ state 0
     (0) S' -> . program2
     (1) program2 -> . START NEWLINE program END
 
-    START           shift and go to state 1
+    START           shift and go to state 2
 
-    program2                       shift and go to state 2
+    program2                       shift and go to state 1
 
 state 1
 
-    (1) program2 -> START . NEWLINE program END
+    (0) S' -> program2 .
 
-    NEWLINE         shift and go to state 3
 
 
 state 2
 
-    (0) S' -> program2 .
+    (1) program2 -> START . NEWLINE program END
 
+    NEWLINE         shift and go to state 3
 
 
 state 3
@@ -103,124 +113,115 @@ state 3
     (6) statement -> . assignation
     (7) statement -> . loop
     (11) command -> . command COMMA param
-    (12) command -> . PLAY TWOPOINTS LBRACKET expression RBRACKET
+    (12) command -> . PLAY TWOPOINTS LBRACKET seqsound RBRACKET
     (8) param -> . AMP TWOPOINTS INT
     (9) param -> . DUR TWOPOINTS INT
     (10) param -> . INSTR TWOPOINTS INT
-    (13) assignation -> . VAR ID TWOPOINTS LBRACKET expression RBRACKET
-    (14) assignation -> . VAR ID TWOPOINTS acc
-    (26) loop -> . REPEAT INT TWOPOINTS NEWLINE program ENDREPEAT
+    (13) assignation -> . VAR ID TWOPOINTS exp
+    (29) loop -> . REPEAT INT TWOPOINTS NEWLINE program ENDREPEAT
 
-    PLAY            shift and go to state 8
-    AMP             shift and go to state 7
-    DUR             shift and go to state 11
-    INSTR           shift and go to state 13
-    VAR             shift and go to state 10
-    REPEAT          shift and go to state 9
+    PLAY            shift and go to state 6
+    AMP             shift and go to state 8
+    DUR             shift and go to state 15
+    INSTR           shift and go to state 12
+    VAR             shift and go to state 11
+    REPEAT          shift and go to state 13
 
-    assignation                    shift and go to state 12
-    param                          shift and go to state 4
-    program                        shift and go to state 5
-    command                        shift and go to state 14
-    statement                      shift and go to state 6
-    loop                           shift and go to state 15
+    statement                      shift and go to state 4
+    command                        shift and go to state 9
+    assignation                    shift and go to state 5
+    program                        shift and go to state 14
+    loop                           shift and go to state 10
+    param                          shift and go to state 7
 
 state 4
-
-    (5) statement -> param .
-
-    NEWLINE         reduce using rule 5 (statement -> param .)
-
-
-state 5
-
-    (1) program2 -> START NEWLINE program . END
-
-    END             shift and go to state 16
-
-
-state 6
 
     (2) program -> statement . NEWLINE
     (3) program -> statement . NEWLINE program
 
-    NEWLINE         shift and go to state 17
+    NEWLINE         shift and go to state 16
 
 
-state 7
-
-    (8) param -> AMP . TWOPOINTS INT
-
-    TWOPOINTS       shift and go to state 18
-
-
-state 8
-
-    (12) command -> PLAY . TWOPOINTS LBRACKET expression RBRACKET
-
-    TWOPOINTS       shift and go to state 19
-
-
-state 9
-
-    (26) loop -> REPEAT . INT TWOPOINTS NEWLINE program ENDREPEAT
-
-    INT             shift and go to state 20
-
-
-state 10
-
-    (13) assignation -> VAR . ID TWOPOINTS LBRACKET expression RBRACKET
-    (14) assignation -> VAR . ID TWOPOINTS acc
-
-    ID              shift and go to state 21
-
-
-state 11
-
-    (9) param -> DUR . TWOPOINTS INT
-
-    TWOPOINTS       shift and go to state 22
-
-
-state 12
+state 5
 
     (6) statement -> assignation .
 
     NEWLINE         reduce using rule 6 (statement -> assignation .)
 
 
-state 13
+state 6
 
-    (10) param -> INSTR . TWOPOINTS INT
+    (12) command -> PLAY . TWOPOINTS LBRACKET seqsound RBRACKET
 
-    TWOPOINTS       shift and go to state 23
+    TWOPOINTS       shift and go to state 17
 
 
-state 14
+state 7
+
+    (5) statement -> param .
+
+    NEWLINE         reduce using rule 5 (statement -> param .)
+
+
+state 8
+
+    (8) param -> AMP . TWOPOINTS INT
+
+    TWOPOINTS       shift and go to state 18
+
+
+state 9
 
     (4) statement -> command .
     (11) command -> command . COMMA param
 
     NEWLINE         reduce using rule 4 (statement -> command .)
-    COMMA           shift and go to state 24
+    COMMA           shift and go to state 19
 
 
-state 15
+state 10
 
     (7) statement -> loop .
 
     NEWLINE         reduce using rule 7 (statement -> loop .)
 
 
+state 11
+
+    (13) assignation -> VAR . ID TWOPOINTS exp
+
+    ID              shift and go to state 20
+
+
+state 12
+
+    (10) param -> INSTR . TWOPOINTS INT
+
+    TWOPOINTS       shift and go to state 21
+
+
+state 13
+
+    (29) loop -> REPEAT . INT TWOPOINTS NEWLINE program ENDREPEAT
+
+    INT             shift and go to state 22
+
+
+state 14
+
+    (1) program2 -> START NEWLINE program . END
+
+    END             shift and go to state 23
+
+
+state 15
+
+    (9) param -> DUR . TWOPOINTS INT
+
+    TWOPOINTS       shift and go to state 24
+
+
 state 16
-
-    (1) program2 -> START NEWLINE program END .
-
-    $end            reduce using rule 1 (program2 -> START NEWLINE program END .)
-
-
-state 17
 
     (2) program -> statement NEWLINE .
     (3) program -> statement NEWLINE . program
@@ -231,85 +232,90 @@ state 17
     (6) statement -> . assignation
     (7) statement -> . loop
     (11) command -> . command COMMA param
-    (12) command -> . PLAY TWOPOINTS LBRACKET expression RBRACKET
+    (12) command -> . PLAY TWOPOINTS LBRACKET seqsound RBRACKET
     (8) param -> . AMP TWOPOINTS INT
     (9) param -> . DUR TWOPOINTS INT
     (10) param -> . INSTR TWOPOINTS INT
-    (13) assignation -> . VAR ID TWOPOINTS LBRACKET expression RBRACKET
-    (14) assignation -> . VAR ID TWOPOINTS acc
-    (26) loop -> . REPEAT INT TWOPOINTS NEWLINE program ENDREPEAT
+    (13) assignation -> . VAR ID TWOPOINTS exp
+    (29) loop -> . REPEAT INT TWOPOINTS NEWLINE program ENDREPEAT
 
     END             reduce using rule 2 (program -> statement NEWLINE .)
     ENDREPEAT       reduce using rule 2 (program -> statement NEWLINE .)
-    PLAY            shift and go to state 8
-    AMP             shift and go to state 7
-    DUR             shift and go to state 11
-    INSTR           shift and go to state 13
-    VAR             shift and go to state 10
-    REPEAT          shift and go to state 9
+    PLAY            shift and go to state 6
+    AMP             shift and go to state 8
+    DUR             shift and go to state 15
+    INSTR           shift and go to state 12
+    VAR             shift and go to state 11
+    REPEAT          shift and go to state 13
 
-    assignation                    shift and go to state 12
-    param                          shift and go to state 4
+    statement                      shift and go to state 4
+    command                        shift and go to state 9
+    assignation                    shift and go to state 5
     program                        shift and go to state 25
-    command                        shift and go to state 14
-    statement                      shift and go to state 6
-    loop                           shift and go to state 15
+    loop                           shift and go to state 10
+    param                          shift and go to state 7
+
+state 17
+
+    (12) command -> PLAY TWOPOINTS . LBRACKET seqsound RBRACKET
+
+    LBRACKET        shift and go to state 26
+
 
 state 18
 
     (8) param -> AMP TWOPOINTS . INT
 
-    INT             shift and go to state 26
+    INT             shift and go to state 27
 
 
 state 19
-
-    (12) command -> PLAY TWOPOINTS . LBRACKET expression RBRACKET
-
-    LBRACKET        shift and go to state 27
-
-
-state 20
-
-    (26) loop -> REPEAT INT . TWOPOINTS NEWLINE program ENDREPEAT
-
-    TWOPOINTS       shift and go to state 28
-
-
-state 21
-
-    (13) assignation -> VAR ID . TWOPOINTS LBRACKET expression RBRACKET
-    (14) assignation -> VAR ID . TWOPOINTS acc
-
-    TWOPOINTS       shift and go to state 29
-
-
-state 22
-
-    (9) param -> DUR TWOPOINTS . INT
-
-    INT             shift and go to state 30
-
-
-state 23
-
-    (10) param -> INSTR TWOPOINTS . INT
-
-    INT             shift and go to state 31
-
-
-state 24
 
     (11) command -> command COMMA . param
     (8) param -> . AMP TWOPOINTS INT
     (9) param -> . DUR TWOPOINTS INT
     (10) param -> . INSTR TWOPOINTS INT
 
-    AMP             shift and go to state 7
-    DUR             shift and go to state 11
-    INSTR           shift and go to state 13
+    AMP             shift and go to state 8
+    DUR             shift and go to state 15
+    INSTR           shift and go to state 12
 
-    param                          shift and go to state 32
+    param                          shift and go to state 28
+
+state 20
+
+    (13) assignation -> VAR ID . TWOPOINTS exp
+
+    TWOPOINTS       shift and go to state 29
+
+
+state 21
+
+    (10) param -> INSTR TWOPOINTS . INT
+
+    INT             shift and go to state 30
+
+
+state 22
+
+    (29) loop -> REPEAT INT . TWOPOINTS NEWLINE program ENDREPEAT
+
+    TWOPOINTS       shift and go to state 31
+
+
+state 23
+
+    (1) program2 -> START NEWLINE program END .
+
+    $end            reduce using rule 1 (program2 -> START NEWLINE program END .)
+
+
+state 24
+
+    (9) param -> DUR TWOPOINTS . INT
+
+    INT             shift and go to state 32
+
 
 state 25
 
@@ -321,77 +327,33 @@ state 25
 
 state 26
 
-    (8) param -> AMP TWOPOINTS INT .
+    (12) command -> PLAY TWOPOINTS LBRACKET . seqsound RBRACKET
+    (20) seqsound -> . sound COMMA seqsound
+    (21) seqsound -> . sound
+    (22) sound -> . acc
+    (23) sound -> . nota
+    (24) acc -> . LPAREN seqnotas RPAREN
+    (27) nota -> . INT
+    (28) nota -> . ID
 
-    NEWLINE         reduce using rule 8 (param -> AMP TWOPOINTS INT .)
-    COMMA           reduce using rule 8 (param -> AMP TWOPOINTS INT .)
+    LPAREN          shift and go to state 37
+    INT             shift and go to state 35
+    ID              shift and go to state 33
 
+    acc                            shift and go to state 34
+    sound                          shift and go to state 38
+    seqsound                       shift and go to state 36
+    nota                           shift and go to state 39
 
 state 27
 
-    (12) command -> PLAY TWOPOINTS LBRACKET . expression RBRACKET
-    (15) expression -> . acc
-    (16) expression -> . acc COMMA expression
-    (17) acc -> . LPAREN seqnotas RPAREN
-    (18) acc -> . nota
-    (21) nota -> . nota SUM nota
-    (22) nota -> . nota MINUS nota
-    (23) nota -> . nota MULTIPLY nota
-    (24) nota -> . INT
-    (25) nota -> . ID
+    (8) param -> AMP TWOPOINTS INT .
 
-    LPAREN          shift and go to state 34
-    INT             shift and go to state 36
-    ID              shift and go to state 35
+    COMMA           reduce using rule 8 (param -> AMP TWOPOINTS INT .)
+    NEWLINE         reduce using rule 8 (param -> AMP TWOPOINTS INT .)
 
-    acc                            shift and go to state 33
-    nota                           shift and go to state 37
-    expression                     shift and go to state 38
 
 state 28
-
-    (26) loop -> REPEAT INT TWOPOINTS . NEWLINE program ENDREPEAT
-
-    NEWLINE         shift and go to state 39
-
-
-state 29
-
-    (13) assignation -> VAR ID TWOPOINTS . LBRACKET expression RBRACKET
-    (14) assignation -> VAR ID TWOPOINTS . acc
-    (17) acc -> . LPAREN seqnotas RPAREN
-    (18) acc -> . nota
-    (21) nota -> . nota SUM nota
-    (22) nota -> . nota MINUS nota
-    (23) nota -> . nota MULTIPLY nota
-    (24) nota -> . INT
-    (25) nota -> . ID
-
-    LBRACKET        shift and go to state 41
-    LPAREN          shift and go to state 34
-    INT             shift and go to state 36
-    ID              shift and go to state 35
-
-    acc                            shift and go to state 40
-    nota                           shift and go to state 37
-
-state 30
-
-    (9) param -> DUR TWOPOINTS INT .
-
-    NEWLINE         reduce using rule 9 (param -> DUR TWOPOINTS INT .)
-    COMMA           reduce using rule 9 (param -> DUR TWOPOINTS INT .)
-
-
-state 31
-
-    (10) param -> INSTR TWOPOINTS INT .
-
-    NEWLINE         reduce using rule 10 (param -> INSTR TWOPOINTS INT .)
-    COMMA           reduce using rule 10 (param -> INSTR TWOPOINTS INT .)
-
-
-state 32
 
     (11) command -> command COMMA param .
 
@@ -399,83 +361,174 @@ state 32
     NEWLINE         reduce using rule 11 (command -> command COMMA param .)
 
 
+state 29
+
+    (13) assignation -> VAR ID TWOPOINTS . exp
+    (14) exp -> . LBRACKET seqsound RBRACKET rec_op
+    (15) exp -> . nota rec_op
+    (16) exp -> . acc rec_op
+    (27) nota -> . INT
+    (28) nota -> . ID
+    (24) acc -> . LPAREN seqnotas RPAREN
+
+    LBRACKET        shift and go to state 40
+    INT             shift and go to state 35
+    ID              shift and go to state 33
+    LPAREN          shift and go to state 37
+
+    exp                            shift and go to state 42
+    acc                            shift and go to state 41
+    nota                           shift and go to state 43
+
+state 30
+
+    (10) param -> INSTR TWOPOINTS INT .
+
+    COMMA           reduce using rule 10 (param -> INSTR TWOPOINTS INT .)
+    NEWLINE         reduce using rule 10 (param -> INSTR TWOPOINTS INT .)
+
+
+state 31
+
+    (29) loop -> REPEAT INT TWOPOINTS . NEWLINE program ENDREPEAT
+
+    NEWLINE         shift and go to state 44
+
+
+state 32
+
+    (9) param -> DUR TWOPOINTS INT .
+
+    COMMA           reduce using rule 9 (param -> DUR TWOPOINTS INT .)
+    NEWLINE         reduce using rule 9 (param -> DUR TWOPOINTS INT .)
+
+
 state 33
 
-    (15) expression -> acc .
-    (16) expression -> acc . COMMA expression
+    (28) nota -> ID .
 
-    RBRACKET        reduce using rule 15 (expression -> acc .)
-    COMMA           shift and go to state 42
+    SUM             reduce using rule 28 (nota -> ID .)
+    MINUS           reduce using rule 28 (nota -> ID .)
+    NEWLINE         reduce using rule 28 (nota -> ID .)
+    COMMA           reduce using rule 28 (nota -> ID .)
+    RBRACKET        reduce using rule 28 (nota -> ID .)
+    RPAREN          reduce using rule 28 (nota -> ID .)
 
 
 state 34
 
-    (17) acc -> LPAREN . seqnotas RPAREN
-    (19) seqnotas -> . nota
-    (20) seqnotas -> . nota COMMA seqnotas
-    (21) nota -> . nota SUM nota
-    (22) nota -> . nota MINUS nota
-    (23) nota -> . nota MULTIPLY nota
-    (24) nota -> . INT
-    (25) nota -> . ID
+    (22) sound -> acc .
 
-    INT             shift and go to state 36
-    ID              shift and go to state 35
+    COMMA           reduce using rule 22 (sound -> acc .)
+    RBRACKET        reduce using rule 22 (sound -> acc .)
 
-    seqnotas                       shift and go to state 43
-    nota                           shift and go to state 44
 
 state 35
 
-    (25) nota -> ID .
+    (27) nota -> INT .
 
-    SUM             reduce using rule 25 (nota -> ID .)
-    MINUS           reduce using rule 25 (nota -> ID .)
-    MULTIPLY        reduce using rule 25 (nota -> ID .)
-    COMMA           reduce using rule 25 (nota -> ID .)
-    RBRACKET        reduce using rule 25 (nota -> ID .)
-    RPAREN          reduce using rule 25 (nota -> ID .)
-    NEWLINE         reduce using rule 25 (nota -> ID .)
+    SUM             reduce using rule 27 (nota -> INT .)
+    MINUS           reduce using rule 27 (nota -> INT .)
+    NEWLINE         reduce using rule 27 (nota -> INT .)
+    COMMA           reduce using rule 27 (nota -> INT .)
+    RBRACKET        reduce using rule 27 (nota -> INT .)
+    RPAREN          reduce using rule 27 (nota -> INT .)
 
 
 state 36
 
-    (24) nota -> INT .
+    (12) command -> PLAY TWOPOINTS LBRACKET seqsound . RBRACKET
 
-    SUM             reduce using rule 24 (nota -> INT .)
-    MINUS           reduce using rule 24 (nota -> INT .)
-    MULTIPLY        reduce using rule 24 (nota -> INT .)
-    COMMA           reduce using rule 24 (nota -> INT .)
-    RBRACKET        reduce using rule 24 (nota -> INT .)
-    RPAREN          reduce using rule 24 (nota -> INT .)
-    NEWLINE         reduce using rule 24 (nota -> INT .)
+    RBRACKET        shift and go to state 45
 
 
 state 37
 
-    (18) acc -> nota .
-    (21) nota -> nota . SUM nota
-    (22) nota -> nota . MINUS nota
-    (23) nota -> nota . MULTIPLY nota
+    (24) acc -> LPAREN . seqnotas RPAREN
+    (25) seqnotas -> . nota
+    (26) seqnotas -> . nota COMMA seqnotas
+    (27) nota -> . INT
+    (28) nota -> . ID
 
-    COMMA           reduce using rule 18 (acc -> nota .)
-    RBRACKET        reduce using rule 18 (acc -> nota .)
-    NEWLINE         reduce using rule 18 (acc -> nota .)
-    SUM             shift and go to state 46
-    MINUS           shift and go to state 47
-    MULTIPLY        shift and go to state 45
+    INT             shift and go to state 35
+    ID              shift and go to state 33
 
+    seqnotas                       shift and go to state 46
+    nota                           shift and go to state 47
 
 state 38
 
-    (12) command -> PLAY TWOPOINTS LBRACKET expression . RBRACKET
+    (20) seqsound -> sound . COMMA seqsound
+    (21) seqsound -> sound .
 
-    RBRACKET        shift and go to state 48
+    COMMA           shift and go to state 48
+    RBRACKET        reduce using rule 21 (seqsound -> sound .)
 
 
 state 39
 
-    (26) loop -> REPEAT INT TWOPOINTS NEWLINE . program ENDREPEAT
+    (23) sound -> nota .
+
+    COMMA           reduce using rule 23 (sound -> nota .)
+    RBRACKET        reduce using rule 23 (sound -> nota .)
+
+
+state 40
+
+    (14) exp -> LBRACKET . seqsound RBRACKET rec_op
+    (20) seqsound -> . sound COMMA seqsound
+    (21) seqsound -> . sound
+    (22) sound -> . acc
+    (23) sound -> . nota
+    (24) acc -> . LPAREN seqnotas RPAREN
+    (27) nota -> . INT
+    (28) nota -> . ID
+
+    LPAREN          shift and go to state 37
+    INT             shift and go to state 35
+    ID              shift and go to state 33
+
+    sound                          shift and go to state 38
+    acc                            shift and go to state 34
+    seqsound                       shift and go to state 49
+    nota                           shift and go to state 39
+
+state 41
+
+    (16) exp -> acc . rec_op
+    (17) rec_op -> .
+    (18) rec_op -> . SUM exp
+    (19) rec_op -> . MINUS exp
+
+    NEWLINE         reduce using rule 17 (rec_op -> .)
+    SUM             shift and go to state 51
+    MINUS           shift and go to state 50
+
+    rec_op                         shift and go to state 52
+
+state 42
+
+    (13) assignation -> VAR ID TWOPOINTS exp .
+
+    NEWLINE         reduce using rule 13 (assignation -> VAR ID TWOPOINTS exp .)
+
+
+state 43
+
+    (15) exp -> nota . rec_op
+    (17) rec_op -> .
+    (18) rec_op -> . SUM exp
+    (19) rec_op -> . MINUS exp
+
+    NEWLINE         reduce using rule 17 (rec_op -> .)
+    SUM             shift and go to state 51
+    MINUS           shift and go to state 50
+
+    rec_op                         shift and go to state 53
+
+state 44
+
+    (29) loop -> REPEAT INT TWOPOINTS NEWLINE . program ENDREPEAT
     (2) program -> . statement NEWLINE
     (3) program -> . statement NEWLINE program
     (4) statement -> . command
@@ -483,294 +536,213 @@ state 39
     (6) statement -> . assignation
     (7) statement -> . loop
     (11) command -> . command COMMA param
-    (12) command -> . PLAY TWOPOINTS LBRACKET expression RBRACKET
+    (12) command -> . PLAY TWOPOINTS LBRACKET seqsound RBRACKET
     (8) param -> . AMP TWOPOINTS INT
     (9) param -> . DUR TWOPOINTS INT
     (10) param -> . INSTR TWOPOINTS INT
-    (13) assignation -> . VAR ID TWOPOINTS LBRACKET expression RBRACKET
-    (14) assignation -> . VAR ID TWOPOINTS acc
-    (26) loop -> . REPEAT INT TWOPOINTS NEWLINE program ENDREPEAT
+    (13) assignation -> . VAR ID TWOPOINTS exp
+    (29) loop -> . REPEAT INT TWOPOINTS NEWLINE program ENDREPEAT
 
-    PLAY            shift and go to state 8
-    AMP             shift and go to state 7
-    DUR             shift and go to state 11
-    INSTR           shift and go to state 13
-    VAR             shift and go to state 10
-    REPEAT          shift and go to state 9
+    PLAY            shift and go to state 6
+    AMP             shift and go to state 8
+    DUR             shift and go to state 15
+    INSTR           shift and go to state 12
+    VAR             shift and go to state 11
+    REPEAT          shift and go to state 13
 
-    assignation                    shift and go to state 12
-    param                          shift and go to state 4
-    program                        shift and go to state 49
-    command                        shift and go to state 14
-    statement                      shift and go to state 6
-    loop                           shift and go to state 15
-
-state 40
-
-    (14) assignation -> VAR ID TWOPOINTS acc .
-
-    NEWLINE         reduce using rule 14 (assignation -> VAR ID TWOPOINTS acc .)
-
-
-state 41
-
-    (13) assignation -> VAR ID TWOPOINTS LBRACKET . expression RBRACKET
-    (15) expression -> . acc
-    (16) expression -> . acc COMMA expression
-    (17) acc -> . LPAREN seqnotas RPAREN
-    (18) acc -> . nota
-    (21) nota -> . nota SUM nota
-    (22) nota -> . nota MINUS nota
-    (23) nota -> . nota MULTIPLY nota
-    (24) nota -> . INT
-    (25) nota -> . ID
-
-    LPAREN          shift and go to state 34
-    INT             shift and go to state 36
-    ID              shift and go to state 35
-
-    acc                            shift and go to state 33
-    nota                           shift and go to state 37
-    expression                     shift and go to state 50
-
-state 42
-
-    (16) expression -> acc COMMA . expression
-    (15) expression -> . acc
-    (16) expression -> . acc COMMA expression
-    (17) acc -> . LPAREN seqnotas RPAREN
-    (18) acc -> . nota
-    (21) nota -> . nota SUM nota
-    (22) nota -> . nota MINUS nota
-    (23) nota -> . nota MULTIPLY nota
-    (24) nota -> . INT
-    (25) nota -> . ID
-
-    LPAREN          shift and go to state 34
-    INT             shift and go to state 36
-    ID              shift and go to state 35
-
-    acc                            shift and go to state 33
-    nota                           shift and go to state 37
-    expression                     shift and go to state 51
-
-state 43
-
-    (17) acc -> LPAREN seqnotas . RPAREN
-
-    RPAREN          shift and go to state 52
-
-
-state 44
-
-    (19) seqnotas -> nota .
-    (20) seqnotas -> nota . COMMA seqnotas
-    (21) nota -> nota . SUM nota
-    (22) nota -> nota . MINUS nota
-    (23) nota -> nota . MULTIPLY nota
-
-    RPAREN          reduce using rule 19 (seqnotas -> nota .)
-    COMMA           shift and go to state 53
-    SUM             shift and go to state 46
-    MINUS           shift and go to state 47
-    MULTIPLY        shift and go to state 45
-
+    statement                      shift and go to state 4
+    command                        shift and go to state 9
+    assignation                    shift and go to state 5
+    program                        shift and go to state 54
+    loop                           shift and go to state 10
+    param                          shift and go to state 7
 
 state 45
 
-    (23) nota -> nota MULTIPLY . nota
-    (21) nota -> . nota SUM nota
-    (22) nota -> . nota MINUS nota
-    (23) nota -> . nota MULTIPLY nota
-    (24) nota -> . INT
-    (25) nota -> . ID
+    (12) command -> PLAY TWOPOINTS LBRACKET seqsound RBRACKET .
 
-    INT             shift and go to state 36
-    ID              shift and go to state 35
+    COMMA           reduce using rule 12 (command -> PLAY TWOPOINTS LBRACKET seqsound RBRACKET .)
+    NEWLINE         reduce using rule 12 (command -> PLAY TWOPOINTS LBRACKET seqsound RBRACKET .)
 
-    nota                           shift and go to state 54
 
 state 46
 
-    (21) nota -> nota SUM . nota
-    (21) nota -> . nota SUM nota
-    (22) nota -> . nota MINUS nota
-    (23) nota -> . nota MULTIPLY nota
-    (24) nota -> . INT
-    (25) nota -> . ID
+    (24) acc -> LPAREN seqnotas . RPAREN
 
-    INT             shift and go to state 36
-    ID              shift and go to state 35
+    RPAREN          shift and go to state 55
 
-    nota                           shift and go to state 55
 
 state 47
 
-    (22) nota -> nota MINUS . nota
-    (21) nota -> . nota SUM nota
-    (22) nota -> . nota MINUS nota
-    (23) nota -> . nota MULTIPLY nota
-    (24) nota -> . INT
-    (25) nota -> . ID
+    (25) seqnotas -> nota .
+    (26) seqnotas -> nota . COMMA seqnotas
 
-    INT             shift and go to state 36
-    ID              shift and go to state 35
+    RPAREN          reduce using rule 25 (seqnotas -> nota .)
+    COMMA           shift and go to state 56
 
-    nota                           shift and go to state 56
 
 state 48
 
-    (12) command -> PLAY TWOPOINTS LBRACKET expression RBRACKET .
+    (20) seqsound -> sound COMMA . seqsound
+    (20) seqsound -> . sound COMMA seqsound
+    (21) seqsound -> . sound
+    (22) sound -> . acc
+    (23) sound -> . nota
+    (24) acc -> . LPAREN seqnotas RPAREN
+    (27) nota -> . INT
+    (28) nota -> . ID
 
-    COMMA           reduce using rule 12 (command -> PLAY TWOPOINTS LBRACKET expression RBRACKET .)
-    NEWLINE         reduce using rule 12 (command -> PLAY TWOPOINTS LBRACKET expression RBRACKET .)
+    LPAREN          shift and go to state 37
+    INT             shift and go to state 35
+    ID              shift and go to state 33
 
+    acc                            shift and go to state 34
+    sound                          shift and go to state 38
+    seqsound                       shift and go to state 57
+    nota                           shift and go to state 39
 
 state 49
 
-    (26) loop -> REPEAT INT TWOPOINTS NEWLINE program . ENDREPEAT
-
-    ENDREPEAT       shift and go to state 57
-
-
-state 50
-
-    (13) assignation -> VAR ID TWOPOINTS LBRACKET expression . RBRACKET
+    (14) exp -> LBRACKET seqsound . RBRACKET rec_op
 
     RBRACKET        shift and go to state 58
 
 
+state 50
+
+    (19) rec_op -> MINUS . exp
+    (14) exp -> . LBRACKET seqsound RBRACKET rec_op
+    (15) exp -> . nota rec_op
+    (16) exp -> . acc rec_op
+    (27) nota -> . INT
+    (28) nota -> . ID
+    (24) acc -> . LPAREN seqnotas RPAREN
+
+    LBRACKET        shift and go to state 40
+    INT             shift and go to state 35
+    ID              shift and go to state 33
+    LPAREN          shift and go to state 37
+
+    exp                            shift and go to state 59
+    acc                            shift and go to state 41
+    nota                           shift and go to state 43
+
 state 51
 
-    (16) expression -> acc COMMA expression .
+    (18) rec_op -> SUM . exp
+    (14) exp -> . LBRACKET seqsound RBRACKET rec_op
+    (15) exp -> . nota rec_op
+    (16) exp -> . acc rec_op
+    (27) nota -> . INT
+    (28) nota -> . ID
+    (24) acc -> . LPAREN seqnotas RPAREN
 
-    RBRACKET        reduce using rule 16 (expression -> acc COMMA expression .)
+    LBRACKET        shift and go to state 40
+    INT             shift and go to state 35
+    ID              shift and go to state 33
+    LPAREN          shift and go to state 37
 
+    exp                            shift and go to state 60
+    acc                            shift and go to state 41
+    nota                           shift and go to state 43
 
 state 52
 
-    (17) acc -> LPAREN seqnotas RPAREN .
+    (16) exp -> acc rec_op .
 
-    COMMA           reduce using rule 17 (acc -> LPAREN seqnotas RPAREN .)
-    RBRACKET        reduce using rule 17 (acc -> LPAREN seqnotas RPAREN .)
-    NEWLINE         reduce using rule 17 (acc -> LPAREN seqnotas RPAREN .)
+    NEWLINE         reduce using rule 16 (exp -> acc rec_op .)
 
 
 state 53
 
-    (20) seqnotas -> nota COMMA . seqnotas
-    (19) seqnotas -> . nota
-    (20) seqnotas -> . nota COMMA seqnotas
-    (21) nota -> . nota SUM nota
-    (22) nota -> . nota MINUS nota
-    (23) nota -> . nota MULTIPLY nota
-    (24) nota -> . INT
-    (25) nota -> . ID
+    (15) exp -> nota rec_op .
 
-    INT             shift and go to state 36
-    ID              shift and go to state 35
+    NEWLINE         reduce using rule 15 (exp -> nota rec_op .)
 
-    seqnotas                       shift and go to state 59
-    nota                           shift and go to state 44
 
 state 54
 
-    (23) nota -> nota MULTIPLY nota .
-    (21) nota -> nota . SUM nota
-    (22) nota -> nota . MINUS nota
-    (23) nota -> nota . MULTIPLY nota
+    (29) loop -> REPEAT INT TWOPOINTS NEWLINE program . ENDREPEAT
 
-  ! shift/reduce conflict for SUM resolved as shift
-  ! shift/reduce conflict for MINUS resolved as shift
-  ! shift/reduce conflict for MULTIPLY resolved as shift
-    COMMA           reduce using rule 23 (nota -> nota MULTIPLY nota .)
-    RBRACKET        reduce using rule 23 (nota -> nota MULTIPLY nota .)
-    RPAREN          reduce using rule 23 (nota -> nota MULTIPLY nota .)
-    NEWLINE         reduce using rule 23 (nota -> nota MULTIPLY nota .)
-    SUM             shift and go to state 46
-    MINUS           shift and go to state 47
-    MULTIPLY        shift and go to state 45
-
-  ! SUM             [ reduce using rule 23 (nota -> nota MULTIPLY nota .) ]
-  ! MINUS           [ reduce using rule 23 (nota -> nota MULTIPLY nota .) ]
-  ! MULTIPLY        [ reduce using rule 23 (nota -> nota MULTIPLY nota .) ]
+    ENDREPEAT       shift and go to state 61
 
 
 state 55
 
-    (21) nota -> nota SUM nota .
-    (21) nota -> nota . SUM nota
-    (22) nota -> nota . MINUS nota
-    (23) nota -> nota . MULTIPLY nota
+    (24) acc -> LPAREN seqnotas RPAREN .
 
-  ! shift/reduce conflict for SUM resolved as shift
-  ! shift/reduce conflict for MINUS resolved as shift
-  ! shift/reduce conflict for MULTIPLY resolved as shift
-    COMMA           reduce using rule 21 (nota -> nota SUM nota .)
-    RBRACKET        reduce using rule 21 (nota -> nota SUM nota .)
-    RPAREN          reduce using rule 21 (nota -> nota SUM nota .)
-    NEWLINE         reduce using rule 21 (nota -> nota SUM nota .)
-    SUM             shift and go to state 46
-    MINUS           shift and go to state 47
-    MULTIPLY        shift and go to state 45
-
-  ! SUM             [ reduce using rule 21 (nota -> nota SUM nota .) ]
-  ! MINUS           [ reduce using rule 21 (nota -> nota SUM nota .) ]
-  ! MULTIPLY        [ reduce using rule 21 (nota -> nota SUM nota .) ]
+    SUM             reduce using rule 24 (acc -> LPAREN seqnotas RPAREN .)
+    MINUS           reduce using rule 24 (acc -> LPAREN seqnotas RPAREN .)
+    NEWLINE         reduce using rule 24 (acc -> LPAREN seqnotas RPAREN .)
+    COMMA           reduce using rule 24 (acc -> LPAREN seqnotas RPAREN .)
+    RBRACKET        reduce using rule 24 (acc -> LPAREN seqnotas RPAREN .)
 
 
 state 56
 
-    (22) nota -> nota MINUS nota .
-    (21) nota -> nota . SUM nota
-    (22) nota -> nota . MINUS nota
-    (23) nota -> nota . MULTIPLY nota
+    (26) seqnotas -> nota COMMA . seqnotas
+    (25) seqnotas -> . nota
+    (26) seqnotas -> . nota COMMA seqnotas
+    (27) nota -> . INT
+    (28) nota -> . ID
 
-  ! shift/reduce conflict for SUM resolved as shift
-  ! shift/reduce conflict for MINUS resolved as shift
-  ! shift/reduce conflict for MULTIPLY resolved as shift
-    COMMA           reduce using rule 22 (nota -> nota MINUS nota .)
-    RBRACKET        reduce using rule 22 (nota -> nota MINUS nota .)
-    RPAREN          reduce using rule 22 (nota -> nota MINUS nota .)
-    NEWLINE         reduce using rule 22 (nota -> nota MINUS nota .)
-    SUM             shift and go to state 46
-    MINUS           shift and go to state 47
-    MULTIPLY        shift and go to state 45
+    INT             shift and go to state 35
+    ID              shift and go to state 33
 
-  ! SUM             [ reduce using rule 22 (nota -> nota MINUS nota .) ]
-  ! MINUS           [ reduce using rule 22 (nota -> nota MINUS nota .) ]
-  ! MULTIPLY        [ reduce using rule 22 (nota -> nota MINUS nota .) ]
-
+    seqnotas                       shift and go to state 62
+    nota                           shift and go to state 47
 
 state 57
 
-    (26) loop -> REPEAT INT TWOPOINTS NEWLINE program ENDREPEAT .
+    (20) seqsound -> sound COMMA seqsound .
 
-    NEWLINE         reduce using rule 26 (loop -> REPEAT INT TWOPOINTS NEWLINE program ENDREPEAT .)
+    RBRACKET        reduce using rule 20 (seqsound -> sound COMMA seqsound .)
 
 
 state 58
 
-    (13) assignation -> VAR ID TWOPOINTS LBRACKET expression RBRACKET .
+    (14) exp -> LBRACKET seqsound RBRACKET . rec_op
+    (17) rec_op -> .
+    (18) rec_op -> . SUM exp
+    (19) rec_op -> . MINUS exp
 
-    NEWLINE         reduce using rule 13 (assignation -> VAR ID TWOPOINTS LBRACKET expression RBRACKET .)
+    NEWLINE         reduce using rule 17 (rec_op -> .)
+    SUM             shift and go to state 51
+    MINUS           shift and go to state 50
 
+    rec_op                         shift and go to state 63
 
 state 59
 
-    (20) seqnotas -> nota COMMA seqnotas .
+    (19) rec_op -> MINUS exp .
 
-    RPAREN          reduce using rule 20 (seqnotas -> nota COMMA seqnotas .)
+    NEWLINE         reduce using rule 19 (rec_op -> MINUS exp .)
 
-WARNING: 
-WARNING: Conflicts:
-WARNING: 
-WARNING: shift/reduce conflict for SUM in state 54 resolved as shift
-WARNING: shift/reduce conflict for MINUS in state 54 resolved as shift
-WARNING: shift/reduce conflict for MULTIPLY in state 54 resolved as shift
-WARNING: shift/reduce conflict for SUM in state 55 resolved as shift
-WARNING: shift/reduce conflict for MINUS in state 55 resolved as shift
-WARNING: shift/reduce conflict for MULTIPLY in state 55 resolved as shift
-WARNING: shift/reduce conflict for SUM in state 56 resolved as shift
-WARNING: shift/reduce conflict for MINUS in state 56 resolved as shift
-WARNING: shift/reduce conflict for MULTIPLY in state 56 resolved as shift
+
+state 60
+
+    (18) rec_op -> SUM exp .
+
+    NEWLINE         reduce using rule 18 (rec_op -> SUM exp .)
+
+
+state 61
+
+    (29) loop -> REPEAT INT TWOPOINTS NEWLINE program ENDREPEAT .
+
+    NEWLINE         reduce using rule 29 (loop -> REPEAT INT TWOPOINTS NEWLINE program ENDREPEAT .)
+
+
+state 62
+
+    (26) seqnotas -> nota COMMA seqnotas .
+
+    RPAREN          reduce using rule 26 (seqnotas -> nota COMMA seqnotas .)
+
+
+state 63
+
+    (14) exp -> LBRACKET seqsound RBRACKET rec_op .
+
+    NEWLINE         reduce using rule 14 (exp -> LBRACKET seqsound RBRACKET rec_op .)
+

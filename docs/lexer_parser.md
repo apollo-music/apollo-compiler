@@ -25,41 +25,35 @@
 
 # Parser
 
-## Elementos do Parser de Apollo
-
-| Elemento | Descrição |
-|---|---|
-| program2 | Todas as linhas de código entre os caracteres de START e END |
-| program | Conjunto de linhas de código |
-| statement | Gramática para qualquer frase na linha do programa  |
-| param | Gramática para atribuição de novos valores à constantes musicais |
-| command | Gramática para executar a função "play" com uma sequência de notas |
-| assignation | Gramática para atribuição de uma variável à um valor inteiro ou sequência de notas |
-| expression | Conjunto de acordes em sequência |
-| acc | Qualquer número de notas tocadas juntas (uma ou mais notas) |
-| seqnotas | Sequência de notas separadas pelo Token COMMA |
-| nota | Nota individual (ID, INT ou resultado de uma operação) |
-
-## Regras gramaticais
-
-| Elemento | Regra |
-|---|---|
-| program2 | START NEWLINE program END NEWLINE |
-| program | statement NEWLINE |
-| program | statement NEWLINE program |
-| statement | command \| param \| assignation |
-| param | AMP TWOPOINTS INT |
-| param | DUR TWOPOINTS INT |
-| command | command COMMA param |
-| command | PLAY TWOPOINTS LBRACKET expression RBRACKET |
-| assignation | VAR ID TWOPOINTS LBRACKET expression RBRACKET |
-| assignation | VAR ID TWOPOINTS acc |
-| expression | acc |
-| expression | acc COMMA expression |
-| acc | LPAREN seqnotas RPAREN |
-| acc | nota |
-| seqnotas | nota |
-| seqnotas | nota COMMA seqnotas |
-| nota | nota SUM nota \| nota MINUS nota \| nota MULTIPLY nota |
-| nota | INT |
-| nota | ID |
+| Regra |
+|---|
+| program2 -> START program END NEWLINE |
+| program -> statement NEWLINE |
+| program -> statement NEWLINE program |
+| statement -> command |
+| statement -> param |
+| statement -> assignation |
+| statement -> loop |
+| param -> AMP TWOPOINTS INT |
+| param -> DUR TWOPOINTS INT |
+| param -> INSTR TWOPOINTS INT |
+| command -> command COMMA param |
+| command -> PLAY TWOPOINTS LBRACKET seqsound RBRACKET |
+| assignation -> VAR ID TWOPOINTS exp |
+| exp -> LBRACKET seqsound RBRACKET rec_op |
+| exp -> nota rec_op |
+| exp -> acc rec_op |
+| rec_op -> SUM exp |
+| rec_op -> MINUS exp |
+| rec_op -> |
+| seqsound -> sound COMMA seqsound|
+| seqsound -> sound |
+| sound -> acc |
+| sound -> nota |
+| expression -> acc |
+| expression -> acc COMMA expression |
+| acc -> LPAREN seqnotas RPAREN |
+| seqnotas -> nota |
+| seqnotas -> nota COMMA seqnotas |
+| nota -> INT |
+| nota -> ID |
