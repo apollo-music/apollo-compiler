@@ -232,7 +232,33 @@ def analise(self):
 def analise(self):
 	return self
 
+
 ## This is the function to execute the semantic analiser
 def run(ast):
 	ast.analise()
 	#print("Semantic Analisys Completed...")
+
+
+def test(file_path):
+	import sys
+	import os
+	from compiler.parser import apollo_yacc
+
+	f = open(file_path, 'r')
+	prog = f.read()
+	f.close()
+
+	AST.midiName = "testing"
+	AST.outfile = open(file_path + '_intermediate.py', 'w')
+
+	try:
+		# Generate ast
+		ast = apollo_yacc.parse(prog)
+	except:
+		print(sys.exc_info()[0])
+
+	try:
+		# Run semantic analysis
+		run(ast)
+	except:
+		print(sys.exc_info()[0])
