@@ -19,7 +19,8 @@ def getCurrentScope():
 
 def pushScope(scope, dependency=len(AST.ScopeStack)-1):
 	print('dependency:', str(dependency))
-	AST.ScopeStack.append(scope, dependency)
+	scope.dependency = dependency
+	AST.ScopeStack.append(scope)
 
 def popScope():
 	AST.ScopeStack.pop()
@@ -54,7 +55,7 @@ class Scope():
 
 	def __init__(self, name, dependency=0, definitions={}):
 		'''
-			depency: dependencie is a int position on the stack
+			dependency: dependency is a int position on the stack
 		'''
 		self.name = name
 		if dependency is not None:
@@ -87,8 +88,8 @@ def analise(self):
 @addToClass(AST.EntryNode)
 def analise(self):
 	print('EntryNode', str(self))
-	pushScope(Scope('global'))
-	c = self.children[0].analyse()
+	pushScope(Scope('global'), 0) # Global scope has scope 0
+	c = self.children[0].analise()
 	return c
 
 # ProgramNode (generic)
@@ -129,9 +130,11 @@ def analise(self):
 @addToClass(AST.CommandNode)
 def analise(self):
 	pushScope(Scope('comand_' + str(len(AST.ScopeStack))))
+	print("Creating scope: " + str(len(AST.ScopeStack)))
 	for c in self.children:
 		c.analise()
 	popScope()
+	print("Popping scope: " + str(len(AST.ScopeStack)))
 	return self
 
 # PlayNode
@@ -144,6 +147,7 @@ def analise(self):
 	exists_inst = findSymbol('INSTR')
 
 	if not (exists_amp and exists_dur and exists_inst):
+		print("!!!! Erro de amp/inst/dur !!!!")
 		return False 	# Error, amp, dur inst not set
 
 	exp = self.children[0].analise()
@@ -213,6 +217,7 @@ def analise(self):
 	nota = self.children[0].analise()
 	print('SeqNotasNode', str(nota))
 	if not (type(nota) is str and findSymbol(nota)):
+		print("!!!! Erro de escopo !!!!")
 		return False  # ERRO DE ESCOPO
 
 	ret = [nota]
