@@ -32,7 +32,9 @@ tokens = [
    'ID',
    'SUM',
    'MINUS',
-   'MULTIPLY'
+   'MULTIPLY',
+   'TONE',
+   'AMPERSAND'
 ]
 
 # Regular expression rules for simple tokens
@@ -45,6 +47,7 @@ t_TWOPOINTS = r':'
 t_START = r'\^'
 t_END = r'\$[\n ]*'
 
+t_AMPERSAND = r'\&'
 t_SUM = r'\+'
 t_MINUS = r'\-'
 t_MULTIPLY = r'\*'
@@ -83,6 +86,10 @@ def t_INSTR(t):
 
 def t_REPEAT(t):
 	r'REPEAT | repeat'
+	return t
+
+def t_TONE(t):
+	r'TONE | tone'
 	return t
 
 def t_ENDREPEAT(t):

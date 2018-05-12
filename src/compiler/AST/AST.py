@@ -125,6 +125,12 @@ class ExpressionNode(Node):
 class PlayNode(Node):
     type = 'Play'
 
+class PlaycontentNode(Node):
+    type = 'Playcontent'
+
+class ToneNode(Node):
+    type = 'Tone'
+
 class LoopNode(Node):
     type = 'Repeat'
 
@@ -139,6 +145,9 @@ class EmptyNode(Node):
 
 class SeqsoundNode(Node):
     type = 'Secsound'
+
+class SeqexpNode(Node):
+    type = 'Secexp'
 
 class SoundNode(Node):
     type = 'Sound'

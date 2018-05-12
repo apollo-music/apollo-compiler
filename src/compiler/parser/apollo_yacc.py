@@ -42,13 +42,29 @@ def p_param_INSTR(p):
 	'param : INSTR TWOPOINTS INT'
 	p[0] = AST.InstrNode(AST.TokenNode(p[3]))
 
+def p_param_TONE(p):
+	'param : TONE TWOPOINTS INT'
+	p[0] = AST.ToneNode(AST.TokenNode(p[3]))
+
 def p_command_param(p):
 	'command : command COMMA param'
 	p[0] = AST.CommandNode([p[3], p[1]])
 	
 def p_command_PLAY(p):
-	'command : PLAY TWOPOINTS LBRACKET seqsound RBRACKET'
-	p[0] = AST.PlayNode([p[4]])
+	'command : PLAY TWOPOINTS playcontent'
+	p[0] = AST.PlayNode([p[3]])
+
+def p_playcontent_seqexp(p):
+	'playcontent : LBRACKET seqexp RBRACKET'
+	p[0] = AST.PlaycontentNode([p[2]])
+
+def p_playcontent_ID(p):
+	'playcontent : ID'
+	p[0] = AST.PlaycontentNode(AST.TokenNode(p[1]))
+
+def p_playcontent_acc(p):
+	'playcontent : acc'
+	p[0] = AST.PlaycontentNode(p[1])
 
 def p_assignation_expression(p):
 	'assignation : VAR ID TWOPOINTS exp'
@@ -66,6 +82,14 @@ def p_expression_acc(p):
 	'exp : acc rec_op'
 	p[0] = AST.ExpressionNode([p[1], p[2]])
 
+def p_seqexp_comma(p):
+	'seqexp : exp COMMA seqexp'
+	p[0] = AST.SeqexpNode([p[1], p[3]])
+
+def p_seqexp(p):
+	'seqexp : exp'
+	p[0] = AST.SeqexpNode(p[1])
+
 def p_recursive_op_empty(p):
 	'rec_op : '
 	p[0] = AST.EmptyNode()
@@ -76,6 +100,10 @@ def p_recursive_op_sum(p):
 
 def p_recursive_op_minus(p):
 	'rec_op : MINUS exp'
+	p[0] = AST.OpNode(p[1], [p[2]])
+
+def p_recursive_op_ampersand(p):
+	'rec_op : AMPERSAND exp'
 	p[0] = AST.OpNode(p[1], [p[2]])
 
 def p_seqsound_comma(p):
