@@ -62,6 +62,10 @@ def p_playcontent_ID(p):
 	'playcontent : ID'
 	p[0] = AST.PlaycontentNode(AST.TokenNode(p[1]))
 
+def p_playcontent_acc(p):
+	'playcontent : acc'
+	p[0] = AST.PlaycontentNode(p[1])
+
 def p_assignation_expression(p):
 	'assignation : VAR ID TWOPOINTS exp'
 	p[0] = AST.VarNode([AST.TokenNode(p[2]), p[4]])
