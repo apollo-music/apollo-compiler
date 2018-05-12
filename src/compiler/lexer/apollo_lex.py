@@ -32,7 +32,8 @@ tokens = [
    'ID',
    'SUM',
    'MINUS',
-   'MULTIPLY'
+   'MULTIPLY',
+   'AMPERSAND'
 ]
 
 # Regular expression rules for simple tokens
@@ -45,6 +46,7 @@ t_TWOPOINTS = r':'
 t_START = r'\^'
 t_END = r'\$[\n ]*'
 
+t_AMPERSAND = r'\&'
 t_SUM = r'\+'
 t_MINUS = r'\-'
 t_MULTIPLY = r'\*'

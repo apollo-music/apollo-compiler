@@ -86,6 +86,10 @@ def p_recursive_op_minus(p):
 	'rec_op : MINUS exp'
 	p[0] = AST.OpNode(p[1], [p[2]])
 
+def p_recursive_op_ampersand(p):
+	'rec_op : AMPERSAND exp'
+	p[0] = AST.OpNode(p[1], [p[2]])
+
 def p_seqsound_comma(p):
 	'seqsound : sound COMMA seqsound'
 	p[0] = AST.SeqsoundNode([p[1], p[3]])
