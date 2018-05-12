@@ -1,4 +1,4 @@
-#!/bin/python3
+#!/usr/bin/python3
 import compiler.parser.apollo_yacc as parser
 import compiler.semantic_analiser.semantic_analiser as sm
 #import compiler.codegen.apollo_codegen as codegen
