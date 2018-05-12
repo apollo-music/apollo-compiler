@@ -125,6 +125,9 @@ class ExpressionNode(Node):
 class PlayNode(Node):
     type = 'Play'
 
+class ToneNode(Node):
+    type = 'Tone'
+
 class LoopNode(Node):
     type = 'Repeat'
 
