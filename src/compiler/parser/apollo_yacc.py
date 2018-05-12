@@ -47,7 +47,7 @@ def p_command_param(p):
 	p[0] = AST.CommandNode([p[3], p[1]])
 	
 def p_command_PLAY(p):
-	'command : PLAY TWOPOINTS LBRACKET seqsound RBRACKET'
+	'command : PLAY TWOPOINTS LBRACKET seqexp RBRACKET'
 	p[0] = AST.PlayNode([p[4]])
 
 def p_assignation_expression(p):
@@ -65,6 +65,14 @@ def p_expression_nota(p):
 def p_expression_acc(p):
 	'exp : acc rec_op'
 	p[0] = AST.ExpressionNode([p[1], p[2]])
+
+def p_seqexp_comma(p):
+	'seqexp : exp COMMA seqexp'
+	p[0] = AST.SeqexpNode([p[1], p[3]])
+
+def p_seqexp(p):
+	'seqexp : exp'
+	p[0] = AST.SeqexpNode(p[1])
 
 def p_recursive_op_empty(p):
 	'rec_op : '

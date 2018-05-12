@@ -140,6 +140,9 @@ class EmptyNode(Node):
 class SeqsoundNode(Node):
     type = 'Secsound'
 
+class SeqexpNode(Node):
+    type = 'Secexp'
+
 class SoundNode(Node):
     type = 'Sound'
 
