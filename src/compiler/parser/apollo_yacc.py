@@ -51,8 +51,20 @@ def p_command_param(p):
 	p[0] = AST.CommandNode([p[3], p[1]])
 	
 def p_command_PLAY(p):
-	'command : PLAY TWOPOINTS LBRACKET seqexp RBRACKET'
-	p[0] = AST.PlayNode([p[4]])
+	'command : PLAY TWOPOINTS playcontent'
+	p[0] = AST.PlayNode([p[3]])
+
+def p_playcontent_seqexp(p):
+	'playcontent : LBRACKET seqexp RBRACKET'
+	p[0] = AST.PlaycontentNode([p[2]])
+
+def p_playcontent_ID(p):
+	'playcontent : ID'
+	p[0] = AST.PlaycontentNode(AST.TokenNode(p[1]))
+
+def p_playcontent_acc(p):
+	'playcontent : acc'
+	p[0] = AST.PlaycontentNode(p[1])
 
 def p_assignation_expression(p):
 	'assignation : VAR ID TWOPOINTS exp'

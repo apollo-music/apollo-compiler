@@ -125,6 +125,9 @@ class ExpressionNode(Node):
 class PlayNode(Node):
     type = 'Play'
 
+class PlaycontentNode(Node):
+    type = 'Playcontent'
+
 class ToneNode(Node):
     type = 'Tone'
 
