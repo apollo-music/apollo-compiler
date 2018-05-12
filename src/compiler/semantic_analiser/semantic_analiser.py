@@ -1,52 +1,19 @@
+## Apollo music gen semantic analysiss
+# This semantic analysis do:
+# - Scope checkin: Variables are declared before using it
+#    - Checks variables
+#    - Checks amp, dur and instr
+# - Valid var use: Check if a var is used an inalid place
+#    - Cannot use ouch = [3,4] e play: [1, (2, ouch), 5]
+# - 
+#
+## Testes que estão sendo feitos
+# - Passar variável no amp, dur, instr  - NOT WORKING
 import sys
 from ..AST import AST
 from ..AST.AST import addToClass
 from ..AST.AST import Node
 from ..exceptions import exceptions
-
-## Testes a serem feitos
-# - Passar variável no amp, dur, instr
-# - Verificar se nome dentro de acc é uma sequencia de musica (nao pode acontecer ouch = [3,4] e play: [1, (2, ouch), 5])
-
-AST.ScopeStack = []
-
-###############
-# Op on Stack #
-###############
-def getCurrentScope():
-	return AST.ScopeStack[-1]
-
-def pushScope(scp, dependency=None):
-	if dependency is None:
-		d = len(AST.ScopeStack) - 1 if len(AST.ScopeStack) > 0 else 0
-		scp.setDependency(d)
-	else:
-		scp.setDependency(dependency)
-	
-	AST.ScopeStack.append(scp)
-
-def popScope():
-	AST.ScopeStack.pop()
-
-def findSymbol(symbol):
-	# print('DEBUG: Finding ' + str(symbol))
-	currentScope = len(AST.ScopeStack) - 1
-
-	while currentScope is not None:
-		# print('DEBUG: \tSearchin on scope ' + str(currentScope))
-		# Get the scope on
-		scope_symbol = AST.ScopeStack[currentScope].isInScope(symbol)
-		if scope_symbol:
-			return scope_symbol
-
-		if AST.ScopeStack[currentScope].dep == currentScope:
-			return False
-
-		currentScope = AST.ScopeStack[currentScope].dep
-
-def insertSymbol(symbol, value):
-	scp = getCurrentScope()
-	scp.addDefiniton(symbol, value)
 
 ###############
 # Scope class #
@@ -54,12 +21,10 @@ def insertSymbol(symbol, value):
 class Scope():
 	'''
 		The scope class defines a scope holding the value of the variables
-		ans which scopes the scope can access
+		ans which scopes the scope can access - the dep is an hierarch level dep
+		so if you can access b, you can access dep b and so on
 	'''
 	def __init__(self, name):
-		'''
-			dep: dep is a int position on the stack
-		'''
 		self.name = name
 		self.dep = 0
 		self.dfn = dict()
@@ -79,6 +44,59 @@ class Scope():
 	def isInScope(self, key):
 		return self.dfn.get(key, False)
 
+
+###############
+# Op on Stack #
+###############
+AST.ScopeStack = []
+
+def getCurrentScope():
+	'''
+		returns the last scope on the scope stack
+	'''
+	return AST.ScopeStack[-1]
+
+def pushScope(scp, dependency=None):
+	'''
+		Inserts an element (scp) on ScopeStack
+		and automatically defines its dependency on the last
+	'''
+	if dependency is None:
+		d = len(AST.ScopeStack) - 1 if len(AST.ScopeStack) > 0 else 0
+		scp.setDependency(d)
+	else:
+		scp.setDependency(dependency)
+
+	AST.ScopeStack.append(scp)
+
+def popScope():
+	'''
+		Removes the last scope
+	'''
+	AST.ScopeStack.pop()
+
+def findSymbol(symbol):
+	'''
+		Seach for symbol on all the scope hiearachy
+	'''
+	# print('DEBUG: Finding ' + str(symbol))
+	currentScope = len(AST.ScopeStack) - 1
+
+	while currentScope is not None:
+		# print('DEBUG: \tSearchin on scope ' + str(currentScope))
+		# Get the scope on
+		scope_symbol = AST.ScopeStack[currentScope].isInScope(symbol)
+		if scope_symbol:
+			return scope_symbol
+
+		if AST.ScopeStack[currentScope].dep == currentScope:
+			return False
+
+		currentScope = AST.ScopeStack[currentScope].dep
+
+def insertSymbol(symbol, value):
+	scp = getCurrentScope()
+	scp.addDefiniton(symbol, value)
 
 ########################
 ## Analiser Functions ##
@@ -176,6 +194,7 @@ def analise(self):
 		print("Atention, no Instrument defined on the scope, using default;")
 
 	seqsound = self.children[0].analise()
+	print(seqsound)
 	return seqsound
 
 # VarNode
@@ -196,6 +215,8 @@ def analise(self):
 	left = self.children[0].analise()
 	# print('DEBUG: ExpressionNode left: ' + str(left))
 	right = self.children[1].analise()
+	if not right:
+		return left
 	# print('DEBUG: ExpressionNode right: ' + str(right))
 
 	return [left, right]
@@ -230,9 +251,12 @@ def analise(self):
 def analise(self):
 	acc_or_nota = self.children[0].analise()
 	if type(acc_or_nota) is str:
-		if not findSymbol(acc_or_nota):
+		var_val = findSymbol(acc_or_nota)
+		if not var_val:
 			print("Error: %s used but never was defined" % (acc_or_nota))
 			# Should break the program? idn
+		else:
+			return var_val
 	
 	return acc_or_nota
 
@@ -240,8 +264,14 @@ def analise(self):
 # 'acc : LPAREN seqnotas RPAREN' | AST.AccNode([p[2]])
 @addToClass(AST.AccNode)
 def analise(self):
-	# PRECISA COLOCAR QUE ESSA SEQ DE NOTAS É ACORDE
 	seq_notas = self.children[0].analise()
+
+	# Analise seq_notas e ver se tem algum elemtno tipo lista
+	# se tiver é por que existe uma variavel tipo [] dento do ()
+	for e in seq_notas:
+		if type(e) is list:
+			print('Error: Invalid type inside a chord\n Check the variable values')
+	
 	return tuple(seq_notas)
 
 # SeqNotasNode
@@ -252,9 +282,12 @@ def analise(self):
 	nota = self.children[0].analise()
 	# print(type(nota), nota)
 	if type(nota) is str:
-		if not findSymbol(nota):
+		var_val = findSymbol(nota)
+		if not var_val:
 			print("Error: %s used but never was defined" % (nota))
 			# Should break the program? idn
+		else:
+			nota = var_val
 
 	ret = [nota]
 	seqNotas = []
@@ -278,7 +311,7 @@ def analise(self):
 # 'rec_op : ' | AST.EmptyNode()
 @addToClass(AST.EmptyNode)
 def analise(self):
-	return []
+	return False
 
 
 ## This is the function to execute the semantic analiser
