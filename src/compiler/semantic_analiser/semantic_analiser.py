@@ -3,10 +3,12 @@
 # - Scope checkin: Variables are declared before using it
 #    - Checks variables
 #    - Checks amp, dur and instr
+#    - MISSING REPEAT						- TODO
 # - Valid var use: Check if a var is used an inalid place
 #    - Cannot use ouch = [3,4] e play: [1, (2, ouch), 5]
-# - 
-#
+# - Operation on riht types
+#    - Length of types are wrong			- TODO
+#    - Types are wrong   					- TODO
 ## Testes que estão sendo feitos
 # - Passar variável no amp, dur, instr  - NOT WORKING
 import sys
@@ -31,7 +33,7 @@ class Scope():
 
 	def __str__(self):
 		return (self.name + '-' + str(self.dep))
-	
+
 	def __repr__(self):
 		return (self.name + ' ' + str(self.dep) + str(self.dfn) + '\n') 
 
@@ -176,7 +178,7 @@ def analise(self):
 	return command + param
 
 # PlayNode
-# 'command : PLAY TWOPOINTS LBRACKET seqsound RBRACKET' | AST.PlayNode([p[4]])
+# 'command : PLAY TWOPOINTS playcontent' | AST.PlayNode([p[3]])
 @addToClass(AST.PlayNode)
 def analise(self):
 	# Check if amp, dur, and instruments are declared on the scope
@@ -197,6 +199,25 @@ def analise(self):
 	print(seqsound)
 	return seqsound
 
+# PlaycontentNode
+# 'playcontent : LBRACKET seqexp RBRACKET' | AST.PlaycontentNode([p[2]])
+# 'playcontent : ID'  | AST.PlaycontentNode(AST.TokenNode(p[1]))
+# 'playcontent : acc' | AST.PlaycontentNode(p[1])
+@addToClass(AST.PlaycontentNode)
+def analise(self):
+	play_val = self.children[0].analise()
+
+	# Check if its an ID
+	if type(play_val) is str:
+		var_val = findSymbol(play_val)
+		if not var_val:
+			print("Error: %s used but never was defined" % (play_val))
+			# Should break the program? idn
+		else:
+			return var_val
+	
+	return play_val
+
 # VarNode
 # 'assignation : VAR ID TWOPOINTS exp' | AST.VarNode([AST.TokenNode(p[2]), p[4]])
 @addToClass(AST.VarNode)
@@ -213,23 +234,50 @@ def analise(self):
 @addToClass(AST.ExpressionNode)
 def analise(self):
 	left = self.children[0].analise()
-	# print('DEBUG: ExpressionNode left: ' + str(left))
-	right = self.children[1].analise()
-	if not right:
-		return left
-	# print('DEBUG: ExpressionNode right: ' + str(right))
 
-	return [left, right]
+	## Checking if nota is a variable
+	if type(left) is str:
+		var_val = findSymbol(left)
+		if not var_val:
+			print("Error: %s used but never was defined" % (left))
+			# Should break the program? idn
+		else:
+			return var_val
+
+	rec_op = self.children[1].analise()
+	if not rec_op:
+		return left
+	# print('DEBUG: ExpressionNode rec_op: ' + str(rec_op))
+
+	return [left + rec_op]
+
+# SeqexpNode
+# 'seqexp : exp COMMA seqexp' | AST.SeqexpNode([p[1], p[3]])
+# 'seqexp : exp' | AST.SeqexpNode(p[1])
+@addToClass(AST.SeqexpNode)
+def analise(self):
+	exp = self.children[0].analise()
+
+	# print('DEBUG exp ' + str(exp))
+
+	if len(self.children) > 1:
+		segexp = self.children[1].analise()
+		# print('DEBUG segexp ' + str(segexp))
+		exp = exp + [segexp]
+
+	return exp
 
 # OpNode
 # 'rec_op : SUM exp' |  AST.OpNode(p[1], [p[2]])
 # 'rec_op : MINUS exp' | AST.OpNode(p[1], [p[2]])
+# 'rec_op : AMPERSAND exp'
 @addToClass(AST.OpNode)
 def analise(self):
+	# NEEDS IMPLEMENTATION
 	# print('DEBUG: AST.OpNode', str(self))
-	op = self.children[0].analise()
-	exp = self.children[1].analise()
-	return [op, exp]
+	op = self.op
+	val = self.children[0].analise()
+	return [op, val]
 
 
 # SeqSoundNode
@@ -250,6 +298,8 @@ def analise(self):
 @addToClass(AST.SoundNode)
 def analise(self):
 	acc_or_nota = self.children[0].analise()
+
+	## Checking if nota is a variable
 	if type(acc_or_nota) is str:
 		var_val = findSymbol(acc_or_nota)
 		if not var_val:
@@ -271,7 +321,8 @@ def analise(self):
 	for e in seq_notas:
 		if type(e) is list:
 			print('Error: Invalid type inside a chord\n Check the variable values')
-	
+			sys.exit(1)
+
 	return tuple(seq_notas)
 
 # SeqNotasNode
@@ -280,7 +331,8 @@ def analise(self):
 @addToClass(AST.SeqNotasNode)
 def analise(self):
 	nota = self.children[0].analise()
-	# print(type(nota), nota)
+
+	## Checking if nota is a variable
 	if type(nota) is str:
 		var_val = findSymbol(nota)
 		if not var_val:
