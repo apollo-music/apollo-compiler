@@ -1,5 +1,5 @@
 ^
-var test: 40
+var test: [50, 50] & [73, 74] & [52, 55] + 32
 instr: OCARINA
 amp: 255
 
