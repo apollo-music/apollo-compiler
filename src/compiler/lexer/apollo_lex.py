@@ -33,6 +33,7 @@ tokens = [
    'SUM',
    'MINUS',
    'MULTIPLY',
+   'TONE',
    'AMPERSAND'
 ]
 
@@ -85,6 +86,10 @@ def t_INSTR(t):
 
 def t_REPEAT(t):
 	r'REPEAT | repeat'
+	return t
+
+def t_TONE(t):
+	r'TONE | tone'
 	return t
 
 def t_ENDREPEAT(t):
