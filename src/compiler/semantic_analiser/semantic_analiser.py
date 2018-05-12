@@ -263,7 +263,7 @@ def analise(self):
 	if len(self.children) > 1:
 		segexp = self.children[1].analise()
 		# print('DEBUG segexp ' + str(segexp))
-		exp = exp + [segexp]
+		return [exp, segexp]
 
 	return exp
 
