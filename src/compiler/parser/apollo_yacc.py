@@ -27,7 +27,8 @@ def p_statement(p):
 	'''statement : command
 		| param
 		| assignation
-		| loop'''
+		| loop
+		| label'''
 	p[0] = p[1]
 		
 def p_param_AMP(p):
@@ -45,6 +46,10 @@ def p_param_INSTR(p):
 def p_param_TONE(p):
 	'param : TONE TWOPOINTS INT'
 	p[0] = AST.ToneNode(AST.TokenNode(p[3]))
+
+def p_param_CALL(p):
+	'param : CALL TWOPOINTS ID'
+	p[0] = AST.CallNode(AST.TokenNode(p[3]))
 
 def p_command_param(p):
 	'command : command COMMA param'
@@ -139,13 +144,13 @@ def p_nota_id(p):
 	'nota : ID'
 	p[0] = AST.TokenNode(p[1])
 
-# def p_loop(p):
-# 	'loop : repeat'
-# 	p[0] = AST.LoopNode(p[1])
-
 def p_loop_repeat(p):
 	'loop : REPEAT INT TWOPOINTS NEWLINE program ENDREPEAT'
 	p[0] = AST.RepeatNode([AST.TokenNode(p[2]), p[5]])
+
+def p_label_definition(p):
+	'label : SEQUENCE ID TWOPOINTS NEWLINE program ENDSEQUENCE'
+	p[0] = AST.LabelNode([AST.TokenNode(p[2]), p[5]])
 
 # Error rule for syntax errors
 def p_error(p):
