@@ -6,9 +6,9 @@ _tabversion = '3.10'
 
 _lr_method = 'LALR'
 
-_lr_signature = 'AMP AMPERSAND CALL COMMA DUR END ENDREPEAT ENDSEQUENCE ID INSTR INT LBRACKET LPAREN MINUS MULTIPLY NEWLINE PLAY RBRACKET REPEAT RPAREN SEQUENCE START SUM TONE TWOPOINTS VARprogram2 : START NEWLINE program ENDprogram : statement NEWLINEprogram : statement NEWLINE programstatement : command\n\t\t| param\n\t\t| assignation\n\t\t| loop\n\t\t| labelparam : AMP TWOPOINTS INTparam : DUR TWOPOINTS INTparam : INSTR TWOPOINTS INTparam : TONE TWOPOINTS INTparam : CALL TWOPOINTS IDcommand : command COMMA paramcommand : PLAY TWOPOINTS playcontentplaycontent : LBRACKET seqexp RBRACKETplaycontent : IDplaycontent : accassignation : VAR ID TWOPOINTS expexp : LBRACKET seqsound RBRACKET rec_opexp : nota rec_opexp : acc rec_opseqexp : exp COMMA seqexpseqexp : exprec_op : rec_op : SUM exprec_op : MINUS exprec_op : AMPERSAND expseqsound : sound COMMA seqsoundseqsound : soundsound : acc\n\t| notaacc : LPAREN seqnotas RPARENseqnotas : notaseqnotas : nota COMMA seqnotasnota : INTnota : IDloop : REPEAT INT TWOPOINTS NEWLINE program ENDREPEATlabel : SEQUENCE ID TWOPOINTS NEWLINE program ENDSEQUENCE'
+_lr_signature = 'AMP AMPERSAND CALL COMMA DUR END ENDREPEAT ENDSEQUENCE ID INSTR INT LBRACKET LPAREN MINUS MULTIPLY NEWLINE PLAY RBRACKET REPEAT RPAREN SEQUENCE START SUM TONE TWOPOINTS VARprogram2 : START NEWLINE program ENDprogram : statement NEWLINEprogram : statement NEWLINE programstatement : command\n\t\t| param\n\t\t| assignation\n\t\t| loop\n\t\t| labelparam : AMP TWOPOINTS INT\n\t| AMP TWOPOINTS IDparam : DUR TWOPOINTS INT\n\t| DUR TWOPOINTS IDparam : INSTR TWOPOINTS INTparam : TONE TWOPOINTS INT\n\t| TONE TWOPOINTS IDparam : CALL TWOPOINTS IDcommand : command COMMA paramcommand : PLAY TWOPOINTS playcontentplaycontent : LBRACKET seqexp RBRACKETplaycontent : IDplaycontent : accassignation : VAR ID TWOPOINTS expexp : LBRACKET seqsound RBRACKET rec_opexp : nota rec_opexp : acc rec_opseqexp : exp COMMA seqexpseqexp : exprec_op : rec_op : SUM exprec_op : MINUS exprec_op : AMPERSAND expseqsound : sound COMMA seqsoundseqsound : soundsound : acc\n\t| notaacc : LPAREN seqnotas RPARENseqnotas : notaseqnotas : nota COMMA seqnotasnota : INTnota : IDloop : REPEAT INT TWOPOINTS NEWLINE program ENDREPEATlabel : SEQUENCE ID TWOPOINTS NEWLINE program ENDSEQUENCE'
     
-_lr_action_items = {'REPEAT':([3,23,47,58,],[4,4,4,4,]),'AMP':([3,23,31,47,58,],[7,7,7,7,7,]),'NEWLINE':([2,6,8,14,15,17,19,32,33,37,38,39,40,41,42,43,45,46,48,51,52,53,57,63,69,70,71,74,75,76,77,78,82,83,],[3,-5,23,-7,-8,-6,-4,47,-9,-17,-18,-15,-13,-10,-12,-11,58,-14,-25,-25,-36,-37,-19,-22,-21,-16,-33,-38,-28,-27,-26,-25,-39,-20,]),'ENDSEQUENCE':([23,34,73,],[-2,-3,82,]),'LPAREN':([24,35,44,49,60,61,62,68,79,],[36,36,36,36,36,36,36,36,36,]),'PLAY':([3,23,47,58,],[9,9,9,9,]),'LBRACKET':([24,35,44,60,61,62,68,],[35,49,49,49,49,49,49,]),'START':([0,],[2,]),'CALL':([3,23,31,47,58,],[10,10,10,10,10,]),'ID':([16,18,24,25,35,36,44,49,60,61,62,68,72,79,],[29,30,37,40,53,53,53,53,53,53,53,53,53,53,]),'DUR':([3,23,31,47,58,],[11,11,11,11,11,]),'END':([5,23,34,],[21,-2,-3,]),'MINUS':([48,51,52,53,71,78,],[61,61,-36,-37,-33,61,]),'SUM':([48,51,52,53,71,78,],[62,62,-36,-37,-33,62,]),'RPAREN':([52,53,55,56,81,],[-36,-37,71,-34,-35,]),'COMMA':([19,33,37,38,39,40,41,42,43,46,48,50,51,52,53,56,63,64,66,67,69,70,71,75,76,77,78,83,],[31,-9,-17,-18,-15,-13,-10,-12,-11,-14,-25,68,-25,-36,-37,72,-22,-31,79,-32,-21,-16,-33,-28,-27,-26,-25,-20,]),'VAR':([3,23,47,58,],[16,16,16,16,]),'ENDREPEAT':([23,34,59,],[-2,-3,74,]),'INSTR':([3,23,31,47,58,],[13,13,13,13,13,]),'RBRACKET':([48,50,51,52,53,54,63,64,65,66,67,69,71,75,76,77,78,80,83,84,],[-25,-24,-25,-36,-37,70,-22,-31,78,-30,-32,-21,-33,-28,-27,-26,-25,-23,-20,-29,]),'AMPERSAND':([48,51,52,53,71,78,],[60,60,-36,-37,-33,60,]),'INT':([4,22,26,27,28,35,36,44,49,60,61,62,68,72,79,],[20,33,41,42,43,52,52,52,52,52,52,52,52,52,52,]),'TONE':([3,23,31,47,58,],[12,12,12,12,12,]),'SEQUENCE':([3,23,47,58,],[18,18,18,18,]),'TWOPOINTS':([7,9,10,11,12,13,20,29,30,],[22,24,25,26,27,28,32,44,45,]),'$end':([1,21,],[0,-1,]),}
+_lr_action_items = {'PLAY':([3,22,59,60,],[4,4,4,4,]),'$end':([1,27,],[0,-1,]),'AMP':([3,22,26,59,60,],[5,5,5,5,5,]),'SUM':([50,51,55,57,63,82,],[-39,-40,66,66,-36,66,]),'TWOPOINTS':([4,5,8,11,17,19,25,28,30,],[20,21,23,24,29,31,43,45,47,]),'LBRACKET':([20,36,47,65,66,67,74,],[36,56,56,56,56,56,56,]),'INSTR':([3,22,26,59,60,],[8,8,8,8,8,]),'END':([14,22,39,],[27,-2,-3,]),'LPAREN':([20,36,47,56,65,66,67,74,81,],[33,33,33,33,33,33,33,33,33,]),'TONE':([3,22,26,59,60,],[11,11,11,11,11,]),'MINUS':([50,51,55,57,63,82,],[-39,-40,67,67,-36,67,]),'SEQUENCE':([3,22,59,60,],[12,12,12,12,]),'AMPERSAND':([50,51,55,57,63,82,],[-39,-40,65,65,-36,65,]),'NEWLINE':([2,6,7,9,10,13,15,32,34,35,37,38,40,41,42,43,44,45,46,48,49,50,51,55,57,61,63,64,68,73,78,79,80,82,84,85,87,],[3,22,-7,-8,-6,-4,-5,-20,-21,-18,-9,-10,-13,-14,-15,59,-17,60,-16,-11,-12,-39,-40,-28,-28,-22,-36,-19,-24,-25,-31,-29,-30,-28,-42,-41,-23,]),'RBRACKET':([50,51,54,55,57,58,63,68,69,70,71,72,73,78,79,80,82,83,86,87,],[-39,-40,64,-28,-28,-27,-36,-24,-33,82,-35,-34,-25,-31,-29,-30,-28,-26,-32,-23,]),'RPAREN':([50,51,52,53,77,],[-39,-40,-37,63,-38,]),'INT':([16,21,23,24,31,33,36,47,56,62,65,66,67,74,81,],[28,37,40,41,48,50,50,50,50,50,50,50,50,50,50,]),'ENDREPEAT':([22,39,76,],[-2,-3,85,]),'ID':([12,18,20,21,24,29,31,33,36,47,56,62,65,66,67,74,81,],[25,30,32,38,42,46,49,51,51,51,51,51,51,51,51,51,51,]),'START':([0,],[2,]),'REPEAT':([3,22,59,60,],[16,16,16,16,]),'CALL':([3,22,26,59,60,],[17,17,17,17,17,]),'VAR':([3,22,59,60,],[18,18,18,18,]),'ENDSEQUENCE':([22,39,75,],[-2,-3,84,]),'DUR':([3,22,26,59,60,],[19,19,19,19,19,]),'COMMA':([13,32,34,35,37,38,40,41,42,44,46,48,49,50,51,52,55,57,58,63,64,68,69,71,72,73,78,79,80,82,87,],[26,-20,-21,-18,-9,-10,-13,-14,-15,-17,-16,-11,-12,-39,-40,62,-28,-28,74,-36,-19,-24,81,-35,-34,-25,-31,-29,-30,-28,-23,]),}
 
 _lr_action = {}
 for _k, _v in _lr_action_items.items():
@@ -17,7 +17,7 @@ for _k, _v in _lr_action_items.items():
       _lr_action[_x][_k] = _y
 del _lr_action_items
 
-_lr_goto_items = {'seqnotas':([36,72,],[55,81,]),'seqsound':([49,79,],[65,84,]),'program2':([0,],[1,]),'acc':([24,35,44,49,60,61,62,68,79,],[38,48,48,64,48,48,48,48,64,]),'program':([3,23,47,58,],[5,34,59,73,]),'statement':([3,23,47,58,],[8,8,8,8,]),'sound':([49,79,],[66,66,]),'loop':([3,23,47,58,],[14,14,14,14,]),'playcontent':([24,],[39,]),'label':([3,23,47,58,],[15,15,15,15,]),'rec_op':([48,51,78,],[63,69,83,]),'assignation':([3,23,47,58,],[17,17,17,17,]),'nota':([35,36,44,49,60,61,62,68,72,79,],[51,56,51,67,51,51,51,51,56,67,]),'seqexp':([35,68,],[54,80,]),'param':([3,23,31,47,58,],[6,6,46,6,6,]),'command':([3,23,47,58,],[19,19,19,19,]),'exp':([35,44,60,61,62,68,],[50,57,75,76,77,50,]),}
+_lr_goto_items = {'rec_op':([55,57,82,],[68,73,87,]),'playcontent':([20,],[35,]),'seqsound':([56,81,],[70,86,]),'seqexp':([36,74,],[54,83,]),'label':([3,22,59,60,],[9,9,9,9,]),'sound':([56,81,],[69,69,]),'nota':([33,36,47,56,62,65,66,67,74,81,],[52,55,55,71,52,55,55,55,55,71,]),'statement':([3,22,59,60,],[6,6,6,6,]),'program':([3,22,59,60,],[14,39,75,76,]),'acc':([20,36,47,56,65,66,67,74,81,],[34,57,57,72,57,57,57,57,72,]),'command':([3,22,59,60,],[13,13,13,13,]),'program2':([0,],[1,]),'assignation':([3,22,59,60,],[10,10,10,10,]),'exp':([36,47,65,66,67,74,],[58,61,78,79,80,58,]),'param':([3,22,26,59,60,],[15,15,44,15,15,]),'loop':([3,22,59,60,],[7,7,7,7,]),'seqnotas':([33,62,],[53,77,]),}
 
 _lr_goto = {}
 for _k, _v in _lr_goto_items.items():
@@ -36,34 +36,37 @@ _lr_productions = [
   ('statement -> loop','statement',1,'p_statement','apollo_yacc.py',30),
   ('statement -> label','statement',1,'p_statement','apollo_yacc.py',31),
   ('param -> AMP TWOPOINTS INT','param',3,'p_param_AMP','apollo_yacc.py',35),
-  ('param -> DUR TWOPOINTS INT','param',3,'p_param_DUR','apollo_yacc.py',39),
-  ('param -> INSTR TWOPOINTS INT','param',3,'p_param_INSTR','apollo_yacc.py',43),
-  ('param -> TONE TWOPOINTS INT','param',3,'p_param_TONE','apollo_yacc.py',47),
-  ('param -> CALL TWOPOINTS ID','param',3,'p_param_CALL','apollo_yacc.py',51),
-  ('command -> command COMMA param','command',3,'p_command_param','apollo_yacc.py',55),
-  ('command -> PLAY TWOPOINTS playcontent','command',3,'p_command_PLAY','apollo_yacc.py',59),
-  ('playcontent -> LBRACKET seqexp RBRACKET','playcontent',3,'p_playcontent_seqexp','apollo_yacc.py',63),
-  ('playcontent -> ID','playcontent',1,'p_playcontent_ID','apollo_yacc.py',67),
-  ('playcontent -> acc','playcontent',1,'p_playcontent_acc','apollo_yacc.py',71),
-  ('assignation -> VAR ID TWOPOINTS exp','assignation',4,'p_assignation_expression','apollo_yacc.py',75),
-  ('exp -> LBRACKET seqsound RBRACKET rec_op','exp',4,'p_expression_seq','apollo_yacc.py',79),
-  ('exp -> nota rec_op','exp',2,'p_expression_nota','apollo_yacc.py',83),
-  ('exp -> acc rec_op','exp',2,'p_expression_acc','apollo_yacc.py',87),
-  ('seqexp -> exp COMMA seqexp','seqexp',3,'p_seqexp_comma','apollo_yacc.py',91),
-  ('seqexp -> exp','seqexp',1,'p_seqexp','apollo_yacc.py',95),
-  ('rec_op -> <empty>','rec_op',0,'p_recursive_op_empty','apollo_yacc.py',99),
-  ('rec_op -> SUM exp','rec_op',2,'p_recursive_op_sum','apollo_yacc.py',103),
-  ('rec_op -> MINUS exp','rec_op',2,'p_recursive_op_minus','apollo_yacc.py',107),
-  ('rec_op -> AMPERSAND exp','rec_op',2,'p_recursive_op_ampersand','apollo_yacc.py',111),
-  ('seqsound -> sound COMMA seqsound','seqsound',3,'p_seqsound_comma','apollo_yacc.py',115),
-  ('seqsound -> sound','seqsound',1,'p_seqsound','apollo_yacc.py',119),
-  ('sound -> acc','sound',1,'p_sound','apollo_yacc.py',123),
-  ('sound -> nota','sound',1,'p_sound','apollo_yacc.py',124),
-  ('acc -> LPAREN seqnotas RPAREN','acc',3,'p_acc_seqnotas','apollo_yacc.py',128),
-  ('seqnotas -> nota','seqnotas',1,'p_seqnotas_nota','apollo_yacc.py',132),
-  ('seqnotas -> nota COMMA seqnotas','seqnotas',3,'p_seqnotas_notaseqnotas','apollo_yacc.py',136),
-  ('nota -> INT','nota',1,'p_nota','apollo_yacc.py',140),
-  ('nota -> ID','nota',1,'p_nota_id','apollo_yacc.py',144),
-  ('loop -> REPEAT INT TWOPOINTS NEWLINE program ENDREPEAT','loop',6,'p_loop_repeat','apollo_yacc.py',148),
-  ('label -> SEQUENCE ID TWOPOINTS NEWLINE program ENDSEQUENCE','label',6,'p_label_definition','apollo_yacc.py',152),
+  ('param -> AMP TWOPOINTS ID','param',3,'p_param_AMP','apollo_yacc.py',36),
+  ('param -> DUR TWOPOINTS INT','param',3,'p_param_DUR','apollo_yacc.py',40),
+  ('param -> DUR TWOPOINTS ID','param',3,'p_param_DUR','apollo_yacc.py',41),
+  ('param -> INSTR TWOPOINTS INT','param',3,'p_param_INSTR','apollo_yacc.py',45),
+  ('param -> TONE TWOPOINTS INT','param',3,'p_param_TONE','apollo_yacc.py',49),
+  ('param -> TONE TWOPOINTS ID','param',3,'p_param_TONE','apollo_yacc.py',50),
+  ('param -> CALL TWOPOINTS ID','param',3,'p_param_CALL','apollo_yacc.py',54),
+  ('command -> command COMMA param','command',3,'p_command_param','apollo_yacc.py',58),
+  ('command -> PLAY TWOPOINTS playcontent','command',3,'p_command_PLAY','apollo_yacc.py',62),
+  ('playcontent -> LBRACKET seqexp RBRACKET','playcontent',3,'p_playcontent_seqexp','apollo_yacc.py',66),
+  ('playcontent -> ID','playcontent',1,'p_playcontent_ID','apollo_yacc.py',70),
+  ('playcontent -> acc','playcontent',1,'p_playcontent_acc','apollo_yacc.py',74),
+  ('assignation -> VAR ID TWOPOINTS exp','assignation',4,'p_assignation_expression','apollo_yacc.py',78),
+  ('exp -> LBRACKET seqsound RBRACKET rec_op','exp',4,'p_expression_seq','apollo_yacc.py',82),
+  ('exp -> nota rec_op','exp',2,'p_expression_nota','apollo_yacc.py',86),
+  ('exp -> acc rec_op','exp',2,'p_expression_acc','apollo_yacc.py',90),
+  ('seqexp -> exp COMMA seqexp','seqexp',3,'p_seqexp_comma','apollo_yacc.py',94),
+  ('seqexp -> exp','seqexp',1,'p_seqexp','apollo_yacc.py',98),
+  ('rec_op -> <empty>','rec_op',0,'p_recursive_op_empty','apollo_yacc.py',102),
+  ('rec_op -> SUM exp','rec_op',2,'p_recursive_op_sum','apollo_yacc.py',106),
+  ('rec_op -> MINUS exp','rec_op',2,'p_recursive_op_minus','apollo_yacc.py',110),
+  ('rec_op -> AMPERSAND exp','rec_op',2,'p_recursive_op_ampersand','apollo_yacc.py',114),
+  ('seqsound -> sound COMMA seqsound','seqsound',3,'p_seqsound_comma','apollo_yacc.py',118),
+  ('seqsound -> sound','seqsound',1,'p_seqsound','apollo_yacc.py',122),
+  ('sound -> acc','sound',1,'p_sound','apollo_yacc.py',126),
+  ('sound -> nota','sound',1,'p_sound','apollo_yacc.py',127),
+  ('acc -> LPAREN seqnotas RPAREN','acc',3,'p_acc_seqnotas','apollo_yacc.py',131),
+  ('seqnotas -> nota','seqnotas',1,'p_seqnotas_nota','apollo_yacc.py',135),
+  ('seqnotas -> nota COMMA seqnotas','seqnotas',3,'p_seqnotas_notaseqnotas','apollo_yacc.py',139),
+  ('nota -> INT','nota',1,'p_nota','apollo_yacc.py',143),
+  ('nota -> ID','nota',1,'p_nota_id','apollo_yacc.py',147),
+  ('loop -> REPEAT INT TWOPOINTS NEWLINE program ENDREPEAT','loop',6,'p_loop_repeat','apollo_yacc.py',151),
+  ('label -> SEQUENCE ID TWOPOINTS NEWLINE program ENDSEQUENCE','label',6,'p_label_definition','apollo_yacc.py',155),
 ]
