@@ -1,7 +1,10 @@
-#AST stuff to use the annotations
 from compiler.AST import AST
 from compiler.AST.AST import addToClass
+from compiler.parser import apollo_yacc
+from compiler.semantic_analiser import semantic_analiser
+import sys, os
 
+debug = False
 AST.amp = 100
 AST.dur = 200
 AST.table = {}
@@ -19,6 +22,8 @@ def compile(self):
 # - 'program2 : START NEWLINE program END NEWLINE' | AST.EntryNode(p[3])
 @addToClass(AST.EntryNode)
 def compile(self):
+	if debug:
+		print("entry node")
 	print("import midi\n", file=AST.outfile)
 	print("pattern = midi.Pattern(format=1, resolution = 100, tick_relative=1)", file=AST.outfile)
 	print("track = midi.Track()", file=AST.outfile)
@@ -37,16 +42,19 @@ def compile(self):
 # - 'program : statement NEWLINE program' | AST.ProgramNode([p[1]] + [p[3]])
 @addToClass(AST.ProgramNode)
 def compile(self):
+	if debug:
+		print("ProgramNode")
 	for c in self.children:
-		# DEBUG print('ProgramNode:\n' + str(c))
 		c.compile()
 	return self
 
 # CommandNode 
 # - 'command : command COMMA param' | AST.CommandNode([p[3], p[1]])
-# - 'command : PLAY TWOPOINTS LBRACKET expression RBRACKET' | AST.PlayNode([p[4]])
+# - 'command : PLAY TWOPOINTS playcontent' | AST.PlayNode([p[3]])
 @addToClass(AST.CommandNode)
 def compile(self):
+	if debug:
+		print("command")
 	left = self.children[0]
 	right = self.children[1]
 
@@ -61,39 +69,78 @@ def compile(self):
 
 	return self
 
+#compute exp1 (op) exp2
+def computeExpression(exp1, exp2, op):
+	return exp1
+	"""
+	result = []
+
+	if len(exp2) == 1:
+		for e in exp2:
+			result.append(e + exp2[0])
+	
+	elif len(exp1) == len(exp2):
+		for i in range(len(exp1)):
+			result.append(exp1[i] + exp2[i])
+	
+	else:
+		raise SystemExit
+	
+	return result
+	"""
+		
 # ExpressionNode 
-# - 'expression : acc' | AST.ExpressionNode([p[1]])
-# - 'expression : acc COMMA expression' | AST.ExpressionNode([p[1], p[3]])
+# - 'exp : LBRACKET seqsound RBRACKET rec_op' | AST.ExpressionNode([p[2],p[4]])
+# - 'exp : nota rec_op' | AST.ExpressionNode([p[1], p[2]])
+# - 'exp : acc rec_op' | AST.ExpressionNode([p[1]], p[2]])
+# In order to execute the operations, we will expand the rec_op in this node
 @addToClass(AST.ExpressionNode)
 def compile(self):
-	# DEBUG print("ExpressionNode:\n", self)
-	if len(self.children) == 1:
-		acc = self.children[0].compile()
-		# DEBUG print(acc)
-		return acc
+	if debug:
+		print("expression")
+	exp1 = self.children[0].compile()
+	rec_op = self.children[1]
+	if len(rec_op.children) > 0:
+		exp2 = rec_op.children[0].compile()
+		op = rec_op.op
+		return computeExpression(exp1, exp2, op)
+
 	else:
-		acc = self.children[0].compile()
-		expr = self.children[1].compile()
-		if type(acc) is not list:
-			acc = [acc]
-		if type(expr) is list:
-			acc = acc + expr
-		else:
-			acc.append(expr)
-		return acc
+		return exp1
+
+# SeqexpNode
+# - 'seqexp : exp COMMA seqexp' | AST.SeqexpNode([p[1], p[3]])
+# - 'seqexp : exp' | AST.SeqexpNode(p[1])
+@addToClass(AST.SeqexpNode)
+def compile(self):
+	if debug:
+		print("seqexp")
+	exp = self.children[0].compile()
+		
+	if len(self.children) == 1:
+		# DEBUG print(nota)
+		return exp
+	else:
+		seqexp = self.children[1].compile()
+		return exp + seqexp
 
 # TokenNode ()
 # - 	MULTIPLE USES :S - I'm very confused
 @addToClass(AST.TokenNode)
 def compile(self):
-	# DEBUG print("TokenNode: " + str(self.tok))
-	return self.tok
+	if debug:
+		print("token " + str(self.tok))
+	nota = self.tok
+	if type(nota) is str:
+		nota = AST.table.get(nota, ())
+	return nota
 
 # AmpNode
 # - 'param : AMP TWOPOINTS INT' | p[0] = AST.AmpNode([AST.TokenNode(p[3])])
 @addToClass(AST.AmpNode)
 def compile(self):
-	# DEBUG print('AmpNode:\n' +  str(self))
+	if debug:
+		print("amp")
 	if len(self.children) == 1:
 		amp = self.children[0]
 		AST.amp = int(str(amp))
@@ -103,7 +150,8 @@ def compile(self):
 # - 'param : DUR TWOPOINTS INT' | p[0] = AST.DurNode([AST.TokenNode(p[3])])
 @addToClass(AST.DurNode)
 def compile(self):
-	# DEBUG print('DurNode:\n' + str(self))
+	if debug:
+		print("dur")
 	if len(self.children) == 1:
 		dur = self.children[0]
 		AST.dur = int(str(dur))
@@ -113,6 +161,8 @@ def compile(self):
 # - 'param : INSTR TWOPOINTS INT' | p[0] = AST.InstNode([AST.TokenNode(p[3])])
 @addToClass(AST.InstrNode)
 def compile(self):
+	if debug:
+		print("instr")
 	# DEBUG print('InstrNode:\n' + str(self.children[0]))
 	if len(self.children) == 1:
 		instrCode = self.children[0]
@@ -126,7 +176,8 @@ def compile(self):
 # 'assignation : VAR ID TWOPOINTS acc' | AST.VarNode([AST.TokenNode(p[2]), p[4]])
 @addToClass(AST.VarNode)
 def compile(self):
-	# DEBUG print("VarNode:\n" + str(self.children))
+	if debug:
+		print("var")
 	left = self.children[0]
 	right = self.children[1]
 
@@ -152,6 +203,8 @@ def compile(self):
 # - 'acc : nota' |  AST.AccNode([p[1]])
 @addToClass(AST.AccNode)
 def compile(self):
+	if debug:
+		print("acc")
 	# PRECISA COLOCAR QUE ESSA SEQ DE NOTAS É ACORDE
 	uniq_or_seq = self.children[0].compile()
 	# DEBUG print("AccNode2:\n" + str(uniq_or_seq))
@@ -168,7 +221,8 @@ def compile(self):
 # 'loop : REPEAT INT TWOPOINTS NEWLINE program ENDREPEAT' | p[0] = AST.RepeatNode([AST.TokenNode(p[2]), p[5]])
 @addToClass(AST.RepeatNode)
 def compile(self):
-	# DEBUG print('RepeatNode:\n' + str(self))
+	if debug:
+		print("repeat")
 	num_repeats = self.children[0].compile()
 	prog = self.children[1]
 
@@ -176,43 +230,40 @@ def compile(self):
 		prog.compile()
 	return self
 
-# OpNode
-# 	| nota : nota SUM nota 
-#	| nota MINUS nota 
-#	| nota MULTIPLY nota
-# AST.OpNode(p[2], [p[1], p[3]])
-@addToClass(AST.OpNode)
+# SeqSoundNode
+# 'seqsound : sound COMMA seqsound' | AST.SeqsoundNode([p[1], p[3]])
+# 'seqsound : sound' | AST.SeqsoundNode(p[1])
+@addToClass(AST.SeqsoundNode)
 def compile(self):
-	op = self.op
-	operand1 = self.children[0]
-	operand2 = self.children[1]
+	if debug:
+		print("seqsound")
+	sound = self.children[0].compile()
 
-	operand1 = operand1.compile()
-	operand2 = operand2.compile()
+	if len(self.children) == 1:
+		return [sound]
+	else:
+		sound = [sound]
+		seqsound = self.children[1].compile()
+		sound = sound + seqsound
+		return sound
 
-	if op == '+':
-		return operand1 + operand2
-
-	if op == '-':
-		return operand1 - operand2
-	
-	if op == '*':
-		return operand1 * operand2
-
-	return self
-
+# SoundNode
+# 'sound : acc' | AST.SoundNode(p[1])
+# 'sound : nota' | AST.SoundNode(p[1])
+@addToClass(AST.SoundNode)
+def compile(self):
+	if debug:
+		print("sound")
+	return self.children[0].compile()
 
 # SeqNotasNode
 # 'seqnotas : nota' | AST.SeqNotasNode([p[1]])
 # 'seqnotas : nota COMMA seqnotas' | AST.SeqNotasNode([p[1], p[3]])
 @addToClass(AST.SeqNotasNode)
 def compile(self):
-	# DEBUG print("SeqNotasNodeSeq:\n" + str(self.children))
-	# DEBUG print(self.children[0].compile())
+	if debug:
+		print("seqnotas")
 	nota = self.children[0].compile()
-	
-	if type(nota) is str:
-		nota = AST.table.get(nota, ())
 		
 	if len(self.children) == 1:
 		# DEBUG print(nota)
@@ -261,18 +312,21 @@ def playNotes(notes):
 # 'command : PLAY TWOPOINTS LBRACKET expression RBRACKET' | AST.PlayNode([p[4]])
 @addToClass(AST.PlayNode)
 def compile(self):
-  	# DEBUG	print('PlayNode:\n' + str(self))
-	# DEBUG print(str(self.children))
+	if debug:
+		print("play")
 	exp = self.children[0].compile()
 	# DEBUG print('exp:\n' + str(exp))
 	playNotes(exp)
 
+# PlayContent
+# 'playcontent : LBRACKET seqexp RBRACKET' | AST.PlaycontentNode([p[2]])
+# 'playcontent : ID' | AST.PlaycontentNode(AST.TokenNode(p[1]))
+# 'playcontent : acc' | AST.PlaycontentNode(p[1])
+@addToClass(AST.PlaycontentNode)
+def compile(self):
+	return self.children[0].compile()
 
 def test(file_path):
-	from compiler.parser import apollo_yacc
-	from compiler.semantic_analiser import semantic_analiser
-	import sys, os
-	
 	f = open(file_path, 'r')
 	prog = f.read()
 	f.close()
@@ -305,10 +359,6 @@ def test(file_path):
 		print(sys.exc_info()[0])
 
 def run():
-	from compiler.parser import apollo_yacc
-	from compiler.semantic_analiser import semantic_analiser
-	import sys, os
-
 	f = open(sys.argv[1], 'r')
 	prog = f.read()
 	f.close()
