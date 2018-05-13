@@ -155,6 +155,9 @@ class SoundNode(Node):
 class LabelNode(Node):
     type = 'Label'
 
+class CallNode(Node):
+    type = 'Call'
+
 class TokenNode(Node):
     type = 'Token'
     def __init__(self, tok):

@@ -16,4 +16,6 @@ play: test
 
 endsequence
 
+call: seq
+
 $

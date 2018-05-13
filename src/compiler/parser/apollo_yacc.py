@@ -47,6 +47,10 @@ def p_param_TONE(p):
 	'param : TONE TWOPOINTS INT'
 	p[0] = AST.ToneNode(AST.TokenNode(p[3]))
 
+def p_param_CALL(p):
+	'param : CALL TWOPOINTS ID'
+	p[0] = AST.CallNode(AST.TokenNode(p[3]))
+
 def p_command_param(p):
 	'command : command COMMA param'
 	p[0] = AST.CommandNode([p[3], p[1]])
