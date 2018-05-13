@@ -10,4 +10,10 @@ play: [[D3, E3, F3] + [32, 46, 54], (32, 64) + (33, 52)], dur: 50
 play: test
 play: (70, 32)
 
+sequence seq:
+
+play: test
+
+endsequence
+
 $

@@ -152,6 +152,9 @@ class SeqexpNode(Node):
 class SoundNode(Node):
     type = 'Sound'
 
+class LabelNode(Node):
+    type = 'Label'
+
 class TokenNode(Node):
     type = 'Token'
     def __init__(self, tok):
