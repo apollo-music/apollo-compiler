@@ -1,0 +1,7 @@
+^
+amp: 100
+dur: 100
+instr: OCARINA
+
+play: [[D3, E3, F3] + (1,2,3)]
+$

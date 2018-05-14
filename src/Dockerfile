@@ -1,6 +1,9 @@
 FROM ubuntu:rolling
 MAINTAINER grupo-9
 
+ENV TZ=America/Los_Angeles 
+RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
+
 # Change working dirs
 WORKDIR /build
 
@@ -29,6 +32,7 @@ RUN apt-get update -qqy && \
                         lame \
                         python3-pydot \
                         graphviz \
+			tzdata \
                        &&\
     \
     # Clean the cache to keep the image small
