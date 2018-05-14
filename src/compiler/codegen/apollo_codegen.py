@@ -167,10 +167,15 @@ def compile(self):
 	exp = self.children[0].compile()
 		
 	if len(self.children) == 1:
-		# DEBUG print(nota)
 		return exp
 	else:
 		seqexp = self.children[1].compile()
+		
+		if not (type(exp) is list):
+			exp = [exp]
+		if not (type(seqexp) is list):
+			seqexp = [seqexp]
+
 		return exp + seqexp
 
 # TokenNode ()
