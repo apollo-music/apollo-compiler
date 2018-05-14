@@ -110,19 +110,15 @@ def addDefaultVal(symbol, value):
 # GenericNode - Default
 @addToClass(AST.Node)
 def analise(self):
-	for c in self.children:
-		c.analise()
-	return self
+	whats_so_ever = [c.analise() for c in self.children]
+	return whats_so_ever
 
 # EntryNode (First node of program)
 # 'program2 : START NEWLINE program END NEWLINE' -> AST.EntryNode(p[3])
 @addToClass(AST.EntryNode)
 def analise(self):
-
-	# Global scope has scope 0
 	pushScope(Scope('global'), 0)
 	c = self.children[0].analise()
-	
 	# Maybe do some analysis on c and check if its ok (True) or not (False)
 	return True
 
@@ -132,7 +128,6 @@ def analise(self):
 # '''statement : command | param | assignation | loop'''
 @addToClass(AST.ProgramNode)
 def analise(self):
-
 	pushScope(Scope('program_' + str(len(AST.ScopeStack))))
 	
 	statement = [self.children[0].analise()]
@@ -141,8 +136,6 @@ def analise(self):
 		statement = statement + program
 	
 	popScope()
-
-	
 	return statement
 
 # AmpNode
@@ -520,7 +513,7 @@ def run(ast):
 	return ast.analise()
 
 
-def test(filename=None):
+def debug(filename=None):
 	'''
 		This function test the sem analise on the file from argv[1] or from filename (if any)
 	'''
