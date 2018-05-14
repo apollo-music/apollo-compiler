@@ -3,5 +3,5 @@ amp: 100
 dur: 100
 instr: OCARINA
 
-play: [C3 + 3]
+play: [[1,2,3] & [4,5,6]]
 $
