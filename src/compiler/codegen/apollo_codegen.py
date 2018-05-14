@@ -101,7 +101,33 @@ def computeExpression(exp1, exp2, op):
 			result = exp1 + exp2
 		elif op == '-':
 			result = exp1 - exp2
-	
+	# If exp1 is a tuple
+	elif type(exp1) is tuple:
+		exp1 = list(exp1)
+		result = []
+		# If exp2 is a number, we add/subtract it from all values of exp1
+		if type(exp2) is int:
+			if op == '+':
+				for e in exp1:
+					result.append(e + exp2)
+			elif op == '-':
+				for e in exp1:
+					result.append(e - exp2)
+		# If exp2 is a tuple, it has the same length of exp1 (semantic analysis)
+		# if its a plus/minus operation, so we add/subtract all values 
+		# or else we just append them
+		else:
+			exp2 = list(exp2)
+			if op == '+':
+				for i in range(len(exp1)):
+					result.append(exp1[i] + exp2[i])
+			elif op == '-':
+				for i in range(len(exp1)):
+					result.append(exp1[i] - exp2[i])
+			else:
+				result = exp1 + exp2
+		return tuple(result)
+
 	else:
 		raise SystemExit
 	
