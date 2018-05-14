@@ -15,7 +15,7 @@ import sys
 from ..AST import AST
 from ..AST.AST import addToClass
 from ..AST.AST import Node
-from ..exceptions import exceptions
+from ..exceptions import exceptions as excp
 
 ###############
 # Scope class #
@@ -81,11 +81,11 @@ def findSymbol(symbol):
 	'''
 		Seach for symbol on all the scope hiearachy
 	'''
-	# print('DEBUG: Finding ' + str(symbol))
+
 	currentScope = len(AST.ScopeStack) - 1
 
 	while currentScope is not None:
-		# print('DEBUG: \tSearchin on scope ' + str(currentScope))
+	
 		# Get the scope on
 		scope_symbol = AST.ScopeStack[currentScope].isInScope(symbol)
 		if scope_symbol:
@@ -118,7 +118,7 @@ def analise(self):
 # 'program2 : START NEWLINE program END NEWLINE' -> AST.EntryNode(p[3])
 @addToClass(AST.EntryNode)
 def analise(self):
-	# print('DEBUG: ' + str(self))
+
 	# Global scope has scope 0
 	pushScope(Scope('global'), 0)
 	c = self.children[0].analise()
@@ -132,7 +132,7 @@ def analise(self):
 # '''statement : command | param | assignation | loop'''
 @addToClass(AST.ProgramNode)
 def analise(self):
-	# print("DEBUG: Creating scope program: " + str(len(AST.ScopeStack)))
+
 	pushScope(Scope('program_' + str(len(AST.ScopeStack))))
 	
 	statement = [self.children[0].analise()]
@@ -141,7 +141,7 @@ def analise(self):
 		statement = statement + program
 	
 	popScope()
-	# print("DEBUG: Popping scope program: " + str(len(AST.ScopeStack)))
+
 	
 	return statement
 
@@ -156,14 +156,12 @@ def analise(self):
 		# As its a var, it can be: not in scope, a int and valid value or a invalid value
 		var_val = findSymbol(amp)
 		if not var_val:
-			print("Error: %s used but never was defined" % (amp))
-			sys.exit(1)
+			raise excp.DefaultSemanticError("Error: %s used but never was defined" % (amp))
 		elif type(var_val) is int or len(var_val) == 1:
 			insertSymbol('AMP', var_val)
 			return var_val
 		else:
-			print("Error: Invalid type used on amp: %s" % (amp))
-			sys.exit(1)
+			raise excp.DefaultSemanticError("Error: Invalid type used on amp: %s" % (amp))
 	else:
 		# If its not a var, add it on scope directly
 		insertSymbol('AMP', amp)
@@ -179,14 +177,12 @@ def analise(self):
 		# As its a var, it can be: not in scope, a int and valid value or a invalid value
 		var_val = findSymbol(dur)
 		if not var_val:
-			print("Error: %s used but never was defined" % (dur))
-			sys.exit(1)
+			raise excp.DefaultSemanticError("Error: %s used but never was defined" % (dur))
 		elif type(var_val) is int or len(var_val) == 1:
 			insertSymbol('DUR', var_val)
 			return var_val
 		else:
-			print("Error: Invalid type used on dur: %s" % (dur))
-			sys.exit(1)
+			raise excp.DefaultSemanticError("Error: Invalid type used on dur: %s" % (dur))
 	else:
 		insertSymbol('DUR', dur)
 		return dur
@@ -220,8 +216,7 @@ def analise(self):
 	# Now, needs to find the scope on the stack
 	var_val = findSymbol(call)
 	if not var_val:
-		print("Error: %s does not exists in scope" % (call))
-		sys.exit(1)
+		raise excp.DefaultSemanticError("Error: %s does not exists in scope" % (call))
 	
 	## Must check if its a valid call (var_val is a program :-))
 
@@ -232,13 +227,13 @@ def analise(self):
 @addToClass(AST.CommandNode)
 def analise(self):
 	pushScope(Scope('comand_' + str(len(AST.ScopeStack))))
-	# print("DEBUG: Creating scope comand: " + str(len(AST.ScopeStack)))
+
 	
 	command = [self.children[0].analise()]
 	param = self.children[1].analise()
 	
 	popScope()
-	# print("DEBUG: Popping scope comand: " + str(len(AST.ScopeStack)))
+
 	return command + param
 
 # PlayNode
@@ -249,21 +244,21 @@ def analise(self):
 	exists_amp = findSymbol('AMP')
 	exists_dur = findSymbol('DUR')
 	exists_inst = findSymbol('INSTR')
-	# print('DEBUG: Check amp, dur and inst')
-	# print(exists_amp, exists_dur, exists_inst)
+
+
 
 	if not exists_amp:
-		print("Atention, No Aplitute defined on the scope, using default;")
+		print("Atention, No Amplitute (amp) defined on the scope, using default;")
 		addDefaultVal('AMP', 1)
 	if not exists_dur:
-		print("Atention, No Duration defined on the scope, using default;")
+		print("Atention, No Duration (dur) defined on the scope, using default;")
 		addDefaultVal('DUR', 1)
 	if not exists_inst:
-		print("Atention, No Instrument defined on the scope, using default;")
+		print("Atention, No Instrument (instr) defined on the scope, using default;")
 		addDefaultVal('INSTR', 1)
 
 	seqsound = self.children[0].analise()
-	# print(seqsound)
+
 	return seqsound
 
 # PlaycontentNode
@@ -278,8 +273,7 @@ def analise(self):
 	if type(play_val) is str:
 		var_val = findSymbol(play_val)
 		if not var_val:
-			print("Error: %s used but never was defined" % (play_val))
-			sys.exit(1)
+			raise excp.DefaultSemanticError("Error: %s used but never was defined" % (play_val))
 		else:
 			return var_val
 	
@@ -306,8 +300,7 @@ def analise(self):
 	if type(left) is str:
 		var_val = findSymbol(left)
 		if not var_val:
-			print("Error: %s used but never was defined" % (left))
-			sys.exit(1)
+			raise excp.DefaultSemanticError("Error: %s used but never was defined" % (left))
 		else:
 			return var_val
 
@@ -316,12 +309,12 @@ def analise(self):
 		if type(left) is not list:
 			return [left]
 		return left
-	# print('DEBUG: ExpressionNode rec_op: ' + str(rec_op))
+
 
 	# Split the op
 	operator = rec_op[0]
 	operand = rec_op[1][0]
-	# print(left, operand)
+
 
 	# Can be three operation:
 	if operator == '+':
@@ -333,7 +326,7 @@ def analise(self):
 		# 	elif len(left) != len(operand):
 		# 		# [[1] + [3]] or [(1) + (3)]
 		# 		print('Error on operation %s. Length are not the same' % (str(left) + ' + ' + str(operand)))
-		# 		sys.exit(1)
+		# 		raise excp.DefaultSemanticError()
 		# 	else:
 		# 		# Do the operation
 		# 		# for i,e in enumerate(left):
@@ -349,7 +342,7 @@ def analise(self):
 		# 		return new_l
 		# else:
 		# 	print('Error on operation %s' % (str(left) + ' + ' + str(operand)))
-		# 	sys.exit(1)
+		# 	raise excp.DefaultSemanticError()
 		return left
 	elif operator == '-':
 		# If its a sum, need to check if the types are compatible
@@ -360,17 +353,17 @@ def analise(self):
 		# 	elif len(left) != len(operand):
 		# 		# [[1] + [3]] or [(1) + (3)]
 		# 		print('Error on operation %s. Length are not the same' % (str(left) + ' - ' + str(operand)))
-		# 		sys.exit(1)
+		# 		raise excp.DefaultSemanticError()
 		# 	else:
 		# 		# Do the operation
 		# 		# for i,e in enumerate(left):
 		# 		print('TODO: Check overflow on %s' % (str(left) + ' - ' + str(operand)))
 		# else:
 		# 	print('Error on operation %s' % (str(left) + ' - ' + str(operand)))
-		# 	sys.exit(1)
+		# 	raise excp.DefaultSemanticError()
 		return left
 	elif operator == '&':
-		# print(str(left) + ' & ' + str(operand))
+	
 		if type(operand) is list and type(left) is list:
 			# [1,2] & [3,4]
 			return left + operand
@@ -379,13 +372,10 @@ def analise(self):
 			return tuple(list(operand) + list(left))
 		elif type(operand) is tuple and type(left) is list:
 			# [1,2] & (3, 4)
-			print('Error on operation %s. Invalid type' % (str(left) + ' & ' + str(operand)))
-			sys.exit(1)
+			raise excp.DefaultSemanticError('Error on operation %s. Invalid type' % (str(left) + ' & ' + str(operand)))
 		elif type(operand) is list and type(left) is tuple:
 			# [1,2] & (3, 4)
-			print('Error on operation %s. Invalid type' %
-				  (str(left) + ' & ' + str(operand)))
-			sys.exit(1)
+			raise excp.DefaultSemanticError('Error on operation %s. Invalid type' % (str(left) + ' & ' + str(operand)))
 	return left
 
 # SeqexpNode
@@ -412,7 +402,7 @@ def analise(self):
 @addToClass(AST.OpNode)
 def analise(self):
 	# NEEDS IMPLEMENTATION
-	# print('DEBUG: AST.OpNode', str(self))
+
 	op = self.op
 	val = self.children[0].analise()
 	return [op, val]
@@ -440,7 +430,7 @@ def analise(self):
 	if type(acc_or_nota) is str:
 		var_val = findSymbol(acc_or_nota)
 		if not var_val:
-			print("Error: %s used but never was defined" % (acc_or_nota))
+			raise excp.DefaultSemanticError('Error: %s used but never was defined' %(acc_or_nota))
 			# Should break the program? idn
 		else:
 			return var_val
@@ -457,8 +447,7 @@ def analise(self):
 	# se tiver é por que existe uma variavel tipo [] dento do ()
 	for e in seq_notas:
 		if type(e) is list:
-			print('Error: Invalid type inside a chord\n Check the variable values')
-			sys.exit(1)
+			raise excp.DefaultSemanticError('Error: Invalid type inside a chord\n Check the variable values')
 
 	return tuple(seq_notas)
 
@@ -473,8 +462,7 @@ def analise(self):
 	if type(nota) is str:
 		var_val = findSymbol(nota)
 		if not var_val:
-			print("Error: %s used but never was defined" % (nota))
-			sys.exit(1)
+			raise excp.DefaultSemanticError("Error: %s used but never was defined" % (nota))
 		else:
 			nota = var_val
 
@@ -558,4 +546,4 @@ def test(filename=None):
 		print('\n' + sys.argv[1] if filename is None else filename)
 		run(ast)
 	except:
-		print(sys.exc_info()[0])
+		print(sys.exc_info()[1].msg)

@@ -31,6 +31,11 @@ class MySyntaxError(ParserError):
 class SemanticError(Exception):
 	pass
 
+
+class DefaultSemanticError(Exception):
+    def __init__(self, msg):
+        self.msg = msg
+
 class VariableNotDefinedError(SemanticError):
     def __init__(self, msg):
         self.msg = "Semantic Error: " + msg + " has not been defined"
