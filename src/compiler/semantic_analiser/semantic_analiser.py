@@ -7,7 +7,7 @@
 # - Valid var use: Check if a var is used an inalid place
 #    - Cannot use ouch = [3,4] e play: [1, (2, ouch), 5]
 #    - Valid vars on amp, dur (missing on tone)
-# - Operation on riht types
+# - Operation on right types
 #    - Length of types are wrong			- TODO
 #    - Types are wrong   					- TODO
 
@@ -100,6 +100,10 @@ def insertSymbol(symbol, value):
 	scp = getCurrentScope()
 	scp.addDefiniton(symbol, value)
 
+def addDefaultVal(symbol, value):
+	scp = AST.ScopeStack[0]
+	scp.addDefiniton(symbol, value)
+
 ########################
 ## Analiser Functions ##
 ########################
@@ -114,7 +118,7 @@ def analise(self):
 # 'program2 : START NEWLINE program END NEWLINE' -> AST.EntryNode(p[3])
 @addToClass(AST.EntryNode)
 def analise(self):
-	print('DEBUG: ' + str(self))
+	# print('DEBUG: ' + str(self))
 	# Global scope has scope 0
 	pushScope(Scope('global'), 0)
 	c = self.children[0].analise()
@@ -249,14 +253,17 @@ def analise(self):
 	# print(exists_amp, exists_dur, exists_inst)
 
 	if not exists_amp:
-		print("Atention, no Aplitute defined on the scope, using default;")
+		print("Atention, No Aplitute defined on the scope, using default;")
+		addDefaultVal('AMP', 1)
 	if not exists_dur:
-		print("Atention, no Duration defined on the scope, using default;")
+		print("Atention, No Duration defined on the scope, using default;")
+		addDefaultVal('DUR', 1)
 	if not exists_inst:
-		print("Atention, no Instrument defined on the scope, using default;")
+		print("Atention, No Instrument defined on the scope, using default;")
+		addDefaultVal('INSTR', 1)
 
 	seqsound = self.children[0].analise()
-	print(seqsound)
+	# print(seqsound)
 	return seqsound
 
 # PlaycontentNode
@@ -311,7 +318,75 @@ def analise(self):
 		return left
 	# print('DEBUG: ExpressionNode rec_op: ' + str(rec_op))
 
-	return [left + rec_op]
+	# Split the op
+	operator = rec_op[0]
+	operand = rec_op[1][0]
+	# print(left, operand)
+
+	# Can be three operation:
+	if operator == '+':
+		# If its a sum, need to check if the types are compatible
+		# if type(left) == type(operand):
+		# 	if type(left) is int:
+		# 	# [1 + 3]
+		# 		left += operand[0]
+		# 	elif len(left) != len(operand):
+		# 		# [[1] + [3]] or [(1) + (3)]
+		# 		print('Error on operation %s. Length are not the same' % (str(left) + ' + ' + str(operand)))
+		# 		sys.exit(1)
+		# 	else:
+		# 		# Do the operation
+		# 		# for i,e in enumerate(left):
+		# 		print('TODO: Check overflow on %s' % (str(left) + ' + ' + str(operand)))
+		# elif type(left) is tuple or type(left) is list and type(operand) is int:
+		# 	# This is [1,2] + 3 or (1,2) + 3
+		# 	new_l = []
+		# 	for e in left:
+		# 		new_l.append(e+operand)
+		# 	if type(left) is tuple:
+		# 		return tuple(new_l)
+		# 	else:
+		# 		return new_l
+		# else:
+		# 	print('Error on operation %s' % (str(left) + ' + ' + str(operand)))
+		# 	sys.exit(1)
+		return left
+	elif operator == '-':
+		# If its a sum, need to check if the types are compatible
+		# if type(left) == type(operand):
+		# 	if type(left) is int:
+		# 		# [1 + 3]
+		# 		left += operand[0]
+		# 	elif len(left) != len(operand):
+		# 		# [[1] + [3]] or [(1) + (3)]
+		# 		print('Error on operation %s. Length are not the same' % (str(left) + ' - ' + str(operand)))
+		# 		sys.exit(1)
+		# 	else:
+		# 		# Do the operation
+		# 		# for i,e in enumerate(left):
+		# 		print('TODO: Check overflow on %s' % (str(left) + ' - ' + str(operand)))
+		# else:
+		# 	print('Error on operation %s' % (str(left) + ' - ' + str(operand)))
+		# 	sys.exit(1)
+		return left
+	elif operator == '&':
+		# print(str(left) + ' & ' + str(operand))
+		if type(operand) is list and type(left) is list:
+			# [1,2] & [3,4]
+			return left + operand
+		elif type(operand) is tuple and type(left) is tuple:
+			# (1,2) & (1,2)
+			return tuple(list(operand) + list(left))
+		elif type(operand) is tuple and type(left) is list:
+			# [1,2] & (3, 4)
+			print('Error on operation %s. Invalid type' % (str(left) + ' & ' + str(operand)))
+			sys.exit(1)
+		elif type(operand) is list and type(left) is tuple:
+			# [1,2] & (3, 4)
+			print('Error on operation %s. Invalid type' %
+				  (str(left) + ' & ' + str(operand)))
+			sys.exit(1)
+	return left
 
 # SeqexpNode
 # 'seqexp : exp COMMA seqexp' -> AST.SeqexpNode([p[1], p[3]])
@@ -322,6 +397,10 @@ def analise(self):
 	exp = self.children[0].analise()
 	if len(self.children) > 1:
 		segexp = self.children[1].analise()
+		if type(exp) is not list:
+			exp = [exp]
+		if type(segexp) is not list:
+			segexp = [segexp]
 		return exp + segexp
 
 	return exp
@@ -476,6 +555,7 @@ def test(filename=None):
 
 	try:
 		# Run semantic analysis
+		print('\n' + sys.argv[1] if filename is None else filename)
 		run(ast)
 	except:
 		print(sys.exc_info()[0])

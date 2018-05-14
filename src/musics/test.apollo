@@ -1,9 +1,0 @@
-^
-var bixo: (65, 66)
-var casa: [1, 2, 3, bixo]
-amp: 10
-dur: 200
-instr: 1
-play: [casa, (60, 61, 62, casa)]
-play: [bixo, casa], amp: 100, dur: 100, instr: 100
-$

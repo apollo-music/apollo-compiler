@@ -2,5 +2,7 @@
 var bixo: (65, 66)
 amp: 100
 dur: 200
+instr: 1
+
 play: [72, (60, 61, 62), bixo], amp: 10, dur: 3
 $
