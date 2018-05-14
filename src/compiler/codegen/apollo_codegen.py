@@ -71,23 +71,41 @@ def compile(self):
 
 #compute exp1 (op) exp2
 def computeExpression(exp1, exp2, op):
-	return exp1
-	"""
-	result = []
-
-	if len(exp2) == 1:
-		for e in exp2:
-			result.append(e + exp2[0])
-	
-	elif len(exp1) == len(exp2):
-		for i in range(len(exp1)):
-			result.append(exp1[i] + exp2[i])
+	# Exp1 is a list
+	if type(exp1) is list:
+		result = []
+		# If exp2 is a number, we add/subtract it from all values of exp1
+		if type(exp2) is int:
+			if op == '+':
+				for e in exp1:
+					result.append(e + exp2)
+			elif op == '-':
+				for e in exp1:
+					result.append(e - exp2)
+		# If exp2 is a list, it has the same length of exp1 (semantic analysis)
+		# if its a plus/minus operation, so we add/subtract all values 
+		# or else we just append them
+		else:
+			if op == '+':
+				for i in range(len(exp1)):
+					result.append(exp1[i] + exp2[i])
+			elif op == '-':
+				for i in range(len(exp1)):
+					result.append(exp1[i] - exp2[i])
+			else:
+				result = exp1
+				result.append(exp2)
+	# If exp1 is an int, then exp2 is an int, and we just add/subtract them
+	elif type(exp1) is int:
+		if op == '+':
+			result = exp1 + exp2
+		elif op == '-':
+			result = exp1 - exp2
 	
 	else:
 		raise SystemExit
 	
 	return result
-	"""
 		
 # ExpressionNode 
 # - 'exp : LBRACKET seqsound RBRACKET rec_op' | AST.ExpressionNode([p[2],p[4]])
