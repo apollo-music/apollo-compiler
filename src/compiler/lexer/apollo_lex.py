@@ -34,7 +34,10 @@ tokens = [
    'MINUS',
    'MULTIPLY',
    'TONE',
-   'AMPERSAND'
+   'AMPERSAND',
+   'SEQUENCE',
+   'ENDSEQUENCE',
+   'CALL'
 ]
 
 # Regular expression rules for simple tokens
@@ -84,16 +87,28 @@ def t_INSTR(t):
 	r'INSTR | instr'
 	return t
 
-def t_REPEAT(t):
-	r'REPEAT | repeat'
-	return t
-
 def t_TONE(t):
 	r'TONE | tone'
 	return t
 
+def t_CALL(t):
+	r'CALL | call'
+	return t
+
+def t_REPEAT(t):
+	r'REPEAT | repeat'
+	return t
+
 def t_ENDREPEAT(t):
 	r'ENDREPEAT | endrepeat'
+	return t
+
+def t_SEQUENCE(t):
+	r'SEQUENCE | sequence'
+	return t
+
+def t_ENDSEQUENCE(t):
+	r'ENDSEQUENCE | endsequence'
 	return t
 
 def t_ID(t):

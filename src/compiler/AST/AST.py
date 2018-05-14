@@ -144,13 +144,19 @@ class EmptyNode(Node):
     type = 'Empty'
 
 class SeqsoundNode(Node):
-    type = 'Secsound'
+    type = 'Seqsound'
 
 class SeqexpNode(Node):
     type = 'Seqexp'
 
 class SoundNode(Node):
     type = 'Sound'
+
+class LabelNode(Node):
+    type = 'Label'
+
+class CallNode(Node):
+    type = 'Call'
 
 class TokenNode(Node):
     type = 'Token'
