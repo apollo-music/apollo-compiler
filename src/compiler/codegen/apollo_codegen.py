@@ -95,12 +95,17 @@ def computeExpression(exp1, exp2, op):
 			else:
 				result = exp1
 				result.append(exp2)
+		
+		return result
 	# If exp1 is an int, then exp2 is an int, and we just add/subtract them
 	elif type(exp1) is int:
 		if op == '+':
 			result = exp1 + exp2
 		elif op == '-':
 			result = exp1 - exp2
+		
+		return result
+
 	# If exp1 is a tuple
 	elif type(exp1) is tuple:
 		exp1 = list(exp1)
@@ -113,6 +118,7 @@ def computeExpression(exp1, exp2, op):
 			elif op == '-':
 				for e in exp1:
 					result.append(e - exp2)
+
 		# If exp2 is a tuple, it has the same length of exp1 (semantic analysis)
 		# if its a plus/minus operation, so we add/subtract all values 
 		# or else we just append them
@@ -126,12 +132,11 @@ def computeExpression(exp1, exp2, op):
 					result.append(exp1[i] - exp2[i])
 			else:
 				result = exp1 + exp2
+		
 		return tuple(result)
 
 	else:
 		raise SystemExit
-	
-	return result
 		
 # ExpressionNode 
 # - 'exp : LBRACKET seqsound RBRACKET rec_op' | AST.ExpressionNode([p[2],p[4]])
@@ -225,20 +230,8 @@ def compile(self):
 	left = self.children[0]
 	right = self.children[1]
 
-	if right.type == "Acc":
-		acc = right.compile()
-		# print(str(left.tok) + " = " + str(tuple(acc)), file=AST.outfile)
-		if type(acc) is int:
-			AST.table[left.tok] = acc
-		else:
-			AST.table[left.tok] = tuple(acc)
-	else:
-		expr = right.compile()
-		# print(str(left.tok) + " = " + str(expr), file=AST.outfile)
-		if type(expr) is int:
-			AST.table[left.tok] = expr
-		else:
-			AST.table[left.tok] = list(expr)
+	expr = right.compile()
+	AST.table[left.tok] = expr
 
 	return self
 
