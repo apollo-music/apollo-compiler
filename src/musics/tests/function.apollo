@@ -1,0 +1,11 @@
+^
+amp: 100
+dur: 100
+instr: OCARINA
+
+sequence seq:
+play: [1,2,3]
+endsequence
+
+call: seq
+$
