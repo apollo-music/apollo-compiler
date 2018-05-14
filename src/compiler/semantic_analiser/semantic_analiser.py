@@ -201,7 +201,8 @@ def analise(self):
 def analise(self):
 	tone = self.children[0].analise()
 
-	## Missing type on var receive verification
+	## Missing decoding ID and valid checking
+
 	insertSymbol('TONE', tone)
 	return tone
 
@@ -215,9 +216,10 @@ def analise(self):
 	# Now, needs to find the scope on the stack
 	var_val = findSymbol(call)
 	if not var_val:
-		print("Error: Calling %d is invalid" % (call))
+		print("Error: %s does not exists in scope" % (call))
 		sys.exit(1)
-	## Must check if its a valid call
+	
+	## Must check if its a valid call (var_val is a program :-))
 
 	return var_val
 
@@ -427,9 +429,9 @@ def analise(self):
 # 'label : SEQUENCE ID TWOPOINTS NEWLINE program ENDSEQUENCE' -> AST.LabelNode([AST.TokenNode(p[2]), p[5]])
 @addToClass(AST.LabelNode)
 def analise(self):
-	pushScope(Scope('label__' + str(ID)))
 	# Gets the ID
 	ID = self.children[0].analise()
+	pushScope(Scope('label__' + str(ID)))
 	# Analise if the program if OK
 	program =  self.children[1].analise()
 	# If it is, add to scope so if the code can find it
