@@ -149,12 +149,12 @@ def analise(self):
 		# As its a var, it can be: not in scope, a int and valid value or a invalid value
 		var_val = findSymbol(amp)
 		if not var_val:
-			raise excp.DefaultSemanticError("Error: %s used but never was defined" % (amp))
+			raise excp.SemanticError("Error: %s used but never was defined" % (amp))
 		elif type(var_val) is int or len(var_val) == 1:
 			insertSymbol('AMP', var_val)
 			return var_val
 		else:
-			raise excp.DefaultSemanticError("Error: Invalid type used on amp: %s" % (amp))
+			raise excp.SemanticError("Error: Invalid type used on amp: %s" % (amp))
 	else:
 		# If its not a var, add it on scope directly
 		insertSymbol('AMP', amp)
@@ -170,12 +170,12 @@ def analise(self):
 		# As its a var, it can be: not in scope, a int and valid value or a invalid value
 		var_val = findSymbol(dur)
 		if not var_val:
-			raise excp.DefaultSemanticError("Error: %s used but never was defined" % (dur))
+			raise excp.SemanticError("Error: %s used but never was defined" % (dur))
 		elif type(var_val) is int or len(var_val) == 1:
 			insertSymbol('DUR', var_val)
 			return var_val
 		else:
-			raise excp.DefaultSemanticError("Error: Invalid type used on dur: %s" % (dur))
+			raise excp.SemanticError("Error: Invalid type used on dur: %s" % (dur))
 	else:
 		insertSymbol('DUR', dur)
 		return dur
@@ -209,7 +209,7 @@ def analise(self):
 	# Now, needs to find the scope on the stack
 	var_val = findSymbol(call)
 	if not var_val:
-		raise excp.DefaultSemanticError("Error: %s does not exists in scope" % (call))
+		raise excp.SemanticError("Error: %s does not exists in scope" % (call))
 	
 	## Must check if its a valid call (var_val is a program :-))
 
@@ -221,7 +221,6 @@ def analise(self):
 def analise(self):
 	pushScope(Scope('comand_' + str(len(AST.ScopeStack))))
 
-	
 	command = [self.children[0].analise()]
 	param = self.children[1].analise()
 	
@@ -266,7 +265,7 @@ def analise(self):
 	if type(play_val) is str:
 		var_val = findSymbol(play_val)
 		if not var_val:
-			raise excp.DefaultSemanticError("Error: %s used but never was defined" % (play_val))
+			raise excp.SemanticError("Error: %s used but never was defined" % (play_val))
 		else:
 			return var_val
 	
@@ -293,70 +292,71 @@ def analise(self):
 	if type(left) is str:
 		var_val = findSymbol(left)
 		if not var_val:
-			raise excp.DefaultSemanticError("Error: %s used but never was defined" % (left))
+			raise excp.SemanticError("Error: %s used but never was defined" % (left))
 		else:
-			return var_val
+			left = var_val
 
 	rec_op = self.children[1].analise()
 	if not rec_op:
-		if type(left) is not list:
-			return [left]
 		return left
-
 
 	# Split the op
 	operator = rec_op[0]
-	operand = rec_op[1][0]
-
+	operand = rec_op[1]
 
 	# Can be three operation:
 	if operator == '+':
 		# If its a sum, need to check if the types are compatible
-		# if type(left) == type(operand):
-		# 	if type(left) is int:
-		# 	# [1 + 3]
-		# 		left += operand[0]
-		# 	elif len(left) != len(operand):
-		# 		# [[1] + [3]] or [(1) + (3)]
-		# 		print('Error on operation %s. Length are not the same' % (str(left) + ' + ' + str(operand)))
-		# 		raise excp.DefaultSemanticError()
-		# 	else:
-		# 		# Do the operation
-		# 		# for i,e in enumerate(left):
-		# 		print('TODO: Check overflow on %s' % (str(left) + ' + ' + str(operand)))
-		# elif type(left) is tuple or type(left) is list and type(operand) is int:
-		# 	# This is [1,2] + 3 or (1,2) + 3
-		# 	new_l = []
-		# 	for e in left:
-		# 		new_l.append(e+operand)
-		# 	if type(left) is tuple:
-		# 		return tuple(new_l)
-		# 	else:
-		# 		return new_l
-		# else:
-		# 	print('Error on operation %s' % (str(left) + ' + ' + str(operand)))
-		# 	raise excp.DefaultSemanticError()
+		if type(left) == type(operand):
+			if type(left) is int:
+			# [1 + 3]
+				left += operand
+			elif len(left) != len(operand):
+				# [[1] + [3]] or [(1) + (3)]
+				raise excp.SemanticError('Error on operation %s. Length are not the same' % (str(left) + ' + ' + str(operand)))
+			else:
+				# Do the operation
+				# for i,e in enumerate(left):
+				print('TODO: Check overflow on %s' % (str(left) + ' + ' + str(operand)))
+		elif type(left) is tuple or type(left) is list and type(operand) is int:
+			# This is [1,2] + 3 or (1,2) + 3
+			new_l = []
+			for e in left:
+				new_l.append(e+operand)
+			if type(left) is tuple:
+				return tuple(new_l)
+			else:
+				return new_l
+		else:
+			raise excp.SemanticError('Error on operation %s' % (str(left) + ' + ' + str(operand)))
 		return left
 	elif operator == '-':
-		# If its a sum, need to check if the types are compatible
-		# if type(left) == type(operand):
-		# 	if type(left) is int:
-		# 		# [1 + 3]
-		# 		left += operand[0]
-		# 	elif len(left) != len(operand):
-		# 		# [[1] + [3]] or [(1) + (3)]
-		# 		print('Error on operation %s. Length are not the same' % (str(left) + ' - ' + str(operand)))
-		# 		raise excp.DefaultSemanticError()
-		# 	else:
-		# 		# Do the operation
-		# 		# for i,e in enumerate(left):
-		# 		print('TODO: Check overflow on %s' % (str(left) + ' - ' + str(operand)))
-		# else:
-		# 	print('Error on operation %s' % (str(left) + ' - ' + str(operand)))
-		# 	raise excp.DefaultSemanticError()
+		# If its a minus, need to check if the types are compatible
+		if type(left) == type(operand):
+			if type(left) is int:
+				# [1 + 3]
+				left -= operand
+			elif len(left) != len(operand):
+				# [[1] + [3]] or [(1) + (3)]
+				raise excp.SemanticError('Error on operation %s. Length are not the same' % (
+					str(left) + ' - ' + str(operand)))
+			else:
+				# Do the operation
+				# for i,e in enumerate(left):
+				print('TODO: Check overflow on %s' % (str(left) + ' - ' + str(operand)))
+		elif type(left) is tuple or type(left) is list and type(operand) is int:
+			# This is [1,2] + 3 or (1,2) + 3
+			new_l = []
+			for e in left:
+				new_l.append(e - operand)
+			if type(left) is tuple:
+				return tuple(new_l)
+			else:
+				return new_l
+		else:
+			raise excp.SemanticError('Error on operation %s' % (str(left) + ' - ' + str(operand)))
 		return left
 	elif operator == '&':
-	
 		if type(operand) is list and type(left) is list:
 			# [1,2] & [3,4]
 			return left + operand
@@ -365,10 +365,12 @@ def analise(self):
 			return tuple(list(operand) + list(left))
 		elif type(operand) is tuple and type(left) is list:
 			# [1,2] & (3, 4)
-			raise excp.DefaultSemanticError('Error on operation %s. Invalid type' % (str(left) + ' & ' + str(operand)))
+			raise excp.SemanticError('Error on operation %s. Invalid type' % (str(left) + ' & ' + str(operand)))
 		elif type(operand) is list and type(left) is tuple:
 			# [1,2] & (3, 4)
-			raise excp.DefaultSemanticError('Error on operation %s. Invalid type' % (str(left) + ' & ' + str(operand)))
+			raise excp.SemanticError('Error on operation %s. Invalid type' % (str(left) + ' & ' + str(operand)))
+		else:
+		 	raise excp.SemanticError('Error1 on operation %s. Invalid type' % (str(left) + ' & ' + str(operand)))
 	return left
 
 # SeqexpNode
@@ -389,9 +391,9 @@ def analise(self):
 	return exp
 
 # OpNode
-# 'rec_op : SUM exp' |  AST.OpNode(p[1], [p[2]])
+# 'rec_op : SUM exp' ->  AST.OpNode(p[1], [p[2]])
 # 'rec_op : MINUS exp' -> AST.OpNode(p[1], [p[2]])
-# 'rec_op : AMPERSAND exp'
+# 'rec_op : AMPERSAND exp' ->  AST.OpNode(p[1], [p[2]])
 @addToClass(AST.OpNode)
 def analise(self):
 	# NEEDS IMPLEMENTATION
@@ -423,7 +425,7 @@ def analise(self):
 	if type(acc_or_nota) is str:
 		var_val = findSymbol(acc_or_nota)
 		if not var_val:
-			raise excp.DefaultSemanticError('Error: %s used but never was defined' %(acc_or_nota))
+			raise excp.SemanticError('Error: %s used but never was defined' %(acc_or_nota))
 			# Should break the program? idn
 		else:
 			return var_val
@@ -440,7 +442,7 @@ def analise(self):
 	# se tiver é por que existe uma variavel tipo [] dento do ()
 	for e in seq_notas:
 		if type(e) is list:
-			raise excp.DefaultSemanticError('Error: Invalid type inside a chord\n Check the variable values')
+			raise excp.SemanticError('Error: Invalid type inside a chord\n Check the variable values')
 
 	return tuple(seq_notas)
 
@@ -455,7 +457,7 @@ def analise(self):
 	if type(nota) is str:
 		var_val = findSymbol(nota)
 		if not var_val:
-			raise excp.DefaultSemanticError("Error: %s used but never was defined" % (nota))
+			raise excp.SemanticError("Error: %s used but never was defined" % (nota))
 		else:
 			nota = var_val
 
@@ -533,10 +535,39 @@ def debug(filename=None):
 		ast = apollo_yacc.parse(prog)
 	except:
 		print(sys.exc_info()[0])
+		print('Failed on AST gen')
+		return False
 
 	try:
 		# Run semantic analysis
 		print('\n' + sys.argv[1] if filename is None else filename)
-		run(ast)
+		return run(ast)
 	except:
 		print(sys.exc_info()[1].msg)
+		return False
+	
+
+def test(filename=None):
+	'''
+		This function test the sem analise on the file from argv[1] or from filename (if any)
+	'''
+	import sys
+	import os
+	from compiler.parser import apollo_yacc
+
+	if filename is None:
+		f = open(sys.argv[1], 'r')
+	else:
+		f = open(filename, 'r')
+	prog = f.read()
+	f.close()
+
+	try:
+		# Generate ast
+		ast = apollo_yacc.parse(prog)
+	except:
+		print(sys.exc_info()[0])
+		print('Failed on AST gen')
+		return False
+
+	return run(ast)
