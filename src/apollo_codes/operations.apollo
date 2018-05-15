@@ -1,0 +1,35 @@
+^
+var test: 40 + 9
+var test1: 40 - 9
+var test2: [50, 60] + [5, 5]
+var test3: [70, 80] - [5, 5]
+var test4: [80, 90] + 1
+var test5: [90, 100] - 3
+var test6: [110, 120] & [110, 100]
+var test7: (50, 60) + 1
+var test8: (90, 100) - 3
+var test9: (110, 120) & (125, 130)
+instr: OCARINA
+amp: 255
+
+play: test, dur: 50
+play: [40 + 10], dur: 55
+play: test1, dur: 60
+play: [40 - 10], dur: 65
+play: test2, dur: 70
+play: [[50, 60] + [3, 3]], dur: 75
+play: test3, dur: 80
+play: [[70, 80] - [3, 3]], dur: 85
+play: test4, dur: 90
+play: [[80, 90] + 2], dur: 95
+play: test5, dur: 100
+play: [[90, 100] - 4], dur: 105
+play: test6, dur: 110
+play: [[90, 80] & [60]], dur: 115
+play: test7, dur: 120
+play: [(70, 80) + 2], dur: 125
+play: test8, dur: 130
+play: [(110, 120) - 4], dur: 135
+play: test9, dur: 140
+play: [(120, 110) & (115, 100)], dur: 145
+$

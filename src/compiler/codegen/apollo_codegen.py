@@ -71,23 +71,72 @@ def compile(self):
 
 #compute exp1 (op) exp2
 def computeExpression(exp1, exp2, op):
-	return exp1
-	"""
-	result = []
+	# Exp1 is a list
+	if type(exp1) is list:
+		result = []
+		# If exp2 is a number, we add/subtract it from all values of exp1
+		if type(exp2) is int:
+			if op == '+':
+				for e in exp1:
+					result.append(e + exp2)
+			elif op == '-':
+				for e in exp1:
+					result.append(e - exp2)
+		# If exp2 is a list, it has the same length of exp1 (semantic analysis)
+		# if its a plus/minus operation, so we add/subtract all values 
+		# or else we just append them
+		else:
+			if op == '+':
+				for i in range(len(exp1)):
+					result.append(exp1[i] + exp2[i])
+			elif op == '-':
+				for i in range(len(exp1)):
+					result.append(exp1[i] - exp2[i])
+			else:
+				result = exp1
+				result.append(exp2)
+		
+		return result
+	# If exp1 is an int, then exp2 is an int, and we just add/subtract them
+	elif type(exp1) is int:
+		if op == '+':
+			result = exp1 + exp2
+		elif op == '-':
+			result = exp1 - exp2
+		
+		return result
 
-	if len(exp2) == 1:
-		for e in exp2:
-			result.append(e + exp2[0])
-	
-	elif len(exp1) == len(exp2):
-		for i in range(len(exp1)):
-			result.append(exp1[i] + exp2[i])
-	
+	# If exp1 is a tuple
+	elif type(exp1) is tuple:
+		exp1 = list(exp1)
+		result = []
+		# If exp2 is a number, we add/subtract it from all values of exp1
+		if type(exp2) is int:
+			if op == '+':
+				for e in exp1:
+					result.append(e + exp2)
+			elif op == '-':
+				for e in exp1:
+					result.append(e - exp2)
+
+		# If exp2 is a tuple, it has the same length of exp1 (semantic analysis)
+		# if its a plus/minus operation, so we add/subtract all values 
+		# or else we just append them
+		else:
+			exp2 = list(exp2)
+			if op == '+':
+				for i in range(len(exp1)):
+					result.append(exp1[i] + exp2[i])
+			elif op == '-':
+				for i in range(len(exp1)):
+					result.append(exp1[i] - exp2[i])
+			else:
+				result = exp1 + exp2
+		
+		return tuple(result)
+
 	else:
 		raise SystemExit
-	
-	return result
-	"""
 		
 # ExpressionNode 
 # - 'exp : LBRACKET seqsound RBRACKET rec_op' | AST.ExpressionNode([p[2],p[4]])
@@ -118,10 +167,15 @@ def compile(self):
 	exp = self.children[0].compile()
 		
 	if len(self.children) == 1:
-		# DEBUG print(nota)
 		return exp
 	else:
 		seqexp = self.children[1].compile()
+		
+		if not (type(exp) is list):
+			exp = [exp]
+		if not (type(seqexp) is list):
+			seqexp = [seqexp]
+
 		return exp + seqexp
 
 # TokenNode ()
@@ -181,20 +235,8 @@ def compile(self):
 	left = self.children[0]
 	right = self.children[1]
 
-	if right.type == "Acc":
-		acc = right.compile()
-		# print(str(left.tok) + " = " + str(tuple(acc)), file=AST.outfile)
-		if type(acc) is int:
-			AST.table[left.tok] = acc
-		else:
-			AST.table[left.tok] = tuple(acc)
-	else:
-		expr = right.compile()
-		# print(str(left.tok) + " = " + str(expr), file=AST.outfile)
-		if type(expr) is int:
-			AST.table[left.tok] = expr
-		else:
-			AST.table[left.tok] = list(expr)
+	expr = right.compile()
+	AST.table[left.tok] = expr
 
 	return self
 
