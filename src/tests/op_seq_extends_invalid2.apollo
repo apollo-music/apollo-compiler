@@ -1,0 +1,10 @@
+^
+amp: 100
+dur: 100
+instr: OCARINA
+
+var thiago: [1,2,4]
+var henrique: (2,4,6)
+
+play: [thiago & henrique]
+$

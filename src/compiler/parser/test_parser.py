@@ -42,7 +42,6 @@ class ParserTest(unittest.TestCase):
 # - Test 3: like test 1, with a variable using '[]' instead of '()'. Should be OK.
 # - Test 4: uses '[]' inside of a '()'. Should raise exception MySyntaxError.
 # - Test 5: doesn't contain a needed character ']'. Should raise exception MySyntaxError.
-
 def run():
     suite = unittest.TestLoader().loadTestsFromTestCase(ParserTest)
     unittest.TextTestRunner(verbosity=2).run(suite)

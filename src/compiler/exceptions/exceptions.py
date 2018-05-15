@@ -29,17 +29,5 @@ class MySyntaxError(ParserError):
 
 # Semantic Analysis Errors
 class SemanticError(Exception):
-	pass
-
-
-class DefaultSemanticError(Exception):
     def __init__(self, msg):
         self.msg = msg
-
-class VariableNotDefinedError(SemanticError):
-    def __init__(self, msg):
-        self.msg = "Semantic Error: " + msg + " has not been defined"
-
-class SequenceInsideAccError(SemanticError):
-    def __init__(self):
-        self.msg = "Semantic Error: Can't play Sequence inside Chord!"
