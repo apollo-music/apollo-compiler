@@ -109,6 +109,17 @@ def addDefaultVal(symbol, value):
 	scp = AST.ScopeStack[0]
 	scp.addDefiniton(symbol, value)
 
+def checkValues(seq):
+	for e in seq:
+		if type(e) is list or type(e) is tuple:
+			checkValues(e)
+		else:
+			if(e > 255):
+				raise excp.SemanticError("Error: %s causes overflow." % (e))
+			elif(e < 0):
+				raise excp.SemanticError("Error: %s causes underflow." % (e))
+
+
 ########################
 ## Analiser Functions ##
 ########################
@@ -242,8 +253,6 @@ def analise(self):
 	exists_dur = findSymbol('DUR')
 	exists_inst = findSymbol('INSTR')
 
-
-
 	if not exists_amp:
 		print_warning("Atention, No Amplitute (amp) defined on the scope, using default;")
 		addDefaultVal('AMP', 1)
@@ -255,6 +264,9 @@ def analise(self):
 		addDefaultVal('INSTR', 1)
 
 	seqsound = self.children[0].analise()
+
+	# Check for overflow/underflow
+	checkValues([seqsound])
 
 	return seqsound
 
@@ -315,12 +327,12 @@ def analise(self):
 			if type(left) is int:
 			# [1 + 3]
 				left += operand
-				
+				'''
 				if (left > 255):
 					raise excp.SemanticError("Error: overflow on operation " + str(left) + " + " + str(operand)) 
 				elif (left < 0):
 					raise excp.SemanticError("Error: underflow on operation " + str(left) + " + " + str(operand)) 
-				
+				'''
 
 			elif len(left) != len(operand):
 				# [[1] + [3]] or [(1) + (3)]
@@ -330,13 +342,19 @@ def analise(self):
 				# for i,e in enumerate(left):
 				#print('TODO: Check overflow on %s' % (str(left) + ' + ' + str(operand)))
 				#print(len(left))
+				new_list = []
 				for i in range(len(left)):
 					sum = left[i] + operand[i]
+					'''
 					if sum > 255:
 						raise excp.SemanticError("Error: overflow on operation " + str(left[i]) + " + " + str(operand[i])) 
 					if sum < 0:
 						raise excp.SemanticError("Error: underflow on operation " + str(left[i]) + " + " + str(operand[i])) 
-
+					'''
+					new_list.append(sum)
+				if (type(left) == tuple):
+					new_list = tuple(new_list)
+				left = new_list
 		elif type(left) is tuple or type(left) is list and type(operand) is int:
 			# This is [1,2] + 3 or (1,2) + 3
 			new_l = []
@@ -355,11 +373,12 @@ def analise(self):
 			if type(left) is int:
 				# [1 + 3]
 				left -= operand
+				'''
 				if (left > 255):
 					raise excp.SemanticError("Error: overflow on operation " + str(left) + " + " + str(operand)) 
 				elif (left < 0):
 					raise excp.SemanticError("Error: underflow on operation " + str(left) + " + " + str(operand)) 
-
+				'''
 			elif len(left) != len(operand):
 				# [[1] + [3]] or [(1) + (3)]
 				raise excp.SemanticError('Error on operation %s. Length are not the same' % (
@@ -368,13 +387,19 @@ def analise(self):
 				# Do the operation
 				# for i,e in enumerate(left):
 				#print('TODO: Check overflow on %s' % (str(left) + ' - ' + str(operand)))
+				new_list = []
 				for i in range(len(left)):
 					sum = left[i] + operand[i]
+					'''
 					if sum > 255:
 						raise excp.SemanticError("Error: overflow on operation " + str(left[i]) + " - " + str(operand[i])) 
 					if sum < 0:
 						raise excp.SemanticError("Error: underflow on operation " + str(left[i]) + " - " + str(operand[i])) 
-
+					'''
+					new_list.append(sum)
+				if (type(left) == tuple):
+					new_list = tuple(new_list)
+				left = new_list
 		elif type(left) is tuple or type(left) is list and type(operand) is int:
 			# This is [1,2] + 3 or (1,2) + 3
 			new_l = []
