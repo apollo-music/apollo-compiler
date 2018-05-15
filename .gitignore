@@ -7,4 +7,5 @@ src/*.pdf
 src/htmlcov
 src/cov.xml
 *.midi
+*.mid
 *.mp3
