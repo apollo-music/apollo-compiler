@@ -4,7 +4,12 @@ import sys
 import os
 from ..exceptions import exceptions as exc
 
-TESTS_PATH = './tests/'
+expected = []
+n_tests = 3
+
+dir_path = os.path.dirname(os.path.realpath(__file__))
+
+TESTS_PATH = dir_path + '/../../tests/'
 
 COMMON_TESTS = [
     'play.apollo',
@@ -23,11 +28,6 @@ COMMON_TESTS = [
     'op_seq_minus_valid.apollo'
 ]
 
-expected = []
-n_tests = 3
-
-dir_path = os.path.dirname(os.path.realpath(__file__))
-
 for i in range(n_tests):
     with open(dir_path + '/__snapshot__/exp_test' + str(i+1) + '_codegen.txt', 'r') as myfile:
         expected.append(myfile.read())
@@ -41,7 +41,7 @@ class CodeGenTest(unittest.TestCase):
 
     def test_codegen(self):
         for i in range(n_tests):
-            file_path = dir_path + '/test_files/test' + str(i+1) + '_codegen.apollo'
+            file_path = dir_path + '/../../tests/test' + str(i+1) + '_codegen.apollo'
             self.assertEqual(codegen.test(file_path), str(expected[i]))
 
 # Tests performed:

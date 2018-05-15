@@ -1,10 +1,14 @@
-from ..semantic_analiser import semantic_analiser
 import unittest
+import os
+
+from ..semantic_analiser import semantic_analiser
 from ..AST import AST
 from ..AST.AST import Node
 from ..exceptions import exceptions as e
 
-TESTS_PATH = './tests/'
+dir_path = os.path.dirname(os.path.realpath(__file__))
+
+TESTS_PATH = dir_path + '/../../tests/'
 
 COMMON_TESTS =[
     'play.apollo',
