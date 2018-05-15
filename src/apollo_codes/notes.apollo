@@ -1,10 +1,20 @@
 ^
-var test: 40
+var test: [50, 50] & [73, 74] & [52, 55] + 32
 instr: OCARINA
 amp: 255
 
-play: [C3 + 8], dur: 150
-play: [D3, E3, F3], dur: 50
+tone: 10
 
+play: [C3 + 8, 32 + 64], dur: 150
+play: [[D3, E3, F3] + [32, 46, 54], (32, 64) + (33, 52)], dur: 50
+play: test
+play: (70, 32)
 
+sequence seq:
+
+play: test
+
+endsequence
+
+call: seq
 $

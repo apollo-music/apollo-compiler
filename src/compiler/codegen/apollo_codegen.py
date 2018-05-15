@@ -9,7 +9,7 @@ AST.amp = 100
 AST.dur = 200
 AST.table = {}
 AST.outfile = open('intermediate.py', 'w')
-	
+
 
 # GenericNode
 @addToClass(AST.Node)
@@ -359,6 +359,36 @@ def compile(self):
 	exp = self.children[0].compile()
 	# DEBUG print('exp:\n' + str(exp))
 	playNotes(exp)
+
+# LabelNode
+# 'label : SEQUENCE ID TWOPOINTS NEWLINE program ENDSEQUENCE' | AST.LabelNode([AST.TokenNode(p[2]), p[5]])
+@addToClass(AST.LabelNode)
+def compile(self):
+	if debug:
+		print("label")
+	name = self.children[0].tok
+	print("sequenceName " + str(name))
+	AST.table[name] = self.children[1]
+
+# CallNode
+# 'param : CALL TWOPOINTS ID' | AST.CallNode(AST.TokenNode(p[3]))
+@addToClass(AST.CallNode)
+def compile(self):
+	if debug:
+		print("label")
+	name = self.children[0].tok
+
+	# code should never get here due to semantic analysis
+	if name not in AST.table:
+		print("ERROR UNDEFINED SEQUENCE")
+
+	amp_before = AST.amp
+	dur_before = AST.dur
+
+	AST.table[name].compile()
+
+	AST.amp = amp_before
+	AST.dur = dur_before
 
 # PlayContent
 # 'playcontent : LBRACKET seqexp RBRACKET' | AST.PlaycontentNode([p[2]])
