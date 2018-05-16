@@ -28,10 +28,12 @@ for i in range(n_incorrect_tests):
 
 class ParserTest(unittest.TestCase):
     def test_parser(self):
+        self.maxDiff = None
         for i in range(len(datas)):
             self.assertEqual(str(parser.parse(datas[i])), str(expected[i]))
 
     def test_parser_errors(self):
+        self.maxDiff = None
         for i in range(len(datas_e)):
             parser.parse(datas_e[i])
             self.assertRaises(exc.MySyntaxError)

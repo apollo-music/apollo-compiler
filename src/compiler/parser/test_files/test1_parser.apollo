@@ -1,5 +1,5 @@
 ^
-var bixo: (1, 3+4)
+var bixo: (1, 3) + 4
 amp: 10
 dur: 2
 play: [72, bixo], amp: 10, dur: 3

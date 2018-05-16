@@ -2,13 +2,16 @@ Entry
 |  Program
 |  |  Var
 |  |  |  'bixo'
-|  |  |  Acc
-|  |  |  |  SeqNotas
-|  |  |  |  |  1
+|  |  |  Expression
+|  |  |  |  Acc
 |  |  |  |  |  SeqNotas
-|  |  |  |  |  |  + (2)
+|  |  |  |  |  |  1
+|  |  |  |  |  |  SeqNotas
 |  |  |  |  |  |  |  3
-|  |  |  |  |  |  |  4
+|  |  |  |  + (1)
+|  |  |  |  |  Expression
+|  |  |  |  |  |  4
+|  |  |  |  |  |  Empty
 |  |  Program
 |  |  |  Amp
 |  |  |  |  10
@@ -23,9 +26,12 @@ Entry
 |  |  |  |  |  |  |  Amp
 |  |  |  |  |  |  |  |  10
 |  |  |  |  |  |  |  Play
-|  |  |  |  |  |  |  |  Expression
-|  |  |  |  |  |  |  |  |  Acc
-|  |  |  |  |  |  |  |  |  |  72
-|  |  |  |  |  |  |  |  |  Expression
-|  |  |  |  |  |  |  |  |  |  Acc
-|  |  |  |  |  |  |  |  |  |  |  'bixo'
+|  |  |  |  |  |  |  |  Playcontent
+|  |  |  |  |  |  |  |  |  Seqexp
+|  |  |  |  |  |  |  |  |  |  Expression
+|  |  |  |  |  |  |  |  |  |  |  72
+|  |  |  |  |  |  |  |  |  |  |  Empty
+|  |  |  |  |  |  |  |  |  |  Seqexp
+|  |  |  |  |  |  |  |  |  |  |  Expression
+|  |  |  |  |  |  |  |  |  |  |  |  'bixo'
+|  |  |  |  |  |  |  |  |  |  |  |  Empty
