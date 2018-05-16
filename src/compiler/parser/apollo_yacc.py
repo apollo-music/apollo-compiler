@@ -11,6 +11,8 @@ from ..AST.AST import addToClass
 import sys
 import pdb
 
+AST.test = False
+
 def p_program2(p):
 	'program2 : START NEWLINE program END'
 	p[0] = AST.EntryNode(p[3])
@@ -157,7 +159,8 @@ def p_label_definition(p):
 
 # Error rule for syntax errors
 def p_error(p):
-	print("\nSyntax error on line: %s" % (p.lineno))
+	if not AST.test:
+		print("\nSyntax error on line: %s" % (p.lineno))
 	(AST.parser).errok()
 	raise exc.MySyntaxError("Syntax error on line: %s" % (p.lineno))
 
@@ -168,6 +171,16 @@ def parse(program):
 		USAGE: open the file with open and read it and use it as input to parse()
 	'''
 	AST.parser = yacc(debug=True)
+	return (AST.parser).parse(program)
+
+
+def test(program):
+	'''
+		Used to generate a AST parsing the program given as input on TEST ONLY - WILL NOT PRINT ANYTHING
+		USAGE: open the file with open and read it and use it as input to parse()
+	'''
+	AST.parser = yacc(debug=True)
+	AST.test = True
 	return (AST.parser).parse(program)
 
 def run():

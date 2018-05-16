@@ -242,7 +242,7 @@ def analise(self):
 	
 	popScope()
 
-	return command + param
+	return command
 
 # PlayNode
 # 'command : PLAY TWOPOINTS playcontent' -> AST.PlayNode([p[3]])

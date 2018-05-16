@@ -25,13 +25,9 @@ COMMON_TESTS = [
     'op_seq_sum_valid.apollo',
     'op_seq_extends_valid.apollo',
     'op_unit_minus.apollo',
-    'op_seq_minus_valid.apollo'
+    'op_seq_minus_valid.apollo',
+    'tone.apollo'
 ]
-
-for i in range(n_tests):
-    with open(dir_path + '/__snapshot__/exp_test' + str(i+1) + '_codegen.txt', 'r') as myfile:
-        expected.append(myfile.read())
-        myfile.close()
 
 class CodeGenTest(unittest.TestCase):
     def test_should_compile_common_properly(self):
@@ -39,10 +35,25 @@ class CodeGenTest(unittest.TestCase):
             sn = codegen.test(TESTS_PATH + test)
             self.assertTrue(sn)
 
-    def test_codegen(self):
-        for i in range(n_tests):
-            file_path = dir_path + '/../../tests/test' + str(i+1) + '_codegen.apollo'
-            self.assertEqual(codegen.test(file_path), str(expected[i]))
+    def test_codegen1(self):
+        with open(dir_path + '/__snapshot__/exp_test1_codegen.txt', 'r') as myfile:
+            snapshot = myfile.read()
+            file_path = dir_path + '/../../tests/test1_codegen.apollo'
+            self.assertEqual(codegen.test(file_path), str(snapshot))
+    
+    def test_codegen2(self):
+        with open(dir_path + '/__snapshot__/exp_test2_codegen.txt', 'r') as myfile:
+            snapshot = myfile.read()
+            file_path = dir_path + '/../../tests/test2_codegen.apollo'
+            self.assertEqual(codegen.test(file_path), str(snapshot))
+    
+    def test_codegen3(self):
+        with open(dir_path + '/__snapshot__/exp_test3_codegen.txt', 'r') as myfile:
+            snapshot = myfile.read()
+            file_path = dir_path + '/../../tests/test3_codegen.apollo'
+            self.assertEqual(codegen.test(file_path), str(snapshot))
+
+    
 
 # Tests performed:
 # - Tests 1-3: regular programs. Should be OK.
