@@ -72,10 +72,10 @@ TESTS_PATH = 'tests/'
 
 if __name__ == '__main__':
 	print("\n----------------------- Testing: Lexer -------------------------------")
-	# testlexer.run()
+	testlexer.run()
 
 	print("\n----------------------- Testing: Parser ------------------------------")
-	# testparser.run()
+	testparser.run()
 
 	print("\n----------------------- Testing: Semantic Analisis -------------------")
 	testsem.run()
