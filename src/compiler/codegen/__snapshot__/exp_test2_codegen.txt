@@ -4,6 +4,9 @@ pattern = midi.Pattern(format=1, resolution = 100, tick_relative=1)
 track = midi.Track()
 pattern.append(track)
 
+track.append(midi.ProgramChangeEvent(tick=0, channel=0, data=[1
+]))
+
 note_on = midi.NoteOnEvent(tick=0, velocity= 10, pitch=72)
 track.append(note_on)
 note_off = midi.NoteOnEvent(tick=3, velocity=0, pitch=72)
