@@ -4,26 +4,7 @@ import sys
 import os
 from ..exceptions import exceptions as exc
 
-
-datas = []
-datas_e = []
-tokens_types = []
-tokens_values = []
-
-n_correct_tests = 4
-n_incorrect_tests = 1
-
 dir_path = os.path.dirname(os.path.realpath(__file__))
-
-for i in range(n_correct_tests):
-    with open(dir_path + '/test_files/test' + str(i+1) + '_lex.apollo', 'r') as myfile:
-        datas.append(myfile.read())
-        myfile.close()
-
-for i in range(n_incorrect_tests):
-    with open(dir_path + '/test_files/test' + str(i+n_correct_tests+1) + '_lex.apollo', 'r') as myfile:
-        datas_e.append(myfile.read())
-        myfile.close()
 
 tokens_v123 = ['^', '\n', 'var', 'bixo', ':', '(', '1', ',', '3', '+', '4', ')', '\n',
 'amp', ':', '10', '\n', 'dur', ':', '2', '\n', 'play', ':', '[', '72', ',', 'bixo',
@@ -38,13 +19,6 @@ tokens_t1234 = ['START', 'NEWLINE', 'VAR', 'ID', 'TWOPOINTS', 'LPAREN', 'INT', '
 'TWOPOINTS', 'INT', 'NEWLINE', 'PLAY', 'TWOPOINTS', 'LBRACKET', 'INT', 'COMMA',
 'ID', 'RBRACKET', 'COMMA', 'AMP', 'TWOPOINTS', 'INT', 'COMMA', 'DUR', 'TWOPOINTS',
 'INT', 'NEWLINE', 'END']
-
-for i in range(3):
-    tokens_values.append(tokens_v123)
-tokens_values.append(tokens_v4)
-
-for i in range(4):
-    tokens_types.append(tokens_t1234)
 
 class LexTest(unittest.TestCase):
     def test_lex_values1(self):
