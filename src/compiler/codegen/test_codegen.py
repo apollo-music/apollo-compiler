@@ -25,7 +25,8 @@ COMMON_TESTS = [
     'op_seq_sum_valid.apollo',
     'op_seq_extends_valid.apollo',
     'op_unit_minus.apollo',
-    'op_seq_minus_valid.apollo'
+    'op_seq_minus_valid.apollo',
+    'tone.apollo'
 ]
 
 for i in range(n_tests):

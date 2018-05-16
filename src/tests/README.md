@@ -16,6 +16,7 @@
 'op_seq_extends_valid.apollo',
 'op_unit_minus.apollo',
 'op_seq_minus_valid.apollo'
+'tone.apollo'
 ```
 
 ## Semantic Analysis
