@@ -115,13 +115,49 @@ class AmpNode(Node):
 
 class DurNode(Node):
     type = 'Dur'
-    
+
+class InstrNode(Node):
+    type = 'Instr'
+
 class ExpressionNode(Node):
     type = 'Expression'
 
 class PlayNode(Node):
     type = 'Play'
-    
+
+class PlaycontentNode(Node):
+    type = 'Playcontent'
+
+class ToneNode(Node):
+    type = 'Tone'
+
+class LoopNode(Node):
+    type = 'Repeat'
+
+class RepeatNode(Node):
+    type = 'Repeat'
+
+class OperandNode(Node):
+    type = 'Operand'
+
+class EmptyNode(Node):
+    type = 'Empty'
+
+class SeqsoundNode(Node):
+    type = 'Seqsound'
+
+class SeqexpNode(Node):
+    type = 'Seqexp'
+
+class SoundNode(Node):
+    type = 'Sound'
+
+class LabelNode(Node):
+    type = 'Label'
+
+class CallNode(Node):
+    type = 'Call'
+
 class TokenNode(Node):
     type = 'Token'
     def __init__(self, tok):

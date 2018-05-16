@@ -1,6 +1,8 @@
 ^
 amp: 100
 dur: 200
+instr: 1
+
 var zebra: [30]
 var girafa: [20, zebra]
 var leao: [10, girafa]

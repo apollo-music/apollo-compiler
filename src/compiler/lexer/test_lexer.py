@@ -4,26 +4,7 @@ import sys
 import os
 from ..exceptions import exceptions as exc
 
-
-datas = []
-datas_e = []
-tokens_types = []
-tokens_values = []
-
-n_correct_tests = 4
-n_incorrect_tests = 1
-
 dir_path = os.path.dirname(os.path.realpath(__file__))
-
-for i in range(n_correct_tests):
-    with open(dir_path + '/test_files/test' + str(i+1) + '_lex.apollo', 'r') as myfile:
-        datas.append(myfile.read())
-        myfile.close()
-
-for i in range(n_incorrect_tests):
-    with open(dir_path + '/test_files/test' + str(i+n_correct_tests+1) + '_lex.apollo', 'r') as myfile:
-        datas_e.append(myfile.read())
-        myfile.close()
 
 tokens_v123 = ['^', '\n', 'var', 'bixo', ':', '(', '1', ',', '3', '+', '4', ')', '\n',
 'amp', ':', '10', '\n', 'dur', ':', '2', '\n', 'play', ':', '[', '72', ',', 'bixo',
@@ -39,36 +20,92 @@ tokens_t1234 = ['START', 'NEWLINE', 'VAR', 'ID', 'TWOPOINTS', 'LPAREN', 'INT', '
 'ID', 'RBRACKET', 'COMMA', 'AMP', 'TWOPOINTS', 'INT', 'COMMA', 'DUR', 'TWOPOINTS',
 'INT', 'NEWLINE', 'END']
 
-for i in range(3):
-    tokens_values.append(tokens_v123)
-tokens_values.append(tokens_v4)
-
-for i in range(4):
-    tokens_types.append(tokens_t1234)
-
 class LexTest(unittest.TestCase):
-    def test_lex_values(self):
-        for i in range(len(datas)):
+    def test_lex_values1(self):
+        with open(dir_path + '/test_files/test1_lex.apollo', 'r') as myfile:
+            datas1 = myfile.read()
             # Give the lexer some input
-            apollo_lex.lexer.input(datas[i])
+            apollo_lex.lexer.input(datas1)
             # Test using values
-            for t_val in tokens_values[i]:
+            for t_val in tokens_v123:
+                tok = apollo_lex.lexer.token()
+                self.assertEqual(t_val, str(tok.value))
+    
+    def test_lex_values2(self):
+        with open(dir_path + '/test_files/test2_lex.apollo', 'r') as myfile:
+            datas2 = myfile.read()
+            # Give the lexer some input
+            apollo_lex.lexer.input(datas2)
+            # Test using values
+            for t_val in tokens_v123:
+                tok = apollo_lex.lexer.token()
+                self.assertEqual(t_val, str(tok.value))
+    
+    def test_lex_values3(self):
+        with open(dir_path + '/test_files/test3_lex.apollo', 'r') as myfile:
+            datas3 = myfile.read()
+            # Give the lexer some input
+            apollo_lex.lexer.input(datas3)
+            # Test using values
+            for t_val in tokens_v123:
+                tok = apollo_lex.lexer.token()
+                self.assertEqual(t_val, str(tok.value))
+    
+    def test_lex_values4(self):
+        with open(dir_path + '/test_files/test4_lex.apollo', 'r') as myfile:
+            datas4 = myfile.read()
+            # Give the lexer some input
+            apollo_lex.lexer.input(datas4)
+            # Test using values
+            for t_val in tokens_v4:
                 tok = apollo_lex.lexer.token()
                 self.assertEqual(t_val, str(tok.value))
 
-    def test_lex_types(self):
-        for i in range(len(datas)):
+    def test_lex_types1(self):
+        with open(dir_path + '/test_files/test1_lex.apollo', 'r') as myfile:
+            datas1 = myfile.read()
             # Give the lexer some input
-            apollo_lex.lexer.input(datas[i])
-            # Test using types
-            for t_type in tokens_types[i]:
+            apollo_lex.lexer.input(datas1)
+            # Test using values
+            for t_val in tokens_t1234:
                 tok = apollo_lex.lexer.token()
-                self.assertEqual(t_type, str(tok.type))
+                self.assertEqual(t_val, str(tok.type))
+    
+    def test_lex_types2(self):
+        with open(dir_path + '/test_files/test2_lex.apollo', 'r') as myfile:
+            datas2 = myfile.read()
+            # Give the lexer some input
+            apollo_lex.lexer.input(datas2)
+            # Test using values
+            for t_val in tokens_t1234:
+                tok = apollo_lex.lexer.token()
+                self.assertEqual(t_val, str(tok.type))
+
+    def test_lex_types3(self):
+        with open(dir_path + '/test_files/test3_lex.apollo', 'r') as myfile:
+            datas3 = myfile.read()
+            # Give the lexer some input
+            apollo_lex.lexer.input(datas3)
+            # Test using values
+            for t_val in tokens_t1234:
+                tok = apollo_lex.lexer.token()
+                self.assertEqual(t_val, str(tok.type))
+
+    def test_lex_types4(self):
+        with open(dir_path + '/test_files/test4_lex.apollo', 'r') as myfile:
+            datas4 = myfile.read()
+            # Give the lexer some input
+            apollo_lex.lexer.input(datas4)
+            # Test using values
+            for t_val in tokens_t1234:
+                tok = apollo_lex.lexer.token()
+                self.assertEqual(t_val, str(tok.type))
 
     def test_lex_errors(self):
-        for i in range(len(datas_e)):
+        with open(dir_path + '/test_files/test5_lex.apollo', 'r') as myfile:
+            datas5 = myfile.read()
             # Give the lexer some input
-            apollo_lex.lexer.input(datas_e[i])
+            apollo_lex.lexer.input(datas5)
             self.assertRaises(exc.CharacterError)
 
 # Tests performed:

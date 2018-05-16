@@ -2,9 +2,7 @@
 [run]
 branch = True
 source = 
-    compiler/AST
     compiler/lexer
     compiler/codegen
     compiler/parser
     compiler/semantic_analiser
-    compiler/exceptions

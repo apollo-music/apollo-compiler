@@ -7,9 +7,11 @@
 from ply import lex
 import sys
 from ..exceptions import exceptions as exc
+from ..lexer import instruments
+from .. lexer import notes
 
 # List of token names. This is always required
-tokens = (
+tokens = [
    'INT',
    'PLAY',
    'TWOPOINTS',
@@ -19,6 +21,9 @@ tokens = (
    'RPAREN',
    'AMP',
    'DUR',
+   'INSTR',
+   'REPEAT',
+   'ENDREPEAT',
    'COMMA',
    'NEWLINE',
    'START',
@@ -27,8 +32,13 @@ tokens = (
    'ID',
    'SUM',
    'MINUS',
-   'MULTIPLY'
-)
+   'MULTIPLY',
+   'TONE',
+   'AMPERSAND',
+   'SEQUENCE',
+   'ENDSEQUENCE',
+   'CALL'
+]
 
 # Regular expression rules for simple tokens
 t_LPAREN  = r'\('
@@ -38,8 +48,9 @@ t_RBRACKET  = r'\]'
 t_COMMA  = r','
 t_TWOPOINTS = r':'
 t_START = r'\^'
-t_END = r'\$\n*'
+t_END = r'\$[\n ]*'
 
+t_AMPERSAND = r'\&'
 t_SUM = r'\+'
 t_MINUS = r'\-'
 t_MULTIPLY = r'\*'
@@ -72,8 +83,44 @@ def t_PLAY(t):
 	r'PLAY | play'
 	return t
 
+def t_INSTR(t):
+	r'INSTR | instr'
+	return t
+
+def t_TONE(t):
+	r'TONE | tone'
+	return t
+
+def t_CALL(t):
+	r'CALL | call'
+	return t
+
+def t_REPEAT(t):
+	r'REPEAT | repeat'
+	return t
+
+def t_ENDREPEAT(t):
+	r'ENDREPEAT | endrepeat'
+	return t
+
+def t_SEQUENCE(t):
+	r'SEQUENCE | sequence'
+	return t
+
+def t_ENDSEQUENCE(t):
+	r'ENDSEQUENCE | endsequence'
+	return t
+
 def t_ID(t):
 	r'[a-zA-Z_][a-zA-Z0-9_]*'
+
+	if t.value in instruments.instr2int.keys():
+		t.type = 'INT'
+		t.value = instruments.instr2int[t.value]
+	if t.value in notes.note2int.keys():
+		t.type = 'INT'
+		t.value = notes.note2int[t.value]
+
 	return t
 
 # A string containing ignored characters (spaces and tabs)
@@ -88,16 +135,21 @@ def t_error(t):
 # Build the lexer
 lexer = lex.lex()
 
-# # Test it out
-# f = open(sys.argv[1], 'r')
-# prog = f.read()
-#
-# # Give the lexer some input
-# lexer.input(prog)
-#
-# # Tokenize
-# while True:
-#     tok = lexer.token()
-#     if not tok:
-#         break      # No more input
-#     print(tok)
+
+"""
+# Test it out
+f = open(sys.argv[1], 'r')
+prog = f.read()
+
+# Give the lexer some input
+lexer.input(prog)
+
+#Tokenize
+while True:
+	tok = lexer.token()
+	
+	if not tok:
+		break      # No more input
+	
+	print(tok)
+"""

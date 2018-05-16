@@ -50,6 +50,7 @@ play: [70]
 end repeat
 ```
 Irá tocar a nota `70` em sequência 10 vezes.
+
 ## Criando variáveis
 Variáveis podem ser criadas usando o termo `var`, seguido pelo nome da variável e o valor que ela irá receber:
 ```
@@ -63,6 +64,24 @@ var sequencia: [70, 71, acorde, 70]
 play: sequencia
 ```
 Vale notar que variáveis não são passadas por referência às outras; portanto, no exemplo acima, se `acorde` fosse modificado após a variável `sequencia` ter sido declarada, as notas em `sequencia` não seriam modificadas.
+
+## Criando `Sequences`
+As sequences serão somente sequências de notas sequenciais. Se seqA é chamada antes de seqB, toca-se seqA e depois seqB.
+
+```
+sequence seqA, inst = I, amp = A, dur = D:
+end sequence
+```
+
+## Criando `Instruments`
+Os instruments definem qual o instrumento será utilizado. Por exemplo, após chamarmos
+
+```
+instr = ACOUSTICBASS
+```
+
+Todos as notas seguintes serão tocadas com o instrumento "baixo". A lista de instrumentos suportados pode ser vista aqui: http://www.pjb.com.au/muscript/gm.html
+
 ## Criando `Tracks`
 Para paralelizar notas, é necessário o uso de `tracks`; por exemplo:
 ```
