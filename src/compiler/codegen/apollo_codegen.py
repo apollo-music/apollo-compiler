@@ -7,6 +7,7 @@ import sys, os
 debug = False
 AST.amp = 100
 AST.dur = 200
+AST.tone = 0
 AST.table = {}
 AST.outfile = open('intermediate.py', 'w')
 
@@ -190,25 +191,31 @@ def compile(self):
 	return nota
 
 # AmpNode
-# - 'param : AMP TWOPOINTS INT' | p[0] = AST.AmpNode([AST.TokenNode(p[3])])
+# 'param : AMP TWOPOINTS INT | AMP TWOPOINTS ID ' -> AST.AmpNode([AST.TokenNode(p[3])])
 @addToClass(AST.AmpNode)
 def compile(self):
 	if debug:
 		print("amp")
 	if len(self.children) == 1:
-		amp = self.children[0]
-		AST.amp = int(str(amp))
+		amp = self.children[0].compile()
+		if type(amp) is str:
+			AST.amp = AST.table.get(amp)
+		else:
+			AST.amp = int(str(amp))
 	return self
 
 # DurNode
-# - 'param : DUR TWOPOINTS INT' | p[0] = AST.DurNode([AST.TokenNode(p[3])])
+# 'param : DUR TWOPOINTS INT | DUR TWOPOINTS ID' -> AST.DurNode([AST.TokenNode(p[3])])
 @addToClass(AST.DurNode)
 def compile(self):
 	if debug:
 		print("dur")
 	if len(self.children) == 1:
-		dur = self.children[0]
-		AST.dur = int(str(dur))
+		dur = self.children[0].compile()
+		if type(dur) is str:
+			AST.dur = AST.table.get(dur)
+		else:
+			AST.dur = int(str(dur))
 	return self
 
 # InstrNode
@@ -224,10 +231,19 @@ def compile(self):
 
 	return self
 
+# ToneNode
+# - 'param : TONE TWOPOINTS INT | TONE TWOPOINTS ID' -> AST.ToneNode([AST.TokenNode(p[3])])
+@addToClass(AST.ToneNode)
+def compile(self):
+	if debug:
+		print("tone")
+	if len(self.children) == 1:
+		tone = self.children[0]
+		AST.tone = int(str(tone))
+	return self
+
 # VarNode
-# 'assignation : VAR ID TWOPOINTS LBRACKET expression RBRACKET' |
-# 	 AST.VarNode([AST.TokenNode(p[2]), p[5]])
-# 'assignation : VAR ID TWOPOINTS acc' | AST.VarNode([AST.TokenNode(p[2]), p[4]])
+# 'assignation : VAR ID TWOPOINTS exp' -> AST.VarNode([AST.TokenNode(p[2]), p[4]])
 @addToClass(AST.VarNode)
 def compile(self):
 	if debug:
@@ -236,6 +252,7 @@ def compile(self):
 	right = self.children[1]
 
 	expr = right.compile()
+	#DEBUG print("Inserting " + str(expr) + " in " + str(left.tok))
 	AST.table[left.tok] = expr
 
 	return self
@@ -320,12 +337,14 @@ def compile(self):
 def playNotes(notes):
 	def playNotesTuple(acchord):
 		for note in acchord:
+			note += AST.tone
 			print("note_on = midi.NoteOnEvent(tick=0, velocity= " +
 				  str(AST.amp) + ", pitch=" + str(note) + ")", file=AST.outfile)
 			print("track.append(note_on)", file=AST.outfile)
 
 		print("", file=AST.outfile)
 		for i, note in enumerate(acchord):
+			note += AST.tone
 			if i == 0:
 				print("note_off = midi.NoteOnEvent(tick=" + str(AST.dur) + ", velocity=0, pitch=" +
 						str(note) + ")", file=AST.outfile)
@@ -337,6 +356,7 @@ def playNotes(notes):
 
 
 	if type(notes) is int:
+		notes += AST.tone
 		print("note_on = midi.NoteOnEvent(tick=0, velocity= " + str(AST.amp) + ", pitch=" + str(notes) + ")", file=AST.outfile)
 		print("track.append(note_on)", file=AST.outfile)
 		print("note_off = midi.NoteOnEvent(tick=" + str(AST.dur) + ", velocity=0, pitch=" + str(notes) + ")", file = AST.outfile)
@@ -367,7 +387,7 @@ def compile(self):
 	if debug:
 		print("label")
 	name = self.children[0].tok
-	print("sequenceName " + str(name))
+	#print("sequenceName " + str(name))
 	AST.table[name] = self.children[1]
 
 # CallNode
