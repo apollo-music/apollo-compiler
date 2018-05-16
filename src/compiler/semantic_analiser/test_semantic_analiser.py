@@ -101,6 +101,18 @@ class SemanticAnaliserTest(unittest.TestCase):
         with self.assertRaises(e.SemanticError):
             semantic_analiser.test(TESTS_PATH + 'op_seq_minus_invalid_type.apollo')
 
+    def test_should_raises_on_op_seq_overflow(self):
+        with self.assertRaises(e.SemanticError):
+            semantic_analiser.test(TESTS_PATH + 'op_seq_overflow.apollo')
+
+    def test_should_raises_on_op_var1_overflow(self):
+        with self.assertRaises(e.SemanticError):
+            semantic_analiser.test(TESTS_PATH + 'op_var1_overflow.apollo')
+
+    def test_should_raises_on_op_var2_underflow(self):
+        with self.assertRaises(e.SemanticError):
+            semantic_analiser.test(TESTS_PATH + 'op_var2_underflow.apollo')
+
 
 def run():
     suite = unittest.TestLoader().loadTestsFromTestCase(SemanticAnaliserTest)
