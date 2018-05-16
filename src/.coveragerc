@@ -1,8 +1,7 @@
 # .coveragerc to control coverage.py
 [run]
 branch = True
-source = 
-    compiler/AST
+source =
     compiler/lexer
     compiler/codegen
     compiler/parser
