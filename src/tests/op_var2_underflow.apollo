@@ -1,7 +1,7 @@
 ^
-var teste1: 10
-var teste2: 250
-var teste3: teste1 - teste2
-var seq: [teste3]
+var teste1 = 10
+var teste2 = 250
+var teste3 = teste1 - teste2
+var seq = [teste3]
 play: seq
 $

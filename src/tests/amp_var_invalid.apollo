@@ -1,4 +1,4 @@
 ^
-var teste: [1,2,3]
-amp: teste
+var teste = [1,2,3]
+amp = teste
 $

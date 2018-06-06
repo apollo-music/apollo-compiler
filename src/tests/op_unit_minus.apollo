@@ -1,7 +1,7 @@
 ^
-amp: 100
-dur: 100
-instr: OCARINA
+amp = 100
+dur = 100
+instr = OCARINA
 
 play: [C3 - 3]
 $

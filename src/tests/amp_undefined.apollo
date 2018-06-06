@@ -1,6 +1,6 @@
 ^
-dur: 100
-instr: 1
+dur = 100
+instr = 1
 
 play: [1,2,3]
 $

@@ -52,6 +52,11 @@ def p_param_TONE(p):
 	| TONE EQUAL ID'''
 	p[0] = AST.ToneNode(AST.TokenNode(p[3]))
 
+def p_param_SLEEP(p):
+	'''param : SLEEP EQUAL INT
+	| SLEEP EQUAL ID'''
+	p[0] = AST.SleepNode(AST.TokenNode(p[3]))
+
 def p_param_CALL(p):
 	'param : CALL TWOPOINTS ID'
 	p[0] = AST.CallNode(AST.TokenNode(p[3]))

@@ -1,10 +1,10 @@
 ^
-amp: 100
-dur: 100
-instr: OCARINA
+amp = 100
+dur = 100
+instr = OCARINA
 
-var v4r1: 1
-var v4r2: 2
+var v4r1 = 1
+var v4r2 = 2
 
 play: [1 & 2]
 $

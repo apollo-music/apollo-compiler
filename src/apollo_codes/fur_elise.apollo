@@ -1,21 +1,21 @@
 ^
-instr: OCARINA
-amp: 255
+instr = OCARINA
+amp = 255
 
 var melody: [76,75,76,75,76,71,74,72]
 
-play: [melody], dur:50
-play: [(69)], dur: 150
-play: [60, 64, 69], dur: 50
-play: [(71)], dur: 150
-play: [64, 68, 71], dur: 50
-play: [(72)], dur: 250
+play: [melody], dur =50
+play: [(69)], dur = 150
+play: [60, 64, 69], dur = 50
+play: [(71)], dur = 150
+play: [64, 68, 71], dur = 50
+play: [(72)], dur = 250
 
-play: [melody], dur:50
-play: [(69)], dur: 150
-play: [60, 64, 69], dur: 50
-play: [(71)], dur: 150
-play: [64, 72, 71], dur: 50
-play: [(69)], dur: 250
+play: [melody], dur =50
+play: [(69)], dur = 150
+play: [60, 64, 69], dur = 50
+play: [(71)], dur = 150
+play: [64, 72, 71], dur = 50
+play: [(69)], dur = 250
 
 $

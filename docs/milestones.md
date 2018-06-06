@@ -9,8 +9,8 @@ Os componentes basicos das nossas "partituras" serão:
   - notas musicais:
     - `play: [pitch1, pitch2, ...]` - essa função irá tocar quantas notas forem fornecidas, de acordo com seus pitchs.
       - `pitch`: define a nota à ser tocada de acordo com seu pitch, que varia de 0 a 127, de acordo com os chamados "MIDI numbers".
-    - `AMP: amp` - define a amplitude das próximas notas que serão tocadas, definindo a dinâmica da música.
-    - `DUR: dur` - define a duração das próximas notas que serão tocadas dentro da música.
+    - `amp = amp` - define a amplitude das próximas notas que serão tocadas, definindo a dinâmica da música.
+    - `dur = dur` - define a duração das próximas notas que serão tocadas dentro da música.
     - `VAR: var_id` - define uma variável que pode ser usada dentro da função `play` para substituir parte da sequência de notas.
 
 Com esses componentes, será possível já tocar algumas melodias simples. Além disso, podemos tocar acordes (conjunto de notas tocadas ao mesmo tempo), determinando quais notas devem ser tocadas simultaneamente com o uso de `()`, como por exemplo:
