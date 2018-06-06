@@ -34,22 +34,22 @@ def p_statement(p):
 	p[0] = p[1]
 		
 def p_param_AMP(p):
-	'''param : AMP TWOPOINTS INT
-	| AMP TWOPOINTS ID'''
+	'''param : AMP EQUAL INT
+	| AMP EQUAL ID'''
 	p[0] = AST.AmpNode(AST.TokenNode(p[3]))
 
 def p_param_DUR(p):
-	'''param : DUR TWOPOINTS INT
-	| DUR TWOPOINTS ID'''
+	'''param : DUR EQUAL INT
+	| DUR EQUAL ID'''
 	p[0] = AST.DurNode(AST.TokenNode(p[3]))
 
 def p_param_INSTR(p):
-	'param : INSTR TWOPOINTS INT'
+	'param : INSTR EQUAL INT'
 	p[0] = AST.InstrNode(AST.TokenNode(p[3]))
 
 def p_param_TONE(p):
-	'''param : TONE TWOPOINTS INT
-	| TONE TWOPOINTS ID'''
+	'''param : TONE EQUAL INT
+	| TONE EQUAL ID'''
 	p[0] = AST.ToneNode(AST.TokenNode(p[3]))
 
 def p_param_CALL(p):
@@ -77,7 +77,7 @@ def p_playcontent_acc(p):
 	p[0] = AST.PlaycontentNode(p[1])
 
 def p_assignation_expression(p):
-	'assignation : VAR ID TWOPOINTS exp'
+	'assignation : VAR ID EQUAL exp'
 	p[0] = AST.VarNode([AST.TokenNode(p[2]), p[4]])
 
 def p_expression_seq(p):
