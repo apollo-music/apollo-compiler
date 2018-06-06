@@ -4,13 +4,18 @@ from compiler.parser import apollo_yacc
 from compiler.semantic_analiser import semantic_analiser
 import sys, os
 
-debug = False
+debug = True
 AST.amp = 100
 AST.dur = 200
 AST.tone = 0
 AST.table = {}
 AST.outfile = open('intermediate.py', 'w')
 
+sleepNote = 0
+
+AST.track_dictionary = {'main': {'node':None, 'ticks':0}}
+AST.track_stack = [('main', 'track0')]
+AST.call_counter = 0
 
 # GenericNode
 @addToClass(AST.Node)
@@ -18,6 +23,12 @@ def compile(self):
 	for c in self.children:
 		c.compile()
 	return self
+
+@addToClass(AST.TrackNode)
+def compile(self):	
+	self.children[0].compile()
+	name = self.children[0].tok
+	AST.track_dictionary[name] = {'node': self, 'ticks':0}
 
 # EntryNode (First node of program)
 # - 'program2 : START NEWLINE program END NEWLINE' | AST.EntryNode(p[3])
@@ -27,14 +38,16 @@ def compile(self):
 		print("entry node")
 	print("import midi\n", file=AST.outfile)
 	print("pattern = midi.Pattern(format=1, resolution = 100, tick_relative=1)", file=AST.outfile)
-	print("track = midi.Track()", file=AST.outfile)
-	print("pattern.append(track)\n", file=AST.outfile)
+	print("track0 = midi.Track()", file=AST.outfile)
+	print("pattern.append(track0)\n", file=AST.outfile)
 
 	for c in self.children:
 	# DEBUG print(c)
 		c.compile()
 
-	print("eot=midi.EndOfTrackEvent(tick=0)\ntrack.append(eot)\n", file=AST.outfile)
+
+	for i in range(AST.call_counter+1):
+		print("eot=midi.EndOfTrackEvent(tick=0)\ntrack"+str(i)+".append(eot)\n", file=AST.outfile)
 	print("midi.write_midifile(\"" + AST.midiName + "\", pattern)", file=AST.outfile)
 	return self
 
@@ -226,7 +239,7 @@ def compile(self):
 		print("instr")
 	# DEBUG print('InstrNode:\n' + str(self.children[0]))
 	if len(self.children) == 1:
-		instrCode = self.children[0]
+		instrCode = self.children[0].compile()
 		print("track.append(midi.ProgramChangeEvent(tick=0, channel=0, data=[" + str(instrCode) + "]))\n", file=AST.outfile)
 
 	return self
@@ -333,6 +346,13 @@ def compile(self):
 		nota = nota + seqnotas
 		return (nota)
 
+def sleep(delay):
+	print("note_on = midi.NoteOnEvent(tick=0, velocity=0" + ", pitch=" + str(sleepNote) + ")", file=AST.outfile)
+	print(AST.track_stack[len(AST.track_stack)-1][1] + ".append(note_on)", file=AST.outfile)
+	print("note_off = midi.NoteOnEvent(tick=" + str(delay) + ", velocity=0, pitch=" + str(sleepNote) + ")", file = AST.outfile)
+	print(AST.track_stack[len(AST.track_stack)-1][1] + ".append(note_off)\n", file=AST.outfile)
+
+	AST.track_dictionary[AST.track_stack[len(AST.track_stack)-1][0]]["ticks"] += delay
 
 def playNotes(notes):
 	def playNotesTuple(acchord):
@@ -340,7 +360,7 @@ def playNotes(notes):
 			note += AST.tone
 			print("note_on = midi.NoteOnEvent(tick=0, velocity= " +
 				  str(AST.amp) + ", pitch=" + str(note) + ")", file=AST.outfile)
-			print("track.append(note_on)", file=AST.outfile)
+			print(AST.track_stack[len(AST.track_stack)-1][1] + ".append(note_on)", file=AST.outfile)
 
 		print("", file=AST.outfile)
 		for i, note in enumerate(acchord):
@@ -351,16 +371,20 @@ def playNotes(notes):
 			else:
 				print("note_off = midi.NoteOnEvent(tick=0, velocity=0, pitch=" +
 						str(note) + ")", file=AST.outfile)
-			print("track.append(note_off)", file=AST.outfile)
+			print(AST.track_stack[len(AST.track_stack)-1][1] + ".append(note_off)", file=AST.outfile)
 		print("", file=AST.outfile)
+
+		AST.track_dictionary[AST.track_stack[len(AST.track_stack)-1][0]]["ticks"] += AST.dur
 
 
 	if type(notes) is int:
 		notes += AST.tone
 		print("note_on = midi.NoteOnEvent(tick=0, velocity= " + str(AST.amp) + ", pitch=" + str(notes) + ")", file=AST.outfile)
-		print("track.append(note_on)", file=AST.outfile)
+		print(AST.track_stack[len(AST.track_stack)-1][1] + ".append(note_on)", file=AST.outfile)
 		print("note_off = midi.NoteOnEvent(tick=" + str(AST.dur) + ", velocity=0, pitch=" + str(notes) + ")", file = AST.outfile)
-		print("track.append(note_off)\n", file=AST.outfile)
+		print(AST.track_stack[len(AST.track_stack)-1][1] + ".append(note_off)\n", file=AST.outfile)
+		AST.track_dictionary[AST.track_stack[len(AST.track_stack)-1][0]]["ticks"] += AST.dur
+
 	elif type(notes) is tuple:
 		# It would be better to achieve this perfection with 
 		playNotesTuple(notes)
@@ -369,6 +393,16 @@ def playNotes(notes):
 			playNotes(note)
 	else:
 		print("ERROR", str(notes), str(type(notes)))
+
+# SleepNode
+@addToClass(AST.SleepNode)
+def compile(self):
+	if debug:
+		print("sleep")
+	dur = self.children[0].compile()	
+	print(dur)
+	sleep(dur)
+	return self
 
 # PlayNode
 # 'command : PLAY TWOPOINTS LBRACKET expression RBRACKET' | AST.PlayNode([p[4]])
@@ -398,17 +432,28 @@ def compile(self):
 		print("label")
 	name = self.children[0].tok
 
-	# code should never get here due to semantic analysis
-	if name not in AST.table:
-		print("ERROR UNDEFINED SEQUENCE")
+	if (name in AST.track_dictionary):
+		AST.call_counter += 1
+		AST.track_stack.append((name, 'track'+str(AST.call_counter)))		
+		print(AST.track_stack[len(AST.track_stack)-1][1] + " = midi.Track()", file=AST.outfile)
+		print("pattern.append("+AST.track_stack[len(AST.track_stack)-1][1]+")\n", file=AST.outfile)
+		print(AST.track_dictionary[name]["node"].children[1])
+		AST.track_dictionary[name]["node"].children[1].compile()
+		
+		AST.track_stack.pop()
 
-	amp_before = AST.amp
-	dur_before = AST.dur
+	else:
+		# code should never get here due to semantic analysis
+		if name not in AST.table:
+			print("ERROR UNDEFINED SEQUENCE")
 
-	AST.table[name].compile()
+		amp_before = AST.amp
+		dur_before = AST.dur
 
-	AST.amp = amp_before
-	AST.dur = dur_before
+		AST.table[name].compile()
+
+		AST.amp = amp_before
+		AST.dur = dur_before
 
 # PlayContent
 # 'playcontent : LBRACKET seqexp RBRACKET' | AST.PlaycontentNode([p[2]])
@@ -455,19 +500,19 @@ def run():
 	prog = f.read()
 	f.close()
 
-	AST.midiName = '.'.join(sys.argv[1].split('.')[:-1]) + ".mid"
-
+	AST.midiName = '.'.join(sys.argv[1].split('.')[:-1]) + ".mid"	
 	try:
 		# Generate ast
 		ast = apollo_yacc.parse(prog)
 	except:
 		print(sys.exc_info()[0])
-	
-	try:
-		# Run semantic analysis
-		semantic_analiser.run(ast)
-	except:
-		print(sys.exc_info()[0])
+		print(sys.exc_info()[1])
+			
+	# try:
+	# 	# Run semantic analysis
+	# 	semantic_analiser.run(ast)
+	# except:
+	# 	print(sys.exc_info()[0])
 	
 	try:
 		# Generate code (analrapist)

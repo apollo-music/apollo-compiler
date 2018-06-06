@@ -1,7 +1,6 @@
 ^
 track tr1:
 	play: [20]
-	sync
 	play: [40]
 endtrack
 
@@ -9,8 +8,9 @@ track tr2:
 	call: tr1
 	play: [30]
 	play: [50]
-	cue: tr1
 endtrack
 
 call: tr2
+sleep=500
+play: [64]
 $
