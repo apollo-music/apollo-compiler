@@ -161,6 +161,12 @@ class LabelNode(Node):
 class CallNode(Node):
     type = 'Call'
 
+class SyncNode(Node):
+    type = 'Sync'
+
+class CueNode(Node):
+    type = 'Cue'
+
 class TokenNode(Node):
     type = 'Token'
     def __init__(self, tok):
