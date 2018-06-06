@@ -544,8 +544,8 @@ def analise(self):
 
 
 # RepeatNode
-# 'label : SEQUENCE ID TWOPOINTS NEWLINE program ENDSEQUENCE' -> AST.LabelNode([AST.TokenNode(p[2]), p[5]])
-@addToClass(AST.LabelNode)
+# 'sequence : SEQUENCE ID TWOPOINTS NEWLINE program ENDSEQUENCE' -> AST.SequenceNode([AST.TokenNode(p[2]), p[5]])
+@addToClass(AST.SequenceNode)
 def analise(self):
 	# Gets the ID
 	ID = self.children[0].analise()

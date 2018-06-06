@@ -30,7 +30,8 @@ def p_statement(p):
 		| param
 		| assignation
 		| loop
-		| label'''
+		| sequence
+		| track'''
 	p[0] = p[1]
 		
 def p_param_AMP(p):
@@ -158,14 +159,13 @@ def p_loop_repeat(p):
 	'loop : REPEAT INT TWOPOINTS NEWLINE program ENDREPEAT'
 	p[0] = AST.RepeatNode([AST.TokenNode(p[2]), p[5]])
 
-def p_label_definition(p):
-	'label : SEQUENCE ID TWOPOINTS NEWLINE program ENDSEQUENCE'
-	p[0] = AST.LabelNode([AST.TokenNode(p[2]), p[5]])
+def p_sequence_definition(p):
+	'sequence : SEQUENCE ID TWOPOINTS NEWLINE program ENDSEQUENCE'
+	p[0] = AST.SequenceNode([AST.TokenNode(p[2]), p[5]])
 
-
-def p_label_definition(p):
-	'label : TRACK ID TWOPOINTS NEWLINE program ENDTRACK'
-	p[0] = AST.LabelNode([AST.TokenNode(p[2]), p[5]])
+def p_track_definition(p):
+	'track : TRACK ID TWOPOINTS NEWLINE program ENDTRACK'
+	p[0] = AST.TrackNode([AST.TokenNode(p[2]), p[5]])
 
 # Error rule for syntax errors
 def p_error(p):

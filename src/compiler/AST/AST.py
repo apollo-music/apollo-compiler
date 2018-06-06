@@ -155,8 +155,12 @@ class SeqexpNode(Node):
 class SoundNode(Node):
     type = 'Sound'
 
-class LabelNode(Node):
-    type = 'Label'
+class SequenceNode(Node):
+    type = 'Sequence'
+
+class TrackNode(Node):
+    type = 'Track'
+
 
 class CallNode(Node):
     type = 'Call'

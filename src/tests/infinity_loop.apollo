@@ -1,0 +1,8 @@
+^
+sequence t1:
+	play: [2]
+	call: t1
+endsequence
+
+call: t1
+$
