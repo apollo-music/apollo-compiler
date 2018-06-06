@@ -160,41 +160,27 @@ def analise(self):
 def analise(self):
 	amp = self.children[0].analise()
 
-	# Check if its a var
-	if type(amp) is str:
-		# As its a var, it can be: not in scope, a int and valid value or a invalid value
-		var_val = findSymbol(amp)
-		if not var_val:
-			raise excp.SemanticError("Error: %s used but never was defined" % (amp))
-		elif type(var_val) is int or len(var_val) == 1:
-			insertSymbol('AMP', var_val)
-			return var_val
-		else:
-			raise excp.SemanticError("Error: Invalid type used on amp: %s" % (amp))
-	else:
-		# If its not a var, add it on scope directly
+	if not amp:
+		raise excp.SemanticError("Error: %s used but never was defined" % (amp))
+	elif type(amp) is int or len(amp) == 1:
 		insertSymbol('AMP', amp)
 		return amp
+	else:
+		raise excp.SemanticError("Error: Invalid type used on amp: %s" % (amp))
 
 # DurNode
 # 'param : DUR TWOPOINTS INT | DUR TWOPOINTS ID' -> AST.DurNode([AST.TokenNode(p[3])])
 @addToClass(AST.DurNode)
 def analise(self):
 	dur = self.children[0].analise()
-	# Check if its a var
-	if type(dur) is str:
-		# As its a var, it can be: not in scope, a int and valid value or a invalid value
-		var_val = findSymbol(dur)
-		if not var_val:
-			raise excp.SemanticError("Error: %s used but never was defined" % (dur))
-		elif type(var_val) is int or len(var_val) == 1:
-			insertSymbol('DUR', var_val)
-			return var_val
-		else:
-			raise excp.SemanticError("Error: Invalid type used on dur: %s" % (dur))
-	else:
+
+	if not dur:
+		raise excp.SemanticError("Error: %s used but never was defined" % (dur))
+	elif type(dur) is int or len(dur) == 1:
 		insertSymbol('DUR', dur)
 		return dur
+	else:
+		raise excp.SemanticError("Error: Invalid type used on dur: %s" % (dur))
 
 # InstrNode
 # 'param : INSTR TWOPOINTS INT' -> AST.InstNode([AST.TokenNode(p[3])])
@@ -303,7 +289,6 @@ def analise(self):
 @addToClass(AST.ExpressionNode)
 def analise(self):
 	left = self.children[0].analise()
-
 	## Checking if nota is a variable
 	if type(left) is str:
 		var_val = findSymbol(left)
