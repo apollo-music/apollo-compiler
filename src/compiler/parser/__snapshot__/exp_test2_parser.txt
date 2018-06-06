@@ -18,12 +18,14 @@ Entry
 |  |  |  |  |  Expression
 |  |  |  |  |  |  10
 |  |  |  |  |  |  Empty
+|  |  |  |  |  Empty
 |  |  |  Program
 |  |  |  |  Dur
 |  |  |  |  |  Expression
 |  |  |  |  |  |  Expression
 |  |  |  |  |  |  |  2
 |  |  |  |  |  |  |  Empty
+|  |  |  |  |  |  Empty
 |  |  |  |  Program
 |  |  |  |  |  Command
 |  |  |  |  |  |  Dur
@@ -31,12 +33,14 @@ Entry
 |  |  |  |  |  |  |  |  Expression
 |  |  |  |  |  |  |  |  |  3
 |  |  |  |  |  |  |  |  |  Empty
+|  |  |  |  |  |  |  |  Empty
 |  |  |  |  |  |  Command
 |  |  |  |  |  |  |  Amp
 |  |  |  |  |  |  |  |  Expression
 |  |  |  |  |  |  |  |  |  Expression
 |  |  |  |  |  |  |  |  |  |  10
 |  |  |  |  |  |  |  |  |  |  Empty
+|  |  |  |  |  |  |  |  |  Empty
 |  |  |  |  |  |  |  Play
 |  |  |  |  |  |  |  |  Playcontent
 |  |  |  |  |  |  |  |  |  Seqexp
