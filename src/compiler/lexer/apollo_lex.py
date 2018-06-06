@@ -15,6 +15,7 @@ tokens = [
    'INT',
    'PLAY',
    'TWOPOINTS',
+   'EQUAL',
    'LBRACKET',
    'RBRACKET',
    'LPAREN',
@@ -51,6 +52,7 @@ t_LBRACKET  = r'\['
 t_RBRACKET  = r'\]'
 t_COMMA  = r','
 t_TWOPOINTS = r':'
+t_EQUAL = r'='
 t_START = r'\^'
 t_END = r'\$[\n ]*'
 
