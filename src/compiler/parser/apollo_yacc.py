@@ -59,8 +59,8 @@ def p_param_CALL(p):
 	p[0] = AST.CallNode(AST.TokenNode(p[3]))
 
 def p_param_SYNC(p):
-	'param : SYNC TWOPOINTS ID'
-	p[0] = AST.SyncNode(AST.TokenNode(p[3]))
+	'param : SYNC'
+	p[0] = AST.SyncNode(AST.TokenNode())
 
 def p_param_CUE(p):
 	'param : CUE TWOPOINTS ID'
