@@ -157,6 +157,11 @@ def p_label_definition(p):
 	'label : SEQUENCE ID TWOPOINTS NEWLINE program ENDSEQUENCE'
 	p[0] = AST.LabelNode([AST.TokenNode(p[2]), p[5]])
 
+
+def p_label_definition(p):
+	'label : TRACK ID TWOPOINTS NEWLINE program ENDTRACK'
+	p[0] = AST.LabelNode([AST.TokenNode(p[2]), p[5]])
+
 # Error rule for syntax errors
 def p_error(p):
 	if not AST.test:
