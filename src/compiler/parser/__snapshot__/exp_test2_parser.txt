@@ -15,16 +15,28 @@ Entry
 |  |  Program
 |  |  |  Amp
 |  |  |  |  Expression
+|  |  |  |  |  Expression
+|  |  |  |  |  |  10
+|  |  |  |  |  |  Empty
 |  |  |  Program
 |  |  |  |  Dur
 |  |  |  |  |  Expression
+|  |  |  |  |  |  Expression
+|  |  |  |  |  |  |  2
+|  |  |  |  |  |  |  Empty
 |  |  |  |  Program
 |  |  |  |  |  Command
 |  |  |  |  |  |  Dur
 |  |  |  |  |  |  |  Expression
+|  |  |  |  |  |  |  |  Expression
+|  |  |  |  |  |  |  |  |  3
+|  |  |  |  |  |  |  |  |  Empty
 |  |  |  |  |  |  Command
 |  |  |  |  |  |  |  Amp
 |  |  |  |  |  |  |  |  Expression
+|  |  |  |  |  |  |  |  |  Expression
+|  |  |  |  |  |  |  |  |  |  10
+|  |  |  |  |  |  |  |  |  |  Empty
 |  |  |  |  |  |  |  Play
 |  |  |  |  |  |  |  |  Playcontent
 |  |  |  |  |  |  |  |  |  Seqexp
