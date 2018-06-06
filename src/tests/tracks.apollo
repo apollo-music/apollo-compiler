@@ -1,0 +1,14 @@
+^
+track tr1:
+	play: [20]
+	play: [40]
+endtrack
+
+track tr2:
+	play: [30]
+	call: tr1
+	play: [50]
+endtrack
+
+call: tr2
+$

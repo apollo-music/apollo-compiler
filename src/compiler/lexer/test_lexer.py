@@ -24,8 +24,8 @@ tokens_t1234 = ['START', 'NEWLINE', 'VAR', 'ID', 'EQUAL', 'LPAREN', 'INT', 'COMM
 
 class LexTest(unittest.TestCase):
     def test_lex_values1(self):
-        with open(TESTS_PATH + 'test1_lex.apollo', 'r') as myfile:
-            datas1 = myfile.read()
+        with open(TESTS_PATH + 'test1_lex.apollo', 'r') as testfile:
+            datas1 = testfile.read()
             # Give the lexer some input
             apollo_lex.lexer.input(datas1)
             # Test using values
@@ -34,8 +34,8 @@ class LexTest(unittest.TestCase):
                 self.assertEqual(t_val, str(tok.value))
     
     def test_lex_values2(self):
-        with open(TESTS_PATH + 'test2_lex.apollo', 'r') as myfile:
-            datas2 = myfile.read()
+        with open(TESTS_PATH + 'test2_lex.apollo', 'r') as testfile:
+            datas2 = testfile.read()
             # Give the lexer some input
             apollo_lex.lexer.input(datas2)
             # Test using values
@@ -44,8 +44,8 @@ class LexTest(unittest.TestCase):
                 self.assertEqual(t_val, str(tok.value))
     
     def test_lex_values3(self):
-        with open(TESTS_PATH + 'test3_lex.apollo', 'r') as myfile:
-            datas3 = myfile.read()
+        with open(TESTS_PATH + 'test3_lex.apollo', 'r') as testfile:
+            datas3 = testfile.read()
             # Give the lexer some input
             apollo_lex.lexer.input(datas3)
             # Test using values
@@ -54,8 +54,8 @@ class LexTest(unittest.TestCase):
                 self.assertEqual(t_val, str(tok.value))
     
     def test_lex_values4(self):
-        with open(TESTS_PATH + 'test4_lex.apollo', 'r') as myfile:
-            datas4 = myfile.read()
+        with open(TESTS_PATH + 'test4_lex.apollo', 'r') as testfile:
+            datas4 = testfile.read()
             # Give the lexer some input
             apollo_lex.lexer.input(datas4)
             # Test using values
@@ -64,8 +64,8 @@ class LexTest(unittest.TestCase):
                 self.assertEqual(t_val, str(tok.value))
 
     def test_lex_types1(self):
-        with open(TESTS_PATH + 'test1_lex.apollo', 'r') as myfile:
-            datas1 = myfile.read()
+        with open(TESTS_PATH + 'test1_lex.apollo', 'r') as testfile:
+            datas1 = testfile.read()
             # Give the lexer some input
             apollo_lex.lexer.input(datas1)
             # Test using values
@@ -74,8 +74,8 @@ class LexTest(unittest.TestCase):
                 self.assertEqual(t_val, str(tok.type))
     
     def test_lex_types2(self):
-        with open(TESTS_PATH + 'test2_lex.apollo', 'r') as myfile:
-            datas2 = myfile.read()
+        with open(TESTS_PATH + 'test2_lex.apollo', 'r') as testfile:
+            datas2 = testfile.read()
             # Give the lexer some input
             apollo_lex.lexer.input(datas2)
             # Test using values
@@ -84,8 +84,8 @@ class LexTest(unittest.TestCase):
                 self.assertEqual(t_val, str(tok.type))
 
     def test_lex_types3(self):
-        with open(TESTS_PATH + 'test3_lex.apollo', 'r') as myfile:
-            datas3 = myfile.read()
+        with open(TESTS_PATH + 'test3_lex.apollo', 'r') as testfile:
+            datas3 = testfile.read()
             # Give the lexer some input
             apollo_lex.lexer.input(datas3)
             # Test using values
@@ -94,8 +94,8 @@ class LexTest(unittest.TestCase):
                 self.assertEqual(t_val, str(tok.type))
 
     def test_lex_types4(self):
-        with open(TESTS_PATH + 'test4_lex.apollo', 'r') as myfile:
-            datas4 = myfile.read()
+        with open(TESTS_PATH + 'test4_lex.apollo', 'r') as testfile:
+            datas4 = testfile.read()
             # Give the lexer some input
             apollo_lex.lexer.input(datas4)
             # Test using values
@@ -104,12 +104,21 @@ class LexTest(unittest.TestCase):
                 self.assertEqual(t_val, str(tok.type))
 
     def test_lex_errors(self):
-        with open(TESTS_PATH + 'test5_lex.apollo', 'r') as myfile:
-            datas5 = myfile.read()
+        with open(TESTS_PATH + 'test5_lex.apollo', 'r') as testfile:
+            datas5 = testfile.read()
             # Give the lexer some input
             apollo_lex.lexer.input(datas5)
             self.assertRaises(exc.CharacterError)
 
+    def test_tracks_sould_generate_valid_tokens(self):
+        with open(TESTS_PATH + 'tracks.apollo', 'r') as testfile:
+            file = testfile.read()
+            apollo_lex.lexer.input(file)
+        # NNEEDS TO SEE WHAT TO CHECK
+        # # Give the lexer some input
+        # apollo_lex.lexer.input(datas5)
+        # self.assertRaises(exc.CharacterError)
+    
 # Tests performed:
 # - Test 1: regular program. Should be OK.
 # - Test 2: like test 1, with empty spaces added. Should be OK.
