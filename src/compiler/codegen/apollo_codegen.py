@@ -4,7 +4,7 @@ from compiler.parser import apollo_yacc
 from compiler.semantic_analiser import semantic_analiser
 import sys, os
 
-debug = False
+debug = True
 AST.amp = 100
 AST.dur = 200
 AST.tone = 0
@@ -399,7 +399,8 @@ def playNotes(notes):
 def compile(self):
 	if debug:
 		print("sleep")
-	dur = self.children[0].compile()
+	dur = self.children[0].compile()	
+	print(dur)
 	sleep(dur)
 	return self
 
@@ -499,14 +500,14 @@ def run():
 	prog = f.read()
 	f.close()
 
-	AST.midiName = '.'.join(sys.argv[1].split('.')[:-1]) + ".mid"
-
+	AST.midiName = '.'.join(sys.argv[1].split('.')[:-1]) + ".mid"	
 	try:
 		# Generate ast
 		ast = apollo_yacc.parse(prog)
 	except:
 		print(sys.exc_info()[0])
-	
+		print(sys.exc_info()[1])
+			
 	# try:
 	# 	# Run semantic analysis
 	# 	semantic_analiser.run(ast)

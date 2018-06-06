@@ -1,6 +1,5 @@
 ^
 track tr1:
-	instr=OCARINA
 	play: [20]
 	play: [40]
 endtrack
@@ -12,4 +11,6 @@ track tr2:
 endtrack
 
 call: tr2
+sleep=500
+play: [64]
 $

@@ -36,23 +36,23 @@ def p_statement(p):
 		
 def p_param_AMP(p):
 	'param : AMP EQUAL exp2'
-	p[0] = AST.AmpNode(AST.ExpressionNode(p[3]))
+	p[0] = AST.AmpNode(p[3])
 
 def p_param_DUR(p):
 	'param : DUR EQUAL exp2'
-	p[0] = AST.DurNode(AST.ExpressionNode(p[3]))
+	p[0] = AST.DurNode(p[3])
 
 def p_param_INSTR(p):
 	'param : INSTR EQUAL exp2'
-	p[0] = AST.InstrNode(AST.ExpressionNode(p[3]))
+	p[0] = AST.InstrNode(p[3])
 
 def p_param_TONE(p):
 	'param : TONE EQUAL exp2'
-	p[0] = AST.ToneNode(AST.Expression(p[3]))
+	p[0] = AST.ToneNode(p[3])
 
 def p_param_SLEEP(p):
 	'param : SLEEP EQUAL exp2'
-	p[0] = AST.SleepNode(AST.Expression(p[3]))
+	p[0] = AST.SleepNode(p[3])
 
 def p_param_CALL(p):
 	'param : CALL TWOPOINTS ID'
