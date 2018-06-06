@@ -35,27 +35,23 @@ def p_statement(p):
 	p[0] = p[1]
 		
 def p_param_AMP(p):
-	'''param : AMP EQUAL INT
-	| AMP EQUAL ID'''
+	'param : AMP EQUAL exp2'
 	p[0] = AST.AmpNode(AST.TokenNode(p[3]))
 
 def p_param_DUR(p):
-	'''param : DUR EQUAL INT
-	| DUR EQUAL ID'''
+	'param : DUR EQUAL exp2'
 	p[0] = AST.DurNode(AST.TokenNode(p[3]))
 
 def p_param_INSTR(p):
-	'param : INSTR EQUAL INT'
+	'param : INSTR EQUAL exp2'
 	p[0] = AST.InstrNode(AST.TokenNode(p[3]))
 
 def p_param_TONE(p):
-	'''param : TONE EQUAL INT
-	| TONE EQUAL ID'''
+	'param : TONE EQUAL exp2'
 	p[0] = AST.ToneNode(AST.TokenNode(p[3]))
 
 def p_param_SLEEP(p):
-	'''param : SLEEP EQUAL INT
-	| SLEEP EQUAL ID'''
+	'param : SLEEP EQUAL exp2'
 	p[0] = AST.SleepNode(AST.TokenNode(p[3]))
 
 def p_param_CALL(p):
@@ -120,6 +116,22 @@ def p_recursive_op_minus(p):
 
 def p_recursive_op_ampersand(p):
 	'rec_op : AMPERSAND exp'
+	p[0] = AST.OpNode(p[1], [p[2]])
+
+def p_expression2_nota(p):
+	'exp2 : nota rec_op2'
+	p[0] = AST.ExpressionNode([p[1], p[2]])
+
+def p_recursive_op2_empty(p):
+	'rec_op2 : '
+	p[0] = AST.EmptyNode()
+
+def p_recursive_op2_sum(p):
+	'rec_op2 : SUM exp2'
+	p[0] = AST.OpNode(p[1], [p[2]])
+
+def p_recursive_op2_minus(p):
+	'rec_op2 : MINUS exp2'
 	p[0] = AST.OpNode(p[1], [p[2]])
 
 def p_seqsound_comma(p):
