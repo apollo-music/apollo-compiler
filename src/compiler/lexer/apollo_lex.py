@@ -42,7 +42,8 @@ tokens = [
    'SYNC',
    'CUE',
    'TRACK',
-   'ENDTRACK'
+   'ENDTRACK',
+   'SLEEP'
 ]
 
 # Regular expression rules for simple tokens
@@ -131,6 +132,10 @@ def t_TRACK(t):
 
 def t_ENDTRACK(t):
 	r'ENDTRACK | endtrack'
+	return t
+
+def t_SLEEP(t):
+	r'SLEEP | sleep'
 	return t
 
 def t_ID(t):
