@@ -1,7 +1,7 @@
 ^
-amp: 100
-dur: 100
-instr: OCARINA
+amp = 100
+dur = 100
+instr = OCARINA
 
-play: [1, 2, (3, 4)], amp: 50, dur: 25, instr: 5
+play: [1, 2, (3, 4)], amp = 50, dur = 25, instr = 5
 $

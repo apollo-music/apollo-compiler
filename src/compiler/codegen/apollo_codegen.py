@@ -380,9 +380,9 @@ def compile(self):
 	# DEBUG print('exp:\n' + str(exp))
 	playNotes(exp)
 
-# LabelNode
-# 'label : SEQUENCE ID TWOPOINTS NEWLINE program ENDSEQUENCE' | AST.LabelNode([AST.TokenNode(p[2]), p[5]])
-@addToClass(AST.LabelNode)
+# SequenceNode
+# 'sequence : SEQUENCE ID TWOPOINTS NEWLINE program ENDSEQUENCE' | AST.SequenceNode([AST.TokenNode(p[2]), p[5]])
+@addToClass(AST.SequenceNode)
 def compile(self):
 	if debug:
 		print("label")
