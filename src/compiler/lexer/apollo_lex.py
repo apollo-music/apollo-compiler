@@ -37,7 +37,11 @@ tokens = [
    'AMPERSAND',
    'SEQUENCE',
    'ENDSEQUENCE',
-   'CALL'
+   'CALL',
+   'SYNC',
+   'CUE',
+   'TRACK',
+   'ENDTRACK'
 ]
 
 # Regular expression rules for simple tokens
@@ -109,6 +113,22 @@ def t_SEQUENCE(t):
 
 def t_ENDSEQUENCE(t):
 	r'ENDSEQUENCE | endsequence'
+	return t
+
+def t_SYNC(t):
+	r'SYNC | sync'
+	return t
+
+def t_CUE(t):
+	r'CUE | cue'
+	return t
+
+def t_TRACK(t):
+	r'TRACK | track'
+	return t
+
+def t_ENDTRACK(t):
+	r'ENDTRACK | endtrack'
 	return t
 
 def t_ID(t):
