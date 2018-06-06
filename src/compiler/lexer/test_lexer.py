@@ -6,23 +6,25 @@ from ..exceptions import exceptions as exc
 
 dir_path = os.path.dirname(os.path.realpath(__file__))
 
-tokens_v123 = ['^', '\n', 'var', 'bixo', ':', '(', '1', ',', '3', '+', '4', ')', '\n',
-'amp', ':', '10', '\n', 'dur', ':', '2', '\n', 'play', ':', '[', '72', ',', 'bixo',
-']', ',', 'amp', ':', '10', ',', 'dur', ':', '3', '\n', '$']
+TESTS_PATH = dir_path + '/../../tests/'
 
-tokens_v4 = ['^', '\n', 'var', '_abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789', ':', '(', '1', ',', '3', '+', '4', ')', '\n',
-'amp', ':', '10', '\n', 'dur', ':', '2', '\n', 'play', ':', '[', '72', ',', 'bixo',
-']', ',', 'amp', ':', '10', ',', 'dur', ':', '3', '\n', '$']
+tokens_v123 = ['^', '\n', 'var', 'bixo', '=', '(', '1', ',', '3', '+', '4', ')', '\n',
+'amp', '=', '10', '\n', 'dur', '=', '2', '\n', 'play', ':', '[', '72', ',', 'bixo',
+']', ',', 'amp', '=', '10', ',', 'dur', '=', '3', '\n', '$']
 
-tokens_t1234 = ['START', 'NEWLINE', 'VAR', 'ID', 'TWOPOINTS', 'LPAREN', 'INT', 'COMMA', 'INT',
-'SUM', 'INT', 'RPAREN', 'NEWLINE', 'AMP', 'TWOPOINTS', 'INT', 'NEWLINE', 'DUR',
-'TWOPOINTS', 'INT', 'NEWLINE', 'PLAY', 'TWOPOINTS', 'LBRACKET', 'INT', 'COMMA',
-'ID', 'RBRACKET', 'COMMA', 'AMP', 'TWOPOINTS', 'INT', 'COMMA', 'DUR', 'TWOPOINTS',
+tokens_v4 = ['^', '\n', 'var', '_abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789', '=', '(', '1', ',', '3', '+', '4', ')', '\n',
+'amp', '=', '10', '\n', 'dur', '=', '2', '\n', 'play', ':', '[', '72', ',', 'bixo',
+']', ',', 'amp', '=', '10', ',', 'dur', '=', '3', '\n', '$']
+
+tokens_t1234 = ['START', 'NEWLINE', 'VAR', 'ID', 'EQUAL', 'LPAREN', 'INT', 'COMMA', 'INT',
+'SUM', 'INT', 'RPAREN', 'NEWLINE', 'AMP', 'EQUAL', 'INT', 'NEWLINE', 'DUR',
+'EQUAL', 'INT', 'NEWLINE', 'PLAY', 'TWOPOINTS', 'LBRACKET', 'INT', 'COMMA',
+'ID', 'RBRACKET', 'COMMA', 'AMP', 'EQUAL', 'INT', 'COMMA', 'DUR', 'EQUAL',
 'INT', 'NEWLINE', 'END']
 
 class LexTest(unittest.TestCase):
     def test_lex_values1(self):
-        with open(dir_path + '/test_files/test1_lex.apollo', 'r') as myfile:
+        with open(TESTS_PATH + 'test1_lex.apollo', 'r') as myfile:
             datas1 = myfile.read()
             # Give the lexer some input
             apollo_lex.lexer.input(datas1)
@@ -32,7 +34,7 @@ class LexTest(unittest.TestCase):
                 self.assertEqual(t_val, str(tok.value))
     
     def test_lex_values2(self):
-        with open(dir_path + '/test_files/test2_lex.apollo', 'r') as myfile:
+        with open(TESTS_PATH + 'test2_lex.apollo', 'r') as myfile:
             datas2 = myfile.read()
             # Give the lexer some input
             apollo_lex.lexer.input(datas2)
@@ -42,7 +44,7 @@ class LexTest(unittest.TestCase):
                 self.assertEqual(t_val, str(tok.value))
     
     def test_lex_values3(self):
-        with open(dir_path + '/test_files/test3_lex.apollo', 'r') as myfile:
+        with open(TESTS_PATH + 'test3_lex.apollo', 'r') as myfile:
             datas3 = myfile.read()
             # Give the lexer some input
             apollo_lex.lexer.input(datas3)
@@ -52,7 +54,7 @@ class LexTest(unittest.TestCase):
                 self.assertEqual(t_val, str(tok.value))
     
     def test_lex_values4(self):
-        with open(dir_path + '/test_files/test4_lex.apollo', 'r') as myfile:
+        with open(TESTS_PATH + 'test4_lex.apollo', 'r') as myfile:
             datas4 = myfile.read()
             # Give the lexer some input
             apollo_lex.lexer.input(datas4)
@@ -62,7 +64,7 @@ class LexTest(unittest.TestCase):
                 self.assertEqual(t_val, str(tok.value))
 
     def test_lex_types1(self):
-        with open(dir_path + '/test_files/test1_lex.apollo', 'r') as myfile:
+        with open(TESTS_PATH + 'test1_lex.apollo', 'r') as myfile:
             datas1 = myfile.read()
             # Give the lexer some input
             apollo_lex.lexer.input(datas1)
@@ -72,7 +74,7 @@ class LexTest(unittest.TestCase):
                 self.assertEqual(t_val, str(tok.type))
     
     def test_lex_types2(self):
-        with open(dir_path + '/test_files/test2_lex.apollo', 'r') as myfile:
+        with open(TESTS_PATH + 'test2_lex.apollo', 'r') as myfile:
             datas2 = myfile.read()
             # Give the lexer some input
             apollo_lex.lexer.input(datas2)
@@ -82,7 +84,7 @@ class LexTest(unittest.TestCase):
                 self.assertEqual(t_val, str(tok.type))
 
     def test_lex_types3(self):
-        with open(dir_path + '/test_files/test3_lex.apollo', 'r') as myfile:
+        with open(TESTS_PATH + 'test3_lex.apollo', 'r') as myfile:
             datas3 = myfile.read()
             # Give the lexer some input
             apollo_lex.lexer.input(datas3)
@@ -92,7 +94,7 @@ class LexTest(unittest.TestCase):
                 self.assertEqual(t_val, str(tok.type))
 
     def test_lex_types4(self):
-        with open(dir_path + '/test_files/test4_lex.apollo', 'r') as myfile:
+        with open(TESTS_PATH + 'test4_lex.apollo', 'r') as myfile:
             datas4 = myfile.read()
             # Give the lexer some input
             apollo_lex.lexer.input(datas4)
@@ -102,7 +104,7 @@ class LexTest(unittest.TestCase):
                 self.assertEqual(t_val, str(tok.type))
 
     def test_lex_errors(self):
-        with open(dir_path + '/test_files/test5_lex.apollo', 'r') as myfile:
+        with open(TESTS_PATH + 'test5_lex.apollo', 'r') as myfile:
             datas5 = myfile.read()
             # Give the lexer some input
             apollo_lex.lexer.input(datas5)

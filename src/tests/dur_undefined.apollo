@@ -1,6 +1,6 @@
 ^
-amp: 100
-instr: 1
+amp = 100
+instr = 1
 
 play: [1,2,3]
 $

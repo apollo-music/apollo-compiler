@@ -14,6 +14,8 @@ n_incorrect_tests = 0
 
 dir_path = os.path.dirname(os.path.realpath(__file__))
 
+TESTS_PATH = dir_path + '/../../tests/'
+
 # for i in range(n_correct_tests):
 #     with open(dir_path + '/test_files/test' + str(i + 1) + '_parser.apollo', 'r') as myfile:
 #         datas.append(myfile.read())
@@ -27,7 +29,7 @@ class ParserTest(unittest.TestCase):
         self.maxDiff = None
         # REDO THIS TO PARSER TO OPEN THE FILE PLX
         file = ''
-        with open(dir_path + '/test_files/test1_parser.apollo', 'r') as myfile:
+        with open(TESTS_PATH + 'test1_parser.apollo', 'r') as myfile:
             file = myfile.read()
         snapshot = ''
         with open(dir_path + '/__snapshot__/exp_test1_parser.txt', 'r') as myfile:
@@ -41,7 +43,7 @@ class ParserTest(unittest.TestCase):
         self.maxDiff = None
         # REDO THIS TO PARSER TO OPEN THE FILE PLX
         file = ''
-        with open(dir_path + '/test_files/test2_parser.apollo', 'r') as myfile:
+        with open(TESTS_PATH + 'test2_parser.apollo', 'r') as myfile:
             file = myfile.read()
         snapshot = ''
         with open(dir_path + '/__snapshot__/exp_test2_parser.txt', 'r') as myfile:
@@ -54,7 +56,7 @@ class ParserTest(unittest.TestCase):
         self.maxDiff = None
         # REDO THIS TO PARSER TO OPEN THE FILE PLX
         file = ''
-        with open(dir_path + '/test_files/test3_parser.apollo', 'r') as myfile:
+        with open(TESTS_PATH + 'test3_parser.apollo', 'r') as myfile:
             file = myfile.read()
         snapshot = ''
         with open(dir_path + '/__snapshot__/exp_test3_parser.txt', 'r') as myfile:
@@ -67,7 +69,7 @@ class ParserTest(unittest.TestCase):
         self.maxDiff = None
 
         file = ''
-        with open(dir_path + '/test_files/test4_parser.apollo', 'r') as myfile:
+        with open(TESTS_PATH + 'test4_parser.apollo', 'r') as myfile:
             file = myfile.read()
         
         with self.assertRaises(e.MySyntaxError):
@@ -77,7 +79,7 @@ class ParserTest(unittest.TestCase):
         self.maxDiff = None
 
         file = ''
-        with open(dir_path + '/test_files/test5_parser.apollo', 'r') as myfile:
+        with open(TESTS_PATH + 'test5_parser.apollo', 'r') as myfile:
             file = myfile.read()
         
         with self.assertRaises(e.MySyntaxError):

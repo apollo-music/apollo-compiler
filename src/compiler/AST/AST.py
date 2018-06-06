@@ -131,6 +131,9 @@ class PlaycontentNode(Node):
 class ToneNode(Node):
     type = 'Tone'
 
+class SleepNode(Node):
+    type = 'Sleep'
+
 class LoopNode(Node):
     type = 'Repeat'
 
