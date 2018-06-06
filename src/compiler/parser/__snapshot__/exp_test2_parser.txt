@@ -14,17 +14,17 @@ Entry
 |  |  |  |  |  |  Empty
 |  |  Program
 |  |  |  Amp
-|  |  |  |  10
+|  |  |  |  Expression
 |  |  |  Program
 |  |  |  |  Dur
-|  |  |  |  |  2
+|  |  |  |  |  Expression
 |  |  |  |  Program
 |  |  |  |  |  Command
 |  |  |  |  |  |  Dur
-|  |  |  |  |  |  |  3
+|  |  |  |  |  |  |  Expression
 |  |  |  |  |  |  Command
 |  |  |  |  |  |  |  Amp
-|  |  |  |  |  |  |  |  10
+|  |  |  |  |  |  |  |  Expression
 |  |  |  |  |  |  |  Play
 |  |  |  |  |  |  |  |  Playcontent
 |  |  |  |  |  |  |  |  |  Seqexp
