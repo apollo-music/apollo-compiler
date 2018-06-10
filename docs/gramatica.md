@@ -117,12 +117,12 @@ var sequencia: [70, 71, 72]
 
 track melody_1:
 play: [sequencia]
-cue(comeca_melody_2)
+cue melody_2
 play: [sequencia]
 end track
 
 track melody_2:
-sync(comeca_melody_2)
+sync
 play: [sequencia]
 end track
 ```
