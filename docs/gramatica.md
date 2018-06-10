@@ -113,11 +113,11 @@ As notas em `melody_1` irão tocar com `amp = 5`, ao contrário de `melody_2`.
 ## Sincronizando `Tracks` através de `Sync`
 A sincronização de `tracks` ocorre através do uso de `sync` - uma track é interrompida (`sync`) e só continua tocando quando outra track emite o sinal através de uma `cue`. Por exemplo:
 ```
-var sequencia: [70, 71, 72]
+var sequencia = [70, 71, 72]
 
 track melody_1:
 play: [sequencia]
-cue melody_2
+cue: melody_2
 play: [sequencia]
 endtrack
 
@@ -127,7 +127,7 @@ sync
 play: [70]
 endtrack
 
-call melody_1
+call: melody_1
 ```
 
 Como é possível observar, o argumento entre `()` de `cue` é o nome do sinal emitido, e o argumento entre `()` de `sync` é o nome do sinal que deve ser recebido para a respectiva `track` continuar sendo tocada.
