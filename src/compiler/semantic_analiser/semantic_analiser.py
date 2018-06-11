@@ -16,6 +16,9 @@ from ..AST import AST
 from ..AST.AST import addToClass
 from ..AST.AST import Node
 from ..exceptions import exceptions as excp
+from ..semantic_analiser import call_sync
+
+AST.numberOfTracks = 0
 
 ###############
 # Scope class #
@@ -217,6 +220,22 @@ def analise(self):
 
 	return var_val
 
+# CueNode
+# 'param : Cue TWOPOINTS ID' -> AST.CueNode([AST.TokenNode(p[3])])
+@addToClass(AST.CueNode)
+def analise(self):
+	# This will return the name of the cue
+	cue = self.children[0].analise()
+
+	# Now, needs to find the scope on the stack
+	var_val = findSymbol(cue)
+	if not var_val:
+		raise excp.SemanticError("Error: %s does not exists in scope" % (cue))
+	
+	## Must check if its a valid cue (var_val is a program :-))
+
+	return var_val
+
 # CommandNode
 # 'command: command COMMA param' -> AST.CommandNode([p[3], p[1]])
 @addToClass(AST.CommandNode)
@@ -250,6 +269,13 @@ def analise(self):
 		addDefaultVal('INSTR', 1)
 
 	seqsound = self.children[0].analise()
+
+	# get the play duration	
+	if type(seqsound) is int:
+		l = 1
+	else:
+		l = len(seqsound)
+	self.duration = l * findSymbol('DUR')
 
 	# Check for overflow/underflow
 	checkValues([seqsound])
@@ -541,6 +567,19 @@ def analise(self):
 	insertSymbol(ID, program)
 	return True
 
+# TrackNode
+@addToClass(AST.TrackNode)
+def analise(self):
+	# Gets the ID
+	ID = self.children[0].analise()
+	pushScope(Scope('label__' + str(ID)))
+	# Analise if the program if OK
+	program =  self.children[1].analise()
+	# If it is, add to scope so if the code can find it
+	insertSymbol(ID, program)
+
+	return True
+
 # EmptyNode
 # 'rec_op : ' -> AST.EmptyNode()
 @addToClass(AST.EmptyNode)
@@ -583,7 +622,8 @@ def debug(filename=None):
 	try:
 		# Run semantic analysis
 		print('\n' + sys.argv[1] if filename is None else filename)
-		return run(ast)
+		run(ast)
+		call_sync.run(ast)
 	except:
 		print(sys.exc_info()[1].msg)
 		return False
@@ -612,4 +652,5 @@ def test(filename=None):
 		print('Failed on AST gen')
 		return False
 
-	return run(ast, True)
+	run(ast, True)
+	call_sync.run(ast)

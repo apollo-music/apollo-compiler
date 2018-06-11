@@ -508,11 +508,11 @@ def run():
 		print(sys.exc_info()[0])
 		print(sys.exc_info()[1])
 			
-	# try:
-	# 	# Run semantic analysis
-	# 	semantic_analiser.run(ast)
-	# except:
-	# 	print(sys.exc_info()[0])
+	try:
+ 		# Run semantic analysis
+	 	semantic_analiser.run(ast)
+	except:
+	 	print(sys.exc_info()[0])
 	
 	try:
 		# Generate code (analrapist)

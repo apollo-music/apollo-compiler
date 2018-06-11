@@ -1,0 +1,19 @@
+^
+var s3 = [70, 71, 72]
+var s2 = [70, 71]
+
+track melody_2:
+play: [s2]
+sync
+play: [70]
+endtrack
+
+track melody_1:
+play: [s3]
+cue: melody_2
+play: [s2]
+endtrack
+
+call: melody_1
+call: melody_2
+$
