@@ -123,6 +123,10 @@ def checkValues(seq):
 				raise excp.SemanticError("Error: %s causes underflow." % (e))
 
 
+def updateDuration(node):
+	for c in node.children:
+		node.duration += c.duration
+
 ########################
 ## Analiser Functions ##
 ########################
@@ -130,6 +134,7 @@ def checkValues(seq):
 @addToClass(AST.Node)
 def analise(self):
 	whats_so_ever = [c.analise() for c in self.children]
+	updateDuration(self)
 	return whats_so_ever
 
 # EntryNode (First node of program)
@@ -153,7 +158,8 @@ def analise(self):
 	if len(self.children) > 1:
 		program = self.children[1].analise()
 		statement = statement + program
-	
+
+	updateDuration(self)
 	popScope()
 	return statement
 
@@ -198,7 +204,6 @@ def analise(self):
 @addToClass(AST.ToneNode)
 def analise(self):
 	tone = self.children[0].analise()
-
 	## Missing decoding ID and valid checking
 
 	insertSymbol('TONE', tone)
@@ -245,6 +250,7 @@ def analise(self):
 	command = [self.children[0].analise()]
 	param = self.children[1].analise()
 	
+	updateDuration(self)
 	popScope()
 
 	return command
@@ -550,11 +556,13 @@ def analise(self):
 	# Analise if the program if OK
 	program =  self.children[1].analise()
 	# Now, remove the scope
+
+	self.duration = REP * self.children[1].duration
 	popScope()
 	return self
 
 
-# RepeatNode
+# SequenceNode
 # 'sequence : SEQUENCE ID TWOPOINTS NEWLINE program ENDSEQUENCE' -> AST.SequenceNode([AST.TokenNode(p[2]), p[5]])
 @addToClass(AST.SequenceNode)
 def analise(self):
@@ -565,6 +573,7 @@ def analise(self):
 	program =  self.children[1].analise()
 	# If it is, add to scope so if the code can find it
 	insertSymbol(ID, program)
+	updateDuration(self)
 	return True
 
 # TrackNode
