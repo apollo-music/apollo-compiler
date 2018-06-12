@@ -1,0 +1,9 @@
+^
+track a:
+amp = 255
+dur = 50
+play: [62,64,65,62],dur =30
+endtrack
+instr = PIANO
+call: a
+$
