@@ -602,7 +602,9 @@ def run(ast, debugging = False):
 		Execute the semantic analisis on ast argument
 	'''
 	AST.debugging = debugging
-	return ast.analise()
+	r = ast.analise()
+	call_sync.run(ast)
+	return r
 
 
 def debug(filename=None):

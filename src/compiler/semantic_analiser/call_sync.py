@@ -42,12 +42,11 @@ def initializeCalls(self, delay):
 # walk pointer up to next sync, if no sync is found, return None
 @addToClass(AST.Node)
 def walkSync(self, first, delay):
-    t = 0
     node = None
 
     #print("walking sync " + str(self.type))
     if not first:
-        if self.type == "Sync":
+        if len(self.children) > 0 and self.children[0].type == "Sync":
             return (delay, self)
         elif self.type == "Program":
             for c in self.children:
@@ -68,7 +67,6 @@ def walkSync(self, first, delay):
 @addToClass(AST.Node)
 def walkCall(self, first, delay):
     global H
-    t = 0
     node = None
     name = ""
 
@@ -119,8 +117,12 @@ def run(root):
             print("ERROR: cant call before sync!")
 
         # set the relative time
-        AST.delays[sync_node] = t1 - t2
-        print(str(sync_node.type) + " delay " + str(AST.delays[sync_node]))
+        if sync_node.type == "Program":
+            AST.delays[sync_node.children[0]] = t1 - t2
+            print(str(sync_node.children[0].type) + " delay " + str(AST.delays[sync_node.children[0]]))
+        else:
+            AST.delays[sync_node] = t1 - t2
+            print(str(sync_node.type) + " delay " + str(AST.delays[sync_node]))
 
         # walk the callee sync pointer to the next sync node and update
         (t2, sync_node) = sync_node.walkSync(True, 0)
