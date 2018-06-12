@@ -1,0 +1,10 @@
+^
+amp = 255
+dur = 100
+
+play:[60]
+sleep = 100
+play: [61]
+sleep = 100
+play: [62]
+$

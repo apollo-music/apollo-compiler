@@ -1,0 +1,23 @@
+^
+track a:
+amp = 255
+dur = 100
+
+play:[60]
+sleep = 100
+play: [61]
+cue: b
+endtrack
+
+track b:
+amp = 255
+dur = 100
+sync
+play:[80]
+sleep = 100
+play: [90]
+endtrack
+
+call: a
+
+$
