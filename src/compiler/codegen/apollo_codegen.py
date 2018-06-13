@@ -30,11 +30,7 @@ def compile(self):
 		print("sync")
 	cur_track = AST.track_stack[len(AST.track_stack)-1][0]
 	node = AST.track_dictionary[cur_track]["node"]
-	# for key in AST.delays:
-	# 	print(key)
-	# print(node)
-	if node in AST.delays:
-		print(AST.delays[self])
+	if node in AST.delays:		
 		sleep(AST.delays[self])
 	
 @addToClass(AST.CueNode)
