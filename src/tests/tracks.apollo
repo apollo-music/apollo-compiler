@@ -1,13 +1,20 @@
 ^
+instr = ELECTRICPIANO1
+amp = 255
+dur = 100
 track tr1:
-	play: [20]
-	play: [40]
+	instr = ELECTRICPIANO1	
+	play: [80]
+	play: [90]
 endtrack
 
 track tr2:
+	instr = OCARINA
+	amp = 255
 	call: tr1
-	play: [30]
-	play: [50]
+	sleep = 50
+	play: [100]
+	play: [110]
 endtrack
 
 call: tr2
