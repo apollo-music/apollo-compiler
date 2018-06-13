@@ -253,7 +253,7 @@ def compile(self):
 	# DEBUG print('InstrNode:\n' + str(self.children[0]))
 	if len(self.children) == 1:
 		instrCode = self.children[0].compile()
-		print(AST.track_stack[len(AST.track_stack)-1][1] + ".append(midi.ProgramChangeEvent(tick=0, channel=0, data=[" + str(instrCode) + "]))\n", file=AST.outfile)
+		print(AST.track_stack[len(AST.track_stack)-1][1] + ".append(midi.ProgramChangeEvent(tick=0, channel=" + AST.track_stack[len(AST.track_stack)-1][1][5:] + ", data=[" + str(instrCode) + "]))\n", file=AST.outfile)
 
 	return self
 
