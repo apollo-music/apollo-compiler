@@ -20,6 +20,7 @@ class Node:
     count = 0
     type = 'Node (unspecified)'
     shape = 'ellipse'
+    duration = 0
     def __init__(self,children=None):
         self.ID = str(Node.count)
         Node.count+=1
@@ -131,6 +132,9 @@ class PlaycontentNode(Node):
 class ToneNode(Node):
     type = 'Tone'
 
+class SleepNode(Node):
+    type = 'Sleep'
+
 class LoopNode(Node):
     type = 'Repeat'
 
@@ -152,11 +156,21 @@ class SeqexpNode(Node):
 class SoundNode(Node):
     type = 'Sound'
 
-class LabelNode(Node):
-    type = 'Label'
+class SequenceNode(Node):
+    type = 'Sequence'
+
+class TrackNode(Node):
+    type = 'Track'
+
 
 class CallNode(Node):
     type = 'Call'
+
+class SyncNode(Node):
+    type = 'Sync'
+
+class CueNode(Node):
+    type = 'Cue'
 
 class TokenNode(Node):
     type = 'Token'

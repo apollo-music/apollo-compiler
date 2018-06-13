@@ -16,6 +16,9 @@ from ..AST import AST
 from ..AST.AST import addToClass
 from ..AST.AST import Node
 from ..exceptions import exceptions as excp
+from ..semantic_analiser import call_sync
+
+AST.numberOfTracks = 0
 
 ###############
 # Scope class #
@@ -120,6 +123,10 @@ def checkValues(seq):
 				raise excp.SemanticError("Error: %s causes underflow." % (e))
 
 
+def updateDuration(node):
+	for c in node.children:
+		node.duration += c.duration
+
 ########################
 ## Analiser Functions ##
 ########################
@@ -127,6 +134,7 @@ def checkValues(seq):
 @addToClass(AST.Node)
 def analise(self):
 	whats_so_ever = [c.analise() for c in self.children]
+	updateDuration(self)
 	return whats_so_ever
 
 # EntryNode (First node of program)
@@ -137,6 +145,11 @@ def analise(self):
 	c = self.children[0].analise()
 	# Maybe do some analysis on c and check if its ok (True) or not (False)
 	return True
+
+@addToClass(AST.SleepNode)
+def analise(self):
+	duration = self.children[0].analise()
+	self.duration = duration
 
 # ProgramNode (generic)
 # 'program : statement NEWLINE' -> AST.ProgramNode(p[1])
@@ -150,7 +163,8 @@ def analise(self):
 	if len(self.children) > 1:
 		program = self.children[1].analise()
 		statement = statement + program
-	
+
+	updateDuration(self)
 	popScope()
 	return statement
 
@@ -160,41 +174,27 @@ def analise(self):
 def analise(self):
 	amp = self.children[0].analise()
 
-	# Check if its a var
-	if type(amp) is str:
-		# As its a var, it can be: not in scope, a int and valid value or a invalid value
-		var_val = findSymbol(amp)
-		if not var_val:
-			raise excp.SemanticError("Error: %s used but never was defined" % (amp))
-		elif type(var_val) is int or len(var_val) == 1:
-			insertSymbol('AMP', var_val)
-			return var_val
-		else:
-			raise excp.SemanticError("Error: Invalid type used on amp: %s" % (amp))
-	else:
-		# If its not a var, add it on scope directly
+	if not amp:
+		raise excp.SemanticError("Error: %s used but never was defined" % (amp))
+	elif type(amp) is int or len(amp) == 1:
 		insertSymbol('AMP', amp)
 		return amp
+	else:
+		raise excp.SemanticError("Error: Invalid type used on amp: %s" % (amp))
 
 # DurNode
 # 'param : DUR TWOPOINTS INT | DUR TWOPOINTS ID' -> AST.DurNode([AST.TokenNode(p[3])])
 @addToClass(AST.DurNode)
 def analise(self):
 	dur = self.children[0].analise()
-	# Check if its a var
-	if type(dur) is str:
-		# As its a var, it can be: not in scope, a int and valid value or a invalid value
-		var_val = findSymbol(dur)
-		if not var_val:
-			raise excp.SemanticError("Error: %s used but never was defined" % (dur))
-		elif type(var_val) is int or len(var_val) == 1:
-			insertSymbol('DUR', var_val)
-			return var_val
-		else:
-			raise excp.SemanticError("Error: Invalid type used on dur: %s" % (dur))
-	else:
+
+	if not dur:
+		raise excp.SemanticError("Error: %s used but never was defined" % (dur))
+	elif type(dur) is int or len(dur) == 1:
 		insertSymbol('DUR', dur)
 		return dur
+	else:
+		raise excp.SemanticError("Error: Invalid type used on dur: %s" % (dur))
 
 # InstrNode
 # 'param : INSTR TWOPOINTS INT' -> AST.InstNode([AST.TokenNode(p[3])])
@@ -209,7 +209,6 @@ def analise(self):
 @addToClass(AST.ToneNode)
 def analise(self):
 	tone = self.children[0].analise()
-
 	## Missing decoding ID and valid checking
 
 	insertSymbol('TONE', tone)
@@ -231,6 +230,22 @@ def analise(self):
 
 	return var_val
 
+# CueNode
+# 'param : Cue TWOPOINTS ID' -> AST.CueNode([AST.TokenNode(p[3])])
+@addToClass(AST.CueNode)
+def analise(self):
+	# This will return the name of the cue
+	cue = self.children[0].analise()
+
+	# Now, needs to find the scope on the stack
+	var_val = findSymbol(cue)
+	if not var_val:
+		raise excp.SemanticError("Error: %s does not exists in scope" % (cue))
+	
+	## Must check if its a valid cue (var_val is a program :-))
+
+	return var_val
+
 # CommandNode
 # 'command: command COMMA param' -> AST.CommandNode([p[3], p[1]])
 @addToClass(AST.CommandNode)
@@ -240,6 +255,7 @@ def analise(self):
 	command = [self.children[0].analise()]
 	param = self.children[1].analise()
 	
+	updateDuration(self)
 	popScope()
 
 	return command
@@ -264,6 +280,13 @@ def analise(self):
 		addDefaultVal('INSTR', 1)
 
 	seqsound = self.children[0].analise()
+
+	# get the play duration	
+	if type(seqsound) is int:
+		l = 1
+	else:
+		l = len(seqsound)
+	self.duration = l * findSymbol('DUR')
 
 	# Check for overflow/underflow
 	checkValues([seqsound])
@@ -303,7 +326,6 @@ def analise(self):
 @addToClass(AST.ExpressionNode)
 def analise(self):
 	left = self.children[0].analise()
-
 	## Checking if nota is a variable
 	if type(left) is str:
 		var_val = findSymbol(left)
@@ -539,13 +561,15 @@ def analise(self):
 	# Analise if the program if OK
 	program =  self.children[1].analise()
 	# Now, remove the scope
+
+	self.duration = REP * self.children[1].duration
 	popScope()
 	return self
 
 
-# RepeatNode
-# 'label : SEQUENCE ID TWOPOINTS NEWLINE program ENDSEQUENCE' -> AST.LabelNode([AST.TokenNode(p[2]), p[5]])
-@addToClass(AST.LabelNode)
+# SequenceNode
+# 'sequence : SEQUENCE ID TWOPOINTS NEWLINE program ENDSEQUENCE' -> AST.SequenceNode([AST.TokenNode(p[2]), p[5]])
+@addToClass(AST.SequenceNode)
 def analise(self):
 	# Gets the ID
 	ID = self.children[0].analise()
@@ -554,6 +578,20 @@ def analise(self):
 	program =  self.children[1].analise()
 	# If it is, add to scope so if the code can find it
 	insertSymbol(ID, program)
+	updateDuration(self)
+	return True
+
+# TrackNode
+@addToClass(AST.TrackNode)
+def analise(self):
+	# Gets the ID
+	ID = self.children[0].analise()
+	pushScope(Scope('label__' + str(ID)))
+	# Analise if the program if OK
+	program =  self.children[1].analise()
+	# If it is, add to scope so if the code can find it
+	insertSymbol(ID, program)
+
 	return True
 
 # EmptyNode
@@ -569,7 +607,9 @@ def run(ast, debugging = False):
 		Execute the semantic analisis on ast argument
 	'''
 	AST.debugging = debugging
-	return ast.analise()
+	r = ast.analise()
+	call_sync.run(ast)
+	return r
 
 
 def debug(filename=None):
@@ -598,7 +638,8 @@ def debug(filename=None):
 	try:
 		# Run semantic analysis
 		print('\n' + sys.argv[1] if filename is None else filename)
-		return run(ast)
+		run(ast)
+		call_sync.run(ast)
 	except:
 		print(sys.exc_info()[1].msg)
 		return False
@@ -627,4 +668,5 @@ def test(filename=None):
 		print('Failed on AST gen')
 		return False
 
-	return run(ast, True)
+	run(ast, True)
+	call_sync.run(ast)

@@ -30,31 +30,41 @@ def p_statement(p):
 		| param
 		| assignation
 		| loop
-		| label'''
+		| sequence
+		| track'''
 	p[0] = p[1]
 		
 def p_param_AMP(p):
-	'''param : AMP TWOPOINTS INT
-	| AMP TWOPOINTS ID'''
-	p[0] = AST.AmpNode(AST.TokenNode(p[3]))
+	'param : AMP EQUAL exp2'
+	p[0] = AST.AmpNode(p[3])
 
 def p_param_DUR(p):
-	'''param : DUR TWOPOINTS INT
-	| DUR TWOPOINTS ID'''
-	p[0] = AST.DurNode(AST.TokenNode(p[3]))
+	'param : DUR EQUAL exp2'
+	p[0] = AST.DurNode(p[3])
 
 def p_param_INSTR(p):
-	'param : INSTR TWOPOINTS INT'
-	p[0] = AST.InstrNode(AST.TokenNode(p[3]))
+	'param : INSTR EQUAL exp2'
+	p[0] = AST.InstrNode(p[3])
 
 def p_param_TONE(p):
-	'''param : TONE TWOPOINTS INT
-	| TONE TWOPOINTS ID'''
-	p[0] = AST.ToneNode(AST.TokenNode(p[3]))
+	'param : TONE EQUAL exp2'
+	p[0] = AST.ToneNode(p[3])
+
+def p_param_SLEEP(p):
+	'param : SLEEP EQUAL exp2'
+	p[0] = AST.SleepNode(p[3])
 
 def p_param_CALL(p):
 	'param : CALL TWOPOINTS ID'
 	p[0] = AST.CallNode(AST.TokenNode(p[3]))
+
+def p_param_SYNC(p):
+	'param : SYNC'
+	p[0] = AST.SyncNode()
+
+def p_param_CUE(p):
+	'param : CUE TWOPOINTS ID'
+	p[0] = AST.CueNode(AST.TokenNode(p[3]))
 
 def p_command_param(p):
 	'command : command COMMA param'
@@ -77,7 +87,7 @@ def p_playcontent_acc(p):
 	p[0] = AST.PlaycontentNode(p[1])
 
 def p_assignation_expression(p):
-	'assignation : VAR ID TWOPOINTS exp'
+	'assignation : VAR ID EQUAL exp'
 	p[0] = AST.VarNode([AST.TokenNode(p[2]), p[4]])
 
 def p_expression_seq(p):
@@ -114,6 +124,22 @@ def p_recursive_op_minus(p):
 
 def p_recursive_op_ampersand(p):
 	'rec_op : AMPERSAND exp'
+	p[0] = AST.OpNode(p[1], [p[2]])
+
+def p_expression2_nota(p):
+	'exp2 : nota rec_op2'
+	p[0] = AST.ExpressionNode([p[1], p[2]])
+
+def p_recursive_op2_empty(p):
+	'rec_op2 : '
+	p[0] = AST.EmptyNode()
+
+def p_recursive_op2_sum(p):
+	'rec_op2 : SUM exp2'
+	p[0] = AST.OpNode(p[1], [p[2]])
+
+def p_recursive_op2_minus(p):
+	'rec_op2 : MINUS exp2'
 	p[0] = AST.OpNode(p[1], [p[2]])
 
 def p_seqsound_comma(p):
@@ -153,9 +179,13 @@ def p_loop_repeat(p):
 	'loop : REPEAT INT TWOPOINTS NEWLINE program ENDREPEAT'
 	p[0] = AST.RepeatNode([AST.TokenNode(p[2]), p[5]])
 
-def p_label_definition(p):
-	'label : SEQUENCE ID TWOPOINTS NEWLINE program ENDSEQUENCE'
-	p[0] = AST.LabelNode([AST.TokenNode(p[2]), p[5]])
+def p_sequence_definition(p):
+	'sequence : SEQUENCE ID TWOPOINTS NEWLINE program ENDSEQUENCE'
+	p[0] = AST.SequenceNode([AST.TokenNode(p[2]), p[5]])
+
+def p_track_definition(p):
+	'track : TRACK ID TWOPOINTS NEWLINE program ENDTRACK'
+	p[0] = AST.TrackNode([AST.TokenNode(p[2]), p[5]])
 
 # Error rule for syntax errors
 def p_error(p):

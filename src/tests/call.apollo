@@ -1,0 +1,27 @@
+^
+track a:
+amp = 255
+dur = 100
+
+play:[60]
+sleep = 100
+play: [61]
+sleep = 100
+play: [62]
+endtrack
+
+track b:
+amp = 255
+dur = 100
+sleep = 500
+
+play:[80]
+sleep = 100
+play: [90]
+sleep = 100
+play: [100]
+endtrack
+
+call: a
+call: b
+$

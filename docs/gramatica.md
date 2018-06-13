@@ -18,19 +18,19 @@ play: [72, (60, 61, 62), 73]
 ## Configurando `Play`
 O volume e duração das notas em um `play` podem ser modificadas alterando os valores globais `AMP` e `DUR`:
 ```
-amp: 10
-dur: 2
+amp = 10
+dur = 2
 play: [72, (60, 61, 62), 73]
 ```
 É possível também sobreescrever tais valores em um `play` específico, não alterando os valores globais; por exemplo:
 ```
-amp: 10
-dur: 2
+amp = 10
+dur = 2
 play: [72, (60, 61, 62), 73]
-play: [72, 73], amp: 8, dur: 2
+play: [72, 73], amp = 8, dur = 2
 play: [72, (60, 61, 62), 73]
 ```
-Apenas o segundo `play` irá tocar as duas notas com `amp: 8` e `dur: 2`.
+Apenas o segundo `play` irá tocar as duas notas com `amp = 8` e `dur = 2`.
 
 ## Adicionando silêncio
 Para inserir tempos de silêncio na música, é possível usar a função `sleep`:
@@ -96,11 +96,11 @@ end track
 Irá tocar as notas em ambos os `plays` ao mesmo tempo. Para todos os efeitos, `tracks` diferentes se comportam como programas em escopos diferentes, portanto apenas variáveis e configurações declaradas no escopo global (fora das tracks) podem ser referenciadas:
 ```
 var sequencia: [70, 71, 72]
-amp: 10
-dur: 2
+amp = 10
+dur = 2
 
 track melody_1:
-amp: 5
+amp = 5
 var nova_sequencia: [69, 70, 71]
 play: [sequencia, nova_sequencia]
 end track
@@ -109,22 +109,25 @@ track melody_2:
 play: [sequencia, sequencia]
 end track
 ```
-As notas em `melody_1` irão tocar com `amp: 5`, ao contrário de `melody_2`.
+As notas em `melody_1` irão tocar com `amp = 5`, ao contrário de `melody_2`.
 ## Sincronizando `Tracks` através de `Sync`
 A sincronização de `tracks` ocorre através do uso de `sync` - uma track é interrompida (`sync`) e só continua tocando quando outra track emite o sinal através de uma `cue`. Por exemplo:
 ```
-var sequencia: [70, 71, 72]
+var sequencia = [70, 71, 72]
 
 track melody_1:
 play: [sequencia]
-cue(comeca_melody_2)
+cue: melody_2
 play: [sequencia]
-end track
+endtrack
 
 track melody_2:
-sync(comeca_melody_2)
 play: [sequencia]
-end track
+sync
+play: [70]
+endtrack
+
+call: melody_1
 ```
 
 Como é possível observar, o argumento entre `()` de `cue` é o nome do sinal emitido, e o argumento entre `()` de `sync` é o nome do sinal que deve ser recebido para a respectiva `track` continuar sendo tocada.

@@ -1,47 +1,47 @@
 ^
-amp: 255
-dur: 50
+amp = 255
+dur = 50
 
 var melody_1: [38, 38, 45, 45, 47, 47]
 
 play: [melody_1]
-play: [(45)], dur: 100
+play: [(45)], dur = 100
 
 var melody_2: [43, 43, 42, 42, 40, 40]
 
 play: [melody_2]
-play: [(38)], dur: 100
+play: [(38)], dur = 100
 
 var melody_3: [50, 50, 57, 57, 59, 59]
 
 play: [melody_3]
-play: [(57)], dur: 100
+play: [(57)], dur = 100
 
 var melody_4: [55, 55, 54, 54, 52, 52]
 
 play: [melody_4]
-play: [(50)], dur: 100
+play: [(50)], dur = 100
 
 var melody_1: [38, 38, 45, 45, 47, 47]
 
-dur: 25
+dur = 25
 
 play: [melody_1]
-play: [(45)], dur: 50
+play: [(45)], dur = 50
 
 var melody_2: [43, 43, 42, 42, 40, 40]
 
 play: [melody_2]
-play: [(38)], dur: 50
+play: [(38)], dur = 50
 
 var melody_3: [50, 50, 57, 57, 59, 59]
 
 play: [melody_3]
-play: [(57)], dur: 50
+play: [(57)], dur = 50
 
 var melody_4: [55, 55, 54, 54, 52, 52]
 
 play: [melody_4]
-play: [(50)], dur: 50
+play: [(50)], dur = 50
 
 $
