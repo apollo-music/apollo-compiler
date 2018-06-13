@@ -4,7 +4,7 @@ from compiler.parser import apollo_yacc
 from compiler.semantic_analiser import semantic_analiser
 import sys, os
 
-debug = True
+debug = False
 AST.amp = 100
 AST.dur = 200
 AST.tone = 0
@@ -22,6 +22,19 @@ AST.call_counter = 0
 def compile(self):
 	for c in self.children:
 		c.compile()
+	return self
+
+@addToClass(AST.SyncNode)
+def compile(self):
+	if debug:
+		print("sync")
+	cur_track = AST.track_stack[len(AST.track_stack)-1][0]
+	node = AST.track_dictionary[cur_track]["node"]
+	if node in AST.delays:		
+		sleep(AST.delays[self])
+	
+@addToClass(AST.CueNode)
+def compile(self):
 	return self
 
 @addToClass(AST.TrackNode)
@@ -240,7 +253,7 @@ def compile(self):
 	# DEBUG print('InstrNode:\n' + str(self.children[0]))
 	if len(self.children) == 1:
 		instrCode = self.children[0].compile()
-		print("track.append(midi.ProgramChangeEvent(tick=0, channel=0, data=[" + str(instrCode) + "]))\n", file=AST.outfile)
+		print(AST.track_stack[len(AST.track_stack)-1][1] + ".append(midi.ProgramChangeEvent(tick=0, channel=0, data=[" + str(instrCode) + "]))\n", file=AST.outfile)
 
 	return self
 
@@ -400,7 +413,6 @@ def compile(self):
 	if debug:
 		print("sleep")
 	dur = self.children[0].compile()	
-	print(dur)
 	sleep(dur)
 	return self
 
@@ -508,11 +520,13 @@ def run():
 		print(sys.exc_info()[0])
 		print(sys.exc_info()[1])
 			
-	# try:
-	# 	# Run semantic analysis
-	# 	semantic_analiser.run(ast)
-	# except:
-	# 	print(sys.exc_info()[0])
+	try:
+ 		# Run semantic analysis
+	 	semantic_analiser.run(ast)
+	except:
+		print(sys.exc_info()[0])
+		print(sys.exc_info()[1])
+		print(sys.exc_info()[2])
 	
 	try:
 		# Generate code (analrapist)
