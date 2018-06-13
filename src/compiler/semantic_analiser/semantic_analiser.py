@@ -146,6 +146,11 @@ def analise(self):
 	# Maybe do some analysis on c and check if its ok (True) or not (False)
 	return True
 
+@addToClass(AST.SleepNode)
+def analise(self):
+	duration = self.children[0].analise()
+	self.duration = duration
+
 # ProgramNode (generic)
 # 'program : statement NEWLINE' -> AST.ProgramNode(p[1])
 # 'program : statement NEWLINE program' -> AST.ProgramNode([p[1]] + [p[3]])

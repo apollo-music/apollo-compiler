@@ -17,7 +17,7 @@ play: [61]
 cue: b
 endtrack
 
-call: a
 call: b
+call: a
 
 $

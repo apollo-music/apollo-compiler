@@ -52,6 +52,7 @@ def walkSync(self, first, delay):
             for c in self.children:
                 (t, node) = c.walkSync(False, delay)
                 if node != None:
+                    delay = t
                     break
                 else:
                     delay += c.duration
@@ -75,10 +76,11 @@ def walkCall(self, first, delay):
         if len(self.children) > 0 and (self.children[0].type == "Call" or self.children[0].type == "Cue"):
             name = self.children[0].children[0].analise()
             return (delay, name, self)
-        elif self.type == "Program":
+        elif self.type == "Program" :
             for c in self.children:
                 (t, name, node) = c.walkCall(False, delay)
                 if node != None:
+                    delay = t
                     break
                 else:
                     delay += c.duration
@@ -105,16 +107,16 @@ def run(root):
     # algorithm main loop
     while(len(H) > 0):
         # get caller with smallest delay
+        # print(H)
         (t1, callee, call_node) = heapq.heappop(H)
-        #print("pop!")
-        #print(H)
+        #print("pop!")        
 
         # get corresponding sync
         (t2, sync_node) = sync[callee]
 
         # this situation should be impossible
-        if(t1 < t2):
-            print("ERROR: cant call before sync!")
+        # if(t1 < t2):
+        #     print("ERROR: cant call before sync!")
 
         # set the relative time
         if sync_node.type == "Program":
@@ -122,7 +124,7 @@ def run(root):
             print(str(sync_node.children[0].type) + " delay " + str(AST.delays[sync_node.children[0]]))
         else:
             AST.delays[sync_node] = t1 - t2
-            print(str(sync_node.type) + " delay " + str(AST.delays[sync_node]))
+            print(str(sync_node.type) + " " + str(sync_node.children[0].tok) + " delay " + str(AST.delays[sync_node]))
 
         # walk the callee sync pointer to the next sync node and update
         (t2, sync_node) = sync_node.walkSync(True, 0)
@@ -133,15 +135,16 @@ def run(root):
 
         # if its a call node, we need to create a new call pointer and walk it
         if len(call_node.children) > 0 and call_node.children[0].type == "Call":
-            #print("spawning new call pointer and walking")
+            print("spawning new call pointer and walking")
             name = call_node.children[0].children[0].analise()
-            #print(name)
+            print(name)
             callee_node = track_nodes[name]
             (delay, name, callee_node) = callee_node.walkCall(True, 0)
-            #print("finished")
+            print("finished")
+            print(H)
             if callee_node != None:
                 heapq.heappush(H, (delay, name, callee_node))
-            #print(H)
+            print(H)
 
         # walk the caller pointer to the next call/cue
         (t1, callee, call_node) = call_node.walkCall(True, 0)
